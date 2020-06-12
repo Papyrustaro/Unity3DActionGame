@@ -33,5 +33,5 @@ NCMB/
 **.fbx
 
 !Documents/**
-!Assets/UnityChan/License/**
-!Assets/unity-chan!/Unity-chan! Model/Documentation/UnityChanLicense2.0/**
+!**/License/**
+!**/UnityChanLicense2.0/**
