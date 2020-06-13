@@ -21,6 +21,13 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     private Vector3 addForceDownPower = Vector3.down;
     private Vector3 velocity;
 
+    /// <summary>
+    /// 壁に空中で張り付いているか(stateのひとつとして持ってもいい)
+    /// </summary>
+    public bool IsStickingWall { get; set; } = false;
+
+    public bool IsGrounded => this._isGrounded;
+
     private void Awake()
     {
         this._rigidbody = GetComponent<Rigidbody>();
@@ -35,8 +42,54 @@ public class PlayerMovementBasedCamera : MonoBehaviour
 
     private void Update()
     {
-        MoveByCameraPosition();
+        //MoveByCameraPosition();
+        MoveTest();
         PlayAnimationOfPlayer();
+    }
+
+    private void MoveTest()
+    {
+        if (this._isGrounded)
+        {
+            this.velocity = Vector3.zero;
+
+            Vector3 cameraForward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
+            Vector3 moveForward = cameraForward * Input.GetAxis("Vertical") + Camera.main.transform.right * Input.GetAxis("Horizontal");
+            this.velocity = moveForward * this.moveSpeed + new Vector3(0f, this.velocity.y, 0f);
+
+            if (moveForward != Vector3.zero)
+            {
+                this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(moveForward), 0.2f);
+            }
+
+            if (moveForward.magnitude > 0f) this.currentState = E_State.Running;
+            else this.currentState = E_State.Standing;
+
+            if (Input.GetButtonDown("Jump"))
+            {
+                this.currentState = E_State.JumpToTop;
+                velocity.y += jumpForce;
+                this._isGrounded = false;
+            }
+            else
+            {
+                this.velocity += this.addForceDownPower;
+            }
+        }
+        else
+        {
+            Vector3 cameraForward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
+            Vector3 moveForward = cameraForward * Input.GetAxis("Vertical") + Camera.main.transform.right * Input.GetAxis("Horizontal");
+            this.velocity += moveForward * this.moveSpeed * 0.01f; //この場合、入力している間加速し続けるため、最大速度の設定が必要。
+
+            if (this.velocity.y < -0.05f) this.currentState = E_State.Falling;
+            else this.currentState = E_State.TopOfJump;
+        }
+
+        velocity.y -= this.gravityPower * Time.deltaTime;
+        _characterController.Move(velocity * Time.deltaTime);
+
+        this._playerAnimation.PlayerAnimator.SetBool("IsLanding", this._isGrounded);
     }
 
     private void MoveByCameraPosition()
@@ -56,9 +109,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
 
         //移動
         Vector3 cameraForward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
-        //Vector3 moveForward = cameraForward * this.inputVertical + Camera.main.transform.right * this.inputHorizontal;
         Vector3 moveForward = cameraForward * Input.GetAxis("Vertical") + Camera.main.transform.right * Input.GetAxis("Horizontal");
-        //this._rigidbody.velocity = moveForward * this.moveSpeed + new Vector3(0, this._rigidbody.velocity.y, 0);
         this.velocity = moveForward * this.moveSpeed + new Vector3(0f, this.velocity.y, 0f);
 
         //回転
@@ -70,13 +121,11 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         //animation
         if (this._isGrounded)
         {
-            //this._playerAnimation.PlayerAnimator.SetBool("IsLanding", true);
             if (moveForward.magnitude > 0f) this.currentState = E_State.Running;
             else this.currentState = E_State.Standing;
         }
         else
         {
-            //this._playerAnimation.PlayerAnimator.SetBool("IsLanding", false);
             if (this.velocity.y < -0.05f) this.currentState = E_State.Falling;
             else this.currentState = E_State.TopOfJump;
         }
@@ -87,7 +136,6 @@ public class PlayerMovementBasedCamera : MonoBehaviour
             if (Input.GetButtonDown("Jump"))
             {
                 this.currentState = E_State.JumpToTop;
-                //this._rigidbody.AddForce(Vector3.up * this.jumpForce);
                 velocity.y += jumpForce;
                 this._isGrounded = false;
             }
@@ -131,21 +179,26 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    /// <summary>
+    /// 壁キック
+    /// </summary>
+    /// <param name="normalOfWall">張り付いている壁の法線ベクトル</param>
+    public void WallKick(Vector3 normalOfWall)
     {
-        if (other.CompareTag("Stage"))
-        {
-            this._isGrounded = true;
-            //this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.Standing);
-        }
-    }
+        Debug.Log("壁キック");
+        //向きを変える(とりあえず現在の向きを反転で妥協)
+        //this.transform.rotation = Quaternion.Euler(Vector3.Reflect(this.transform.rotation.eulerAngles, normalOfWall));
+        //this.transform.rotation = Quaternion.Euler(new Vector3(0f, 180f, 0f));
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Stage"))
-        {
-            Debug.Log("消えた");
-        }
+        //法線ベクトルのyの大きさに制限を加える？
+        //this.transform.LookAt(this.transform.position + normalOfWall);
+        this.transform.forward = normalOfWall;
+
+        //移動させる
+        this.velocity = new Vector3(normalOfWall.x * 10f, 20f, normalOfWall.z * 10f);
+
+        //animation
+        
     }
 
     public enum E_State

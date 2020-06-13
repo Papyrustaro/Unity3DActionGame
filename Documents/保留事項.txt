@@ -1,0 +1,4 @@
+・Unityちゃんの髪のなびきが、fullScreenにするとカクカクする
+→SpringManagerのDynamicRaitoを1から0.1に変更している
+
+・カメラの回り込みを自然にしたい
