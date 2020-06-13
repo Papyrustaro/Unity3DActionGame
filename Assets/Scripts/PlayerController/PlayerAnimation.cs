@@ -54,9 +54,13 @@ public class PlayerAnimation : MonoBehaviour
                 break;
             case E_PlayerAnimationType.TopOfJump:
                 _animator.SetBool("TopOfJump", true);
+                _animator.SetBool("IsFalling", false);
                 break;
             case E_PlayerAnimationType.TopToGround:
                 _animator.SetBool("IsFalling", true);
+                break;
+            case E_PlayerAnimationType.StickingWall:
+                _animator.SetBool("StickingWall", true);
                 break;
             case E_PlayerAnimationType.Damaged:
                 _animator.SetTrigger("Damaged");
@@ -80,6 +84,7 @@ public class PlayerAnimation : MonoBehaviour
         JumpToTop,
         TopOfJump,
         TopToGround,
+        StickingWall,
         Damaged,
         Salute,
         KnellDown,

@@ -24,7 +24,7 @@ public class WallKickTrigger : MonoBehaviour
         if (collision.transform.CompareTag("Stage"))
         {
             this.normalOfWall = collision.contacts[0].normal;
-            Debug.Log(this.normalOfWall);
+            this.playerMoveController.StickWall(true);
         }
     }
 
@@ -33,6 +33,8 @@ public class WallKickTrigger : MonoBehaviour
         if (collision.transform.CompareTag("Stage"))
         {
             this.normalOfWall = Vector3.zero;
+            this.playerMoveController.StickWall(false);
+            this.playerMoveController._PlayerAnimation.PlayerAnimator.SetBool("StickingWall", false);
             this.playerMoveController.IsStickingWall = false;
         }
     }

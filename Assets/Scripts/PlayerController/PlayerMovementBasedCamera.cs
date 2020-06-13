@@ -28,6 +28,8 @@ public class PlayerMovementBasedCamera : MonoBehaviour
 
     public bool IsGrounded => this._isGrounded;
 
+    public PlayerAnimation _PlayerAnimation => this._playerAnimation;
+
     private void Awake()
     {
         this._rigidbody = GetComponent<Rigidbody>();
@@ -185,6 +187,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     /// <param name="normalOfWall">張り付いている壁の法線ベクトル</param>
     public void WallKick(Vector3 normalOfWall)
     {
+        if (this.velocity.y >= -0.05f) return;
         Debug.Log("壁キック");
         //向きを変える(とりあえず現在の向きを反転で妥協)
         //this.transform.rotation = Quaternion.Euler(Vector3.Reflect(this.transform.rotation.eulerAngles, normalOfWall));
@@ -195,10 +198,23 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         this.transform.forward = normalOfWall;
 
         //移動させる
-        this.velocity = new Vector3(normalOfWall.x * 10f, 20f, normalOfWall.z * 10f);
+        this.velocity = new Vector3(normalOfWall.x * 5f, 50f, normalOfWall.z * 5f);
 
         //animation
-        
+        this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.JumpToTop);
+    }
+
+    public void StickWall(bool startStick)
+    {
+        if (this._isGrounded) return;
+        if (startStick)
+        {
+            this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.StickingWall);
+        }
+        else
+        {
+            this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.TopToGround);
+        }
     }
 
     public enum E_State
