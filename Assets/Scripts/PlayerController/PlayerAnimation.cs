@@ -40,11 +40,13 @@ public class PlayerAnimation : MonoBehaviour
                 _animator.SetBool("TopOfJump", false);
                 _animator.SetBool("IsStanding", true);
                 _animator.SetBool("IsLanding", true);
+                _animator.SetBool("IsStickingWall", false);
                 break;
             case E_PlayerAnimationType.Running:
                 _animator.SetBool("IsRunning", true);
                 _animator.SetBool("IsFalling", false);
                 _animator.SetBool("TopOfJump", false);
+                _animator.SetBool("IsStickingWall", false);
                 break;
             case E_PlayerAnimationType.JumpToTop:
                 Debug.Log("jump");
@@ -58,10 +60,25 @@ public class PlayerAnimation : MonoBehaviour
                 break;
             case E_PlayerAnimationType.TopToGround:
                 _animator.SetBool("IsFalling", true);
+                _animator.SetBool("IsStickingWall", false);
                 break;
             case E_PlayerAnimationType.StickingWall:
-                _animator.SetBool("StickingWall", true);
+                _animator.SetBool("IsStickingWall", true);
+                _animator.SetBool("IsFalling", true);
                 break;
+            case E_PlayerAnimationType.SpinJump:
+                _animator.SetTrigger("SpinJump");
+                break;
+            case E_PlayerAnimationType.HipDrop:
+                _animator.SetTrigger("HipDrop");
+                break;
+            case E_PlayerAnimationType.BackFlip:
+                _animator.SetTrigger("BackFlip");
+                break;
+
+
+
+
             case E_PlayerAnimationType.Damaged:
                 _animator.SetTrigger("Damaged");
                 break;
@@ -85,6 +102,13 @@ public class PlayerAnimation : MonoBehaviour
         TopOfJump,
         TopToGround,
         StickingWall,
+        SpinJump,
+        HipDrop,
+        BackFlip,
+
+
+
+
         Damaged,
         Salute,
         KnellDown,

@@ -1,0 +1,11 @@
+移動→horizontal, vertical
+Jump(WallKick): Space
+SpinJump: P
+LongJump: L
+HipDrop: U
+BackFlip: I
+
+DefaultCamera: J
+OverheadCamera: H 
+OnePersonCamera: O
+CameraMoveToPlayerBehind: K

@@ -36,19 +36,19 @@ public class ThirdPersonCameraController : MonoBehaviour
             if(this.CameraViewType != E_CameraViewType.Overhead) this.transform.RotateAround(this.targetPositionBeforeFrame, this.transform.right, mouseInputY * Time.deltaTime * this.rotationByMouseForce);
         }
 
-        if (Input.GetKeyDown(KeyCode.P))
+        if (Input.GetButtonDown("CameraMoveToPlayerBehind"))
         {
             WatchFromPlayerBack();
         }
-        if (Input.GetKeyDown(KeyCode.K))
+        if (Input.GetButtonDown("DefaultCamera"))
         {
             WatchDefault();
         }
-        if (Input.GetKeyDown(KeyCode.O))
+        if (Input.GetButtonDown("OnePersonCamera"))
         {
             WatchOnePerson();
         }
-        if (Input.GetKeyDown(KeyCode.H))
+        if (Input.GetButtonDown("OverheadCamera"))
         {
             WatchFromOverHead();
         }

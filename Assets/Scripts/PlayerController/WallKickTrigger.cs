@@ -11,20 +11,27 @@ public class WallKickTrigger : MonoBehaviour
     /// </summary>
     private Vector3 normalOfWall;
 
-    private void Update()
+    /*private void Update()
     {
-        if (this.normalOfWall != Vector3.zero && Input.GetButtonDown("Jump") && !this.playerMoveController.IsGrounded)
+        if(this.normalOfWall != Vector3.zero && !this.playerMoveController.IsGrounded)
         {
-            this.playerMoveController.WallKick(this.normalOfWall);
+            //this.playerMoveController.InitVelocity(E_Vector.XZ);
+            this.playerMoveController.ChangeVelocityByRate(E_Vector.XZ, 0.2f);
+            if (Input.GetButtonDown("Jump"))
+            {
+                //this.playerMoveController.WallKick(this.normalOfWall);
+            }
         }
-    }
+    }*/
 
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.transform.CompareTag("Stage"))
         {
-            this.normalOfWall = collision.contacts[0].normal;
+            //this.normalOfWall = collision.contacts[0].normal;
+            this.playerMoveController.NormalOfStickingWall = collision.contacts[0].normal;
             this.playerMoveController.StickWall(true);
+            //this.playerMoveController.StickWall(true);
         }
     }
 
@@ -32,10 +39,12 @@ public class WallKickTrigger : MonoBehaviour
     {
         if (collision.transform.CompareTag("Stage"))
         {
-            this.normalOfWall = Vector3.zero;
+            this.playerMoveController.NormalOfStickingWall = Vector3.zero;
             this.playerMoveController.StickWall(false);
-            this.playerMoveController._PlayerAnimation.PlayerAnimator.SetBool("StickingWall", false);
-            this.playerMoveController.IsStickingWall = false;
+            //this.normalOfWall = Vector3.zero;
+            //this.playerMoveController.StickWall(false);
+            //this.playerMoveController._PlayerAnimation.PlayerAnimator.SetBool("StickingWall", false);
+            //this.playerMoveController.IsStickingWall = false;
         }
     }
 }

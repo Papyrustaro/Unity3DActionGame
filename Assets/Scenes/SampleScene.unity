@@ -6616,6 +6616,56 @@ PrefabInstance:
       propertyPath: m_Radius
       value: 0.15
       objectReference: {fileID: 0}
+    - target: {fileID: 5117990153323860878, guid: 8b88e6ab4355afb47b0b6feb7308c43c,
+        type: 3}
+      propertyPath: jumpForce
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 5117990153323860878, guid: 8b88e6ab4355afb47b0b6feb7308c43c,
+        type: 3}
+      propertyPath: gravityPower
+      value: 70
+      objectReference: {fileID: 0}
+    - target: {fileID: 5117990153323860878, guid: 8b88e6ab4355afb47b0b6feb7308c43c,
+        type: 3}
+      propertyPath: backFlipVerticalSpeed
+      value: 2.67
+      objectReference: {fileID: 0}
+    - target: {fileID: 5117990153323860878, guid: 8b88e6ab4355afb47b0b6feb7308c43c,
+        type: 3}
+      propertyPath: runHorizontalSpeed
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 5117990153323860878, guid: 8b88e6ab4355afb47b0b6feb7308c43c,
+        type: 3}
+      propertyPath: jumpVerticalSpeed
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 5117990153323860878, guid: 8b88e6ab4355afb47b0b6feb7308c43c,
+        type: 3}
+      propertyPath: maxNormalAirVerticalSpeed
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 5117990153323860878, guid: 8b88e6ab4355afb47b0b6feb7308c43c,
+        type: 3}
+      propertyPath: gravityVerticalForce
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 5117990153323860878, guid: 8b88e6ab4355afb47b0b6feb7308c43c,
+        type: 3}
+      propertyPath: maxStickingWallFallSpeed
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 5117990153323860878, guid: 8b88e6ab4355afb47b0b6feb7308c43c,
+        type: 3}
+      propertyPath: wallKickHorizontalSpeed
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5117990153323860878, guid: 8b88e6ab4355afb47b0b6feb7308c43c,
+        type: 3}
+      propertyPath: wallKickVerticalSpeed
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 5117990154641889792, guid: 8b88e6ab4355afb47b0b6feb7308c43c,
         type: 3}
       propertyPath: m_Layer

@@ -1,0 +1,96 @@
+# Standing
+velocity初期化
+浮かないように下向きの力(gravity)を加える
+
+# Running
+velocity初期化
+入力に応じて、velocity.xzの値を変更
+浮かないようにgravityを加える
+
+# JumpToTop
+velocity.y += jumpForce
+velocity.y -= gravity * Time.deltaTime
+
+# RollJumping
+velocity.y += rollJumpForce
+着地するまで回転し続ける
+着地するまで最高落下速度を小さく、下向きの加速度も小さく？
+入力に応じてvelocity.xzの値を変更。ただし、最高速度は設定
+
+# StickingWall
+現在の落下速度が壁張り付き時の最高落下速度より大きかったら初期化
+
+
+# Falling(ここがいろいろな状態の落下がある)
+## normal
+若干xz方向に等加速度運動できるように。ただし最高速度は決める
+y方向に重力を。ただし最高速度は決める
+
+## StickingWall
+velocity.xzを0に
+xzの移動はできなくする？？→ただし、壁から離れることはしたい→空中制御でよろしく
+現在の落下速度が壁張り付き時の最高落下速度より大きかったら初期化
+
+## RollJumping
+xz方向に加速度運動。ただし最高速度etc
+y方向に重力。ただし最高速度etc
+
+# TopOfJump
+animation再生するだけ
+
+# OnLand
+animation再生するだけ
+
+# LongJumping
+xzの初速度を加える
+yに初速度を加える
+
+
+# BackFlip
+縦に回転
+y方向に初速度
+y方向に重力。ただし最高速度etc
+
+# WallKick
+y方向に初速度(jump)
+xz方向に初速度
+y方向に重力。ただし最高速度etc
+
+# 障害物に当たった時
+空中にいるときはvelocityを初期化していない→障害物にあたったときにvelocity.xzをどうするか
+→なにもしない(張り付いたらvelocity.xzを初期化)
+→そもそも空中でxzをそんなに制御できなくする
+
+# HipDrop
+velocity.xz = 0
+velocity.y = -hipdropSpeed
+重力の影響を受けず、等速
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# 必要なパラメータ
+## 移動速度
+地上の走行速度(xz)
+重力加速度(y)
+通常jumpの初速度(y)
+rollJumpの初速度(y)
+wallKickの初速度(y)
+backFlipの初速度(y)
+longJumpの初速度(y)
+longJumpの初速度(xz)
+normalFallingの加速度(xz)
+rollJumpingの加速度(xz)
+
+## 最高速度
+通常fallingの落下速度(y)→rollJump以外の落下時
+stickingWallの落下速度(y)
+rollJumpingの落下速度(y)
+通常空中での横移動速度(xz)→ただし、壁キックや幅跳びなどの速度はそのままにしたい→maxVelocityを越えた空中入力は受け付けない
+rollJumpingでの横移動速度(xz)
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#処理の流れ
+1.衝突判定やプレイヤーの入力によって、現在のstate(状態)を変更→この際プレイヤーの入力した値を保持しなければならない
+2.stateに応じた移動処理
+3.stateに応じたanimation遷移
