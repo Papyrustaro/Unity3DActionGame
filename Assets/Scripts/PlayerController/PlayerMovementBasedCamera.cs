@@ -149,7 +149,6 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     /// </summary>
     private void UpdateMovement()
     {
-        if (this.currentState == E_State.JumpToTop) Debug.Log(this._isGrounded);
         if (this._isGrounded) this._velocity = Vector3.zero;
         this._velocity.y -= this.gravityVerticalForce * Time.deltaTime;
 
@@ -275,7 +274,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         this._isGrounded = false;
 
         //進行方向を向く
-        this.transform.forward = new Vector3(this._velocity.x, 0f, this._velocity.z);
+        if(!(this._velocity.x == 0f && this._velocity.z == 0f)) this.transform.forward = new Vector3(this._velocity.x, 0f, this._velocity.z);
 
         this.currentState = E_State.JumpToTop;
         this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.JumpToTop);
@@ -302,6 +301,13 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     /// </summary>
     private void MoveStickWall()
     {
+        Vector3 cameraForward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
+        Vector3 moveForward = cameraForward * this.inputVelocity.y + Camera.main.transform.right * this.inputVelocity.x;
+        Vector3 moveVelocity = moveForward * this.normalAirHorizontalForce * Time.deltaTime + this._velocity;
+
+        //最高速度を超えていなければ入力した横方向に加速
+        if (Mathf.Sqrt(moveVelocity.x * moveVelocity.x + moveVelocity.z * moveVelocity.z) < this.maxNormalAirHorizontalSpeed) this._velocity = new Vector3(moveVelocity.x, this._velocity.y, moveVelocity.z);
+
         if (this._velocity.y < -1 * this.maxStickingWallFallSpeed) this._velocity.y = -1 * this.maxStickingWallFallSpeed;
     }
 
@@ -312,16 +318,16 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     {
         Vector3 cameraForward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
         Vector3 moveForward = cameraForward * this.inputVelocity.y + Camera.main.transform.right * this.inputVelocity.x;
-        Vector3 moveVelocity = moveForward * this.spinJumpAirHorizontalForce * Time.deltaTime + new Vector3(0f, this._velocity.y, 0f);
+        Vector3 moveVelocity = moveForward * this.spinJumpAirHorizontalForce * Time.deltaTime + this._velocity;
 
         //最高速度を超えていなければ入力した横方向に加速
         if (Mathf.Sqrt(moveVelocity.x * moveVelocity.x + moveVelocity.z * moveVelocity.z) < this.maxSpinJumpAirHorizontalSpeed) this._velocity = new Vector3(moveVelocity.x, this._velocity.y, moveVelocity.z);
 
         //vertical下方向に最高速度を越えていれば、最高速度にする
-        if (this._velocity.y < -1 * this.maxSpinJumpAirVerticalSpeed) this._velocity.y = -1 * this.maxNormalAirVerticalSpeed;
+        if (this._velocity.y < -1 * this.maxSpinJumpAirVerticalSpeed) this._velocity.y = -1 * this.maxSpinJumpAirVerticalSpeed;
 
         //回転運動
-        this.transform.Rotate(new Vector3(0f, 1000f, 0f) * Time.deltaTime, Space.World);
+        this.transform.Rotate(new Vector3(0f, 2000f, 0f) * Time.deltaTime, Space.World);
     }
 
     /// <summary>
@@ -354,7 +360,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     private void SpinJump()
     {
         this._isGrounded = false;
-        this._velocity = Vector3.up * this.spinJumpVerticalSpeed;
+        this._velocity.y = this.spinJumpVerticalSpeed;
 
         this.currentState = E_State.SpinJumping;
         this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.SpinJump);
@@ -367,6 +373,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     {
         this._velocity = Vector3.zero;
         //1回転させる処理
+        //this.transform.Rotate(new Vector3(0f, 2000f, 0f) * Time.deltaTime, Space.World);
 
         this.currentState = E_State.HipDropping;
         this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.HipDrop);

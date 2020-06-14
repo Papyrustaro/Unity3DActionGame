@@ -49,7 +49,6 @@ public class PlayerAnimation : MonoBehaviour
                 _animator.SetBool("IsStickingWall", false);
                 break;
             case E_PlayerAnimationType.JumpToTop:
-                Debug.Log("jump");
                 _animator.SetBool("IsLanding", false);
                 _animator.SetTrigger("JumpToTop");
                 _animator.SetBool("IsFalling", false);
