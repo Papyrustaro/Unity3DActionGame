@@ -55,7 +55,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     /// <summary>
     /// 張り付いている壁の法線ベクトル
     /// </summary>
-    public Vector3 NormalOfStickingWall { get; set; } = Vector3.zero;
+    public Vector3 NormalOfStickingWall { get; private set; } = Vector3.zero;
 
     public PlayerAnimation _PlayerAnimation => this._playerAnimation;
 
@@ -192,21 +192,6 @@ public class PlayerMovementBasedCamera : MonoBehaviour
             if (this.currentState == E_State.JumpToTop && this._velocity.y > 0f) this.currentState = E_State.TopOfJump;
             else if (this._velocity.y <= -0f && (this.currentState != E_State.SpinJumping && this.currentState != E_State.StickingWall)) this.currentState = E_State.Falling;
         }
-
-        /*switch (this.currentState)
-        {
-            case E_State.Standing:
-                if (this.inputVelocity != Vector2.zero) this.currentState = E_State.Running;
-                break;
-            case E_State.Running:
-                break;
-            case E_State.JumpToTop:
-                break;
-            case E_State.TopOfJump:
-                break;
-            case E_State.Falling:
-                break;
-        }*/
     }
 
     private void UpdateAnimation()
@@ -228,12 +213,6 @@ public class PlayerMovementBasedCamera : MonoBehaviour
             case E_State.StickingWall:
                 this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.StickingWall);
                 break;
-            //case E_State.HipDropping:
-              //  break;
-            //case E_State.SpinJumping:
-              //  break;
-            //case E_State.BackFliping:
-              //  break;
 
 
             case E_State.Salute:
@@ -398,75 +377,6 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         }));
     }
 
-
-    private void MoveTest()
-    {
-        if (this._isGrounded)
-        {
-            this._velocity = Vector3.zero;
-
-            Vector3 cameraForward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
-            Vector3 moveForward = cameraForward * Input.GetAxis("Vertical") + Camera.main.transform.right * Input.GetAxis("Horizontal");
-            this._velocity = moveForward * this.runHorizontalSpeed + new Vector3(0f, this._velocity.y, 0f);
-
-            if (moveForward != Vector3.zero)
-            {
-                this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(moveForward), 0.2f);
-            }
-
-            if (moveForward.magnitude > 0f) this.currentState = E_State.Running;
-            else this.currentState = E_State.Standing;
-
-            if (Input.GetButtonDown("Jump"))
-            {
-                this.currentState = E_State.JumpToTop;
-                _velocity.y += jumpVerticalSpeed;
-                this._isGrounded = false;
-            }
-            else
-            {
-                this._velocity += this.addForceDownPower;
-            }
-        }
-        else
-        {
-            Vector3 cameraForward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
-            Vector3 moveForward = cameraForward * Input.GetAxis("Vertical") + Camera.main.transform.right * Input.GetAxis("Horizontal");
-            this._velocity += moveForward * this.runHorizontalSpeed * 0.01f; //この場合、入力している間加速し続けるため、最大速度の設定が必要。
-
-            if (this._velocity.y < -0.05f) this.currentState = E_State.Falling;
-            else this.currentState = E_State.TopOfJump;
-        }
-
-        _velocity.y -= this.gravityVerticalForce * Time.deltaTime;
-        _characterController.Move(_velocity * Time.deltaTime);
-
-        this._playerAnimation.PlayerAnimator.SetBool("IsLanding", this._isGrounded);
-    }
-
-    private void PlayAnimationOfPlayer()
-    {
-
-        switch (this.currentState)
-        {
-            case E_State.Standing:
-                this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.Standing);
-                break;
-            case E_State.Running:
-                this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.Running);
-                break;
-            case E_State.JumpToTop:
-                this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.JumpToTop);
-                break;
-            case E_State.Falling:
-                this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.TopToGround);
-                break;
-            case E_State.TopOfJump:
-                this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.TopOfJump);
-                break;
-        }
-    }
-
     /// <summary>
     /// 壁キック
     /// </summary>
@@ -477,16 +387,12 @@ public class PlayerMovementBasedCamera : MonoBehaviour
 
         this._isGrounded = false;
         this.currentState = E_State.JumpToTop;
-        //向きを変える(とりあえず現在の向きを反転で妥協)
-        //this.transform.rotation = Quaternion.Euler(Vector3.Reflect(this.transform.rotation.eulerAngles, normalOfWall));
-        //this.transform.rotation = Quaternion.Euler(new Vector3(0f, 180f, 0f));
 
         //法線ベクトルのyの大きさに制限を加える？
-        //this.transform.LookAt(this.transform.position + normalOfWall);
         this.transform.forward = this.NormalOfStickingWall;
 
         //移動させる
-        this._velocity = new Vector3(this.NormalOfStickingWall.x * this.wallKickHorizontalSpeed, this.wallKickVerticalSpeed, this.NormalOfStickingWall.z * this.wallKickHorizontalSpeed);
+        this._velocity = new Vector3(this.NormalOfStickingWall.x * this.wallKickHorizontalSpeed + this._velocity.x, this.wallKickVerticalSpeed, this.NormalOfStickingWall.z * this.wallKickHorizontalSpeed + this._velocity.z);
 
         //animation
         this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.JumpToTop);
@@ -528,30 +434,31 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         }
     }
 
-
-    public void StickWall(bool startStick)
+    /// <summary>
+    /// 壁に張り付く。張り付いたときに壁方向を向き、水平方向の速度を0にする
+    /// </summary>
+    /// <param name="normalOfStickingWall">壁面の垂直方向(自身のほうへの)</param>
+    public void StickWall(Vector3 normalOfStickingWall)
     {
         if (this._isGrounded) return;
 
-        if (startStick)
-        {
-            this._velocity = new Vector3(0f, this._velocity.y, 0f);
-            this.currentState = E_State.StickingWall;
-            this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.StickingWall);
-        }
-        else
-        {
-            this.currentState = E_State.Falling;
-            this.NormalOfStickingWall = Vector3.zero;
-            this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.TopToGround);
-        }
+        this._velocity = new Vector3(0f, this._velocity.y, 0f);
+        this.transform.rotation = Quaternion.LookRotation(-1 * normalOfStickingWall, Vector3.up);
+        this.NormalOfStickingWall = normalOfStickingWall;
+        this.currentState = E_State.StickingWall;
+        this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.StickingWall);
     }
 
-    public void RollJump()
+    /// <summary>
+    /// 壁張り付き状態から、落下状態へ移行
+    /// </summary>
+    public void StopStickingWall()
     {
-        if (!this._isGrounded) return;
-        Debug.Log("ロールジャンプ");
-        this._velocity.y = 10f;
+        if (this._isGrounded) return;
+
+        this.currentState = E_State.Falling;
+        this.NormalOfStickingWall = Vector3.zero;
+        this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.TopToGround);
     }
 
     /// <summary>

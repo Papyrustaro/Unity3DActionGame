@@ -6,34 +6,14 @@ public class WallKickTrigger : MonoBehaviour
 {
     [SerializeField] private PlayerMovementBasedCamera playerMoveController;
 
-    /// <summary>
-    /// 張り付いている壁の法線ベクトル
-    /// </summary>
-    private Vector3 normalOfWall;
-
-    /*private void Update()
-    {
-        if(this.normalOfWall != Vector3.zero && !this.playerMoveController.IsGrounded)
-        {
-            //this.playerMoveController.InitVelocity(E_Vector.XZ);
-            this.playerMoveController.ChangeVelocityByRate(E_Vector.XZ, 0.2f);
-            if (Input.GetButtonDown("Jump"))
-            {
-                //this.playerMoveController.WallKick(this.normalOfWall);
-            }
-        }
-    }*/
-
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.transform.CompareTag("Stage"))
         {
-            //this.normalOfWall = collision.contacts[0].normal;
             Vector3 normalVector = collision.contacts[0].normal;
             if(normalVector.y < 0.02f) //壁が一定以上垂直方向から傾いていなければ張り付く
             {
-                this.playerMoveController.NormalOfStickingWall = new Vector3(normalVector.x, 0f, normalVector.z).normalized;
-                this.playerMoveController.StickWall(true);
+                this.playerMoveController.StickWall(normalVector);
             }
         }
     }
@@ -42,12 +22,7 @@ public class WallKickTrigger : MonoBehaviour
     {
         if (collision.transform.CompareTag("Stage"))
         {
-            this.playerMoveController.NormalOfStickingWall = Vector3.zero;
-            this.playerMoveController.StickWall(false);
-            //this.normalOfWall = Vector3.zero;
-            //this.playerMoveController.StickWall(false);
-            //this.playerMoveController._PlayerAnimation.PlayerAnimator.SetBool("StickingWall", false);
-            //this.playerMoveController.IsStickingWall = false;
+            this.playerMoveController.StopStickingWall();
         }
     }
 }
