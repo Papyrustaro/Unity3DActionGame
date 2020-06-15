@@ -29,9 +29,12 @@ public class WallKickTrigger : MonoBehaviour
         if (collision.transform.CompareTag("Stage"))
         {
             //this.normalOfWall = collision.contacts[0].normal;
-            this.playerMoveController.NormalOfStickingWall = collision.contacts[0].normal;
-            this.playerMoveController.StickWall(true);
-            //this.playerMoveController.StickWall(true);
+            Vector3 normalVector = collision.contacts[0].normal;
+            if(normalVector.y < 0.02f) //壁が一定以上垂直方向から傾いていなければ張り付く
+            {
+                this.playerMoveController.NormalOfStickingWall = new Vector3(normalVector.x, 0f, normalVector.z).normalized;
+                this.playerMoveController.StickWall(true);
+            }
         }
     }
 

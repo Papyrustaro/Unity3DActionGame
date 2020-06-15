@@ -303,9 +303,24 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     {
         Vector3 cameraForward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
         Vector3 moveForward = cameraForward * this.inputVelocity.y + Camera.main.transform.right * this.inputVelocity.x;
-        Vector3 moveVelocity = moveForward * this.normalAirHorizontalForce * Time.deltaTime + this._velocity;
+        Vector3 moveVelocity = moveForward * this.normalAirHorizontalForce * Time.deltaTime + new Vector3(this._velocity.x, 0f, this._velocity.z);
 
-        //最高速度を超えていなければ入力した横方向に加速
+
+        //壁方向への速度は0にする(いつでもすぐに壁から離れられるようにするため)
+        float incidenceAngle = Vector3.SignedAngle(moveVelocity, -1 * this.NormalOfStickingWall, Vector3.up); //移動ベクトルと壁の法線ベクトル間の角度
+
+        if(incidenceAngle > -90 && incidenceAngle < 90) //壁方向への速度があるとき→壁方向の速さのみ0にする
+        {
+            //壁に平行方向への速さに(ベクトルはそのまま)
+            moveVelocity *= Mathf.Abs(Mathf.Sin(incidenceAngle * Mathf.Deg2Rad));
+
+            //速度ベクトルを壁に平行方向に回転
+            if (incidenceAngle <= 0) moveVelocity = Quaternion.Euler(0f, 90 + incidenceAngle, 0f) * moveVelocity; //正面右方向
+            else if (incidenceAngle > 0) moveVelocity = Quaternion.Euler(0f, -1 * (90 - incidenceAngle), 0f) * moveVelocity; //正面左方向
+            
+        }
+
+        //最高速度を超えていなければ入力した水平方向に加速
         if (Mathf.Sqrt(moveVelocity.x * moveVelocity.x + moveVelocity.z * moveVelocity.z) < this.maxNormalAirHorizontalSpeed) this._velocity = new Vector3(moveVelocity.x, this._velocity.y, moveVelocity.z);
 
         if (this._velocity.y < -1 * this.maxStickingWallFallSpeed) this._velocity.y = -1 * this.maxStickingWallFallSpeed;
@@ -461,6 +476,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         Debug.Log("壁キック");
 
         this._isGrounded = false;
+        this.currentState = E_State.JumpToTop;
         //向きを変える(とりあえず現在の向きを反転で妥協)
         //this.transform.rotation = Quaternion.Euler(Vector3.Reflect(this.transform.rotation.eulerAngles, normalOfWall));
         //this.transform.rotation = Quaternion.Euler(new Vector3(0f, 180f, 0f));
