@@ -14,6 +14,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     [SerializeField] private float spinJumpVerticalSpeed = 3f;
     [SerializeField] private float wallKickHorizontalSpeed = 3f;
     [SerializeField] private float wallKickVerticalSpeed = 3f;
+    [SerializeField] private float backFlipHorizontalSpeed = 3f;
     [SerializeField] private float backFlipVerticalSpeed = 3f;
     [SerializeField] private float longJumpHorizontalSpeed = 3f;
     [SerializeField] private float longJumpVerticalSpeed = 3f;
@@ -82,10 +83,6 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         UpdateMovement();
         UpdateState();
         UpdateAnimation();
-
-        //MoveByCameraPosition();
-        //MoveTest();
-        //PlayAnimationOfPlayer();
     }
 
     /// <summary>
@@ -331,7 +328,15 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     /// </summary>
     private void BackFlip()
     {
-        //回転作業がやっかい。頂点にきたときに...とりあえずなしで
+        //this._velocity.y = this.backFlipVerticalSpeed;
+        this._isGrounded = false;
+
+        //進行方向を向く
+        if (!(this._velocity.x == 0f && this._velocity.z == 0f)) this.transform.forward = new Vector3(this._velocity.x, 0f, this._velocity.z);
+        this._velocity = this.transform.forward * -1 * this.backFlipHorizontalSpeed + this.transform.up * this.backFlipVerticalSpeed;
+
+        this.currentState = E_State.JumpToTop;
+        this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.JumpToTop);
     }
 
     /// <summary>
@@ -373,6 +378,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
 
         this.currentState = E_State.HipDropping;
         this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.HipDrop);
+        StartCoroutine(CoroutineManager.OneRotationInCertainTime(this.transform, Vector3.right * 360f, 0.14f));
         StartCoroutine(CoroutineManager.DelayMethod(0.15f, () =>
         {
             this._velocity.y = -1 * this.hipDropVerticalSpeed;
