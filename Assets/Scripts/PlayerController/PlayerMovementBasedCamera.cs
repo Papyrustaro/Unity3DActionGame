@@ -150,7 +150,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     private void UpdateMovement()
     {
         if (this._isGrounded) this._velocity = Vector3.zero;
-        this._velocity.y -= this.gravityVerticalForce * Time.deltaTime;
+        if(this.currentState != E_State.HipDropping) this._velocity.y -= this.gravityVerticalForce * Time.deltaTime;
 
         switch (this.currentState)
         {
@@ -181,6 +181,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     /// </summary>
     private void UpdateState()
     {
+
         //ここで接地判定をおこなうため、jumpなどの処理時に念のため_isGrounded = falseにするべき
         if (this._isGrounded)
         {
@@ -189,6 +190,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         }
         else
         {
+            if (this.currentState == E_State.HipDropping) return; //ヒップドロップ中は着地するまで遷移しない
             if (this.currentState == E_State.JumpToTop && this._velocity.y > 0f) this.currentState = E_State.TopOfJump;
             else if (this._velocity.y <= -0f && (this.currentState != E_State.SpinJumping && this.currentState != E_State.StickingWall)) this.currentState = E_State.Falling;
         }
@@ -371,7 +373,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
 
         this.currentState = E_State.HipDropping;
         this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.HipDrop);
-        StartCoroutine(CoroutineManager.DelayMethod(0.5f, () =>
+        StartCoroutine(CoroutineManager.DelayMethod(0.15f, () =>
         {
             this._velocity.y = -1 * this.hipDropVerticalSpeed;
         }));

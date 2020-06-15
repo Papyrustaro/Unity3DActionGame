@@ -7043,6 +7043,11 @@ PrefabInstance:
       propertyPath: normalAirHorizontalForce
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 5117990153323860878, guid: 8b88e6ab4355afb47b0b6feb7308c43c,
+        type: 3}
+      propertyPath: hipDropVerticalSpeed
+      value: 70
+      objectReference: {fileID: 0}
     - target: {fileID: 5117990154641889792, guid: 8b88e6ab4355afb47b0b6feb7308c43c,
         type: 3}
       propertyPath: m_Layer
