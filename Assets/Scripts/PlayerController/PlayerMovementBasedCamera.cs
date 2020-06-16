@@ -344,6 +344,8 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         if (!(this._velocity.x == 0f && this._velocity.z == 0f)) this.transform.forward = new Vector3(this._velocity.x, 0f, this._velocity.z);
         this._velocity = this.transform.forward * -1 * this.backFlipHorizontalSpeed + this.transform.up * this.backFlipVerticalSpeed;
 
+        StartCoroutine(CoroutineManager.OneRotationInCertainTime(this.transform, this.CenterPositionFromTransform, this.transform.right, 0.14f, false));
+        StartCoroutine(CoroutineManager.OneRotationInCertainTime(this.transform, this.CenterPositionFromTransform, this.transform.right, 0.14f, false));
         this.currentState = E_State.JumpToTop;
         this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.JumpToTop);
     }
@@ -382,9 +384,6 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     private void HipDrop()
     {
         this._velocity = Vector3.zero;
-        //1回転させる処理
-        //this.transform.Rotate(new Vector3(0f, 2000f, 0f) * Time.deltaTime, Space.World);
-
         this.currentState = E_State.HipDropping;
         this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.HipDrop);
         StartCoroutine(CoroutineManager.OneRotationInCertainTime(this.transform, this.CenterPositionFromTransform, this.transform.right, 0.14f, false));
