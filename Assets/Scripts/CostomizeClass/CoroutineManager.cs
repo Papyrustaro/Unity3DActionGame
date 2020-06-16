@@ -11,21 +11,26 @@ public class CoroutineManager : MonoBehaviour
         action();
     }
 
-    public static IEnumerator OneRotationInCertainTime(Transform obj, Vector3 vec, float time)
+    public static IEnumerator OneRotationInCertainTime(Transform obj, Vector3 centerPositionFromTransform, Vector3 axis, float time, bool moveCameraInRotation)
     {
+        //カメラの追従を一時停止
+        if (!moveCameraInRotation) ThirdPersonCameraController.Instance.IsMoving = false;
+
+        Vector3 centerOfRotation = obj.position + centerPositionFromTransform;
         float countTime = 0f;
-        //float angle = 360f;
         Quaternion beforeRotation = obj.rotation;
+
+        //回転処理
         while (countTime < time)
         {
-            obj.Rotate(vec * Time.deltaTime / time, Space.Self);
-            //obj.Rotate(vec * Time.deltaTime / time);
-            //obj.Rotate(Vector3.right, angle * Time.deltaTime / time);
+            obj.RotateAround(centerOfRotation, axis, 360f * Time.deltaTime / time);
             yield return null;
             countTime += Time.deltaTime;
         }
 
+        //rotationとcameraの設定を回転前に戻して終了
         obj.rotation = beforeRotation;
+        if (!moveCameraInRotation) ThirdPersonCameraController.Instance.IsMoving = true;
         yield break;
     }
 }

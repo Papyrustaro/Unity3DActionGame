@@ -62,6 +62,11 @@ public class PlayerMovementBasedCamera : MonoBehaviour
 
     public Vector3 Velocity { get; set; }
 
+    /// <summary>
+    /// プレイヤーのtransformのcenterから、実際のgameObjectの中心までのベクトル(読み取り専用)
+    /// </summary>
+    public Vector3 CenterPositionFromTransform { get; } = new Vector3(0f, 0.5f, 0f);
+
     private void Awake()
     {
         this._rigidbody = GetComponent<Rigidbody>();
@@ -85,6 +90,10 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         UpdateAnimation();
     }
 
+    private void DebugFunc()
+    {
+        //this.transform.RotateAround(this.centerPosition, this.transform.right, 100f * Time.deltaTime);
+    }
     /// <summary>
     /// プレイヤーの入力を受け取る
     /// </summary>
@@ -378,7 +387,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
 
         this.currentState = E_State.HipDropping;
         this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.HipDrop);
-        StartCoroutine(CoroutineManager.OneRotationInCertainTime(this.transform, Vector3.right * 360f, 0.14f));
+        StartCoroutine(CoroutineManager.OneRotationInCertainTime(this.transform, this.CenterPositionFromTransform, this.transform.right, 0.14f, false));
         StartCoroutine(CoroutineManager.DelayMethod(0.15f, () =>
         {
             this._velocity.y = -1 * this.hipDropVerticalSpeed;

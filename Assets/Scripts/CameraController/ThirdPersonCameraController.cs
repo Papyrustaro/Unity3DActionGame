@@ -17,7 +17,23 @@ public class ThirdPersonCameraController : MonoBehaviour
     private float rotationByMouseForce = 200f;
     private Vector3 targetPositionBeforeFrame;
 
+    public static ThirdPersonCameraController Instance { get; private set; }
+
+    public bool IsMoving { get; set; } = true;
+
     public E_CameraViewType CameraViewType { private get; set; } = E_CameraViewType.Default;
+
+    private void Awake()
+    {
+        if(Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            throw new System.Exception();
+        }
+    }
     private void Start()
     {
         this.targetPositionBeforeFrame = this.targetPlayer.position;
@@ -25,6 +41,7 @@ public class ThirdPersonCameraController : MonoBehaviour
 
     private void Update()
     {
+        if (!this.IsMoving) return;
         this.transform.position += this.targetPlayer.position - this.targetPositionBeforeFrame;
         this.targetPositionBeforeFrame = this.targetPlayer.position;
 
