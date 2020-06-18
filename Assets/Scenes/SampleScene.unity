@@ -6072,7 +6072,7 @@ MonoBehaviour:
   onePersonPosition: {x: 0, y: 1, z: 0.5}
   overheadPosition: {x: 0, y: 15, z: -1}
   overheadRotation: {x: 85, y: 0, z: 0}
-  targetPlayer: {fileID: 2057568358}
+  targetPlayer: {fileID: 1763031446}
 --- !u!1 &965241599
 GameObject:
   m_ObjectHideFlags: 0
@@ -6748,6 +6748,36 @@ Transform:
   m_Father: {fileID: 1886478636}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1763031445
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1763031446}
+  m_Layer: 0
+  m_Name: CenterPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1763031446
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1763031445}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2057568358}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1785175565
 GameObject:
   m_ObjectHideFlags: 0
@@ -7088,6 +7118,11 @@ PrefabInstance:
       propertyPath: longJumpHorizontalSpeed
       value: 15
       objectReference: {fileID: 0}
+    - target: {fileID: 5117990153323860878, guid: 8b88e6ab4355afb47b0b6feb7308c43c,
+        type: 3}
+      propertyPath: <CenterPosition>k__BackingField
+      value: 
+      objectReference: {fileID: 1763031446}
     - target: {fileID: 5117990154641889792, guid: 8b88e6ab4355afb47b0b6feb7308c43c,
         type: 3}
       propertyPath: m_Layer
@@ -7452,6 +7487,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: UnityChanSDSample
+      objectReference: {fileID: 0}
+    - target: {fileID: 5117990154641889946, guid: 8b88e6ab4355afb47b0b6feb7308c43c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5117990154641889948, guid: 8b88e6ab4355afb47b0b6feb7308c43c,
         type: 3}

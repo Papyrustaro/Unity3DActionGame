@@ -40,6 +40,10 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     private Vector3 addForceDownPower = Vector3.down;
     private Vector3 _velocity;
 
+    [field: SerializeField]
+    [field: RenameField("centerPosition")]
+    public Transform CenterPosition { get; private set; }
+
     /// <summary>
     /// x: Horizontal, y: Vertical
     /// </summary>
@@ -62,10 +66,6 @@ public class PlayerMovementBasedCamera : MonoBehaviour
 
     public Vector3 Velocity { get; set; }
 
-    /// <summary>
-    /// プレイヤーのtransformのcenterから、実際のgameObjectの中心までのベクトル(読み取り専用)
-    /// </summary>
-    public Vector3 CenterPositionFromTransform { get; } = new Vector3(0f, 0.5f, 0f);
 
     private void Awake()
     {
@@ -81,18 +81,28 @@ public class PlayerMovementBasedCamera : MonoBehaviour
 
     private void Update()
     {
-        this.waitingAction = E_ActionFlag.None;
+        
+        FirstUpdateInit();
 
         UpdateInput();
         UpdateAction();
         UpdateMovement();
         UpdateState();
         UpdateAnimation();
+        UpdateFixRotation();
     }
 
     private void DebugFunc()
     {
         //this.transform.RotateAround(this.centerPosition, this.transform.right, 100f * Time.deltaTime);
+    }
+
+    /// <summary>
+    /// 毎フレームUpdateで最初に呼ばれる初期化処理
+    /// </summary>
+    private void FirstUpdateInit()
+    {
+        this.waitingAction = E_ActionFlag.None;
     }
     /// <summary>
     /// プレイヤーの入力を受け取る
@@ -120,6 +130,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
             case E_State.Falling:
             case E_State.LongJumpToTop:
             case E_State.SpinJumping:
+            case E_State.BackFliping:
                 if (Input.GetButtonDown("HipDrop")) this.waitingAction = E_ActionFlag.HipDrop;
                 break;
         }
@@ -198,7 +209,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         {
             if (this.currentState == E_State.HipDropping) return; //ヒップドロップ中は着地するまで遷移しない
             if (this.currentState == E_State.JumpToTop && this._velocity.y > 0f) this.currentState = E_State.TopOfJump;
-            else if (this._velocity.y <= -0f && (this.currentState != E_State.SpinJumping && this.currentState != E_State.StickingWall)) this.currentState = E_State.Falling;
+            else if (this._velocity.y <= -0f && (this.currentState != E_State.SpinJumping && this.currentState != E_State.StickingWall && this.currentState != E_State.BackFliping)) this.currentState = E_State.Falling;
         }
     }
 
@@ -230,6 +241,17 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         }
 
         this._playerAnimation.PlayerAnimator.SetBool("IsLanding", this._isGrounded);
+    }
+
+    /// <summary>
+    /// 現在の状態に合わせて、プレイヤーのrotation.xzを修正する(万が一ずれたとき用)
+    /// </summary>
+    private void UpdateFixRotation()
+    {
+        if(this.currentState != E_State.BackFliping && this.currentState != E_State.HipDropping)
+        {
+            this.transform.rotation = new Quaternion(0f, this.transform.rotation.y, 0f, this.transform.rotation.w);
+        }
     }
 
     /// <summary>
@@ -295,7 +317,6 @@ public class PlayerMovementBasedCamera : MonoBehaviour
 
         //壁方向への速度は0にする(いつでもすぐに壁から離れられるようにするため)
         float incidenceAngle = Vector3.SignedAngle(moveVelocity, -1 * this.NormalOfStickingWall, Vector3.up); //移動ベクトルと壁の法線ベクトル間の角度
-
         if(incidenceAngle > -90 && incidenceAngle < 90) //壁方向への速度があるとき→壁方向の速さのみ0にする
         {
             //壁に平行方向への速さに(ベクトルはそのまま)
@@ -304,7 +325,6 @@ public class PlayerMovementBasedCamera : MonoBehaviour
             //速度ベクトルを壁に平行方向に回転
             if (incidenceAngle <= 0) moveVelocity = Quaternion.Euler(0f, 90 + incidenceAngle, 0f) * moveVelocity; //正面右方向
             else if (incidenceAngle > 0) moveVelocity = Quaternion.Euler(0f, -1 * (90 - incidenceAngle), 0f) * moveVelocity; //正面左方向
-            
         }
 
         //最高速度を超えていなければ入力した水平方向に加速
@@ -344,10 +364,10 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         if (!(this._velocity.x == 0f && this._velocity.z == 0f)) this.transform.forward = new Vector3(this._velocity.x, 0f, this._velocity.z);
         this._velocity = this.transform.forward * -1 * this.backFlipHorizontalSpeed + this.transform.up * this.backFlipVerticalSpeed;
 
-        StartCoroutine(CoroutineManager.OneRotationInCertainTime(this.transform, this.CenterPositionFromTransform, this.transform.right, 0.14f, false));
-        StartCoroutine(CoroutineManager.OneRotationInCertainTime(this.transform, this.CenterPositionFromTransform, this.transform.right, 0.14f, false));
-        this.currentState = E_State.JumpToTop;
-        this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.JumpToTop);
+        StartCoroutine(TransformManager.RotateInCertainTimeByAxisFromAway(this.transform, this.CenterPosition, E_TransformAxis.Right, -360f, 1f));
+
+        this.currentState = E_State.BackFliping;
+        this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.BackFlip);
     }
 
     /// <summary>
@@ -383,10 +403,12 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     /// </summary>
     private void HipDrop()
     {
+        StopAllCoroutines(); //現在はbackFlipのコルーチンのみ
         this._velocity = Vector3.zero;
+        this.transform.rotation = new Quaternion(0f, this.transform.rotation.y, 0f, this.transform.rotation.w);
         this.currentState = E_State.HipDropping;
         this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.HipDrop);
-        StartCoroutine(CoroutineManager.OneRotationInCertainTime(this.transform, this.CenterPositionFromTransform, this.transform.right, 0.14f, false));
+        StartCoroutine(TransformManager.RotateInCertainTimeByAxisFromAway(this.transform, this.CenterPosition, E_TransformAxis.Right, 360f, 0.14f));
         StartCoroutine(CoroutineManager.DelayMethod(0.15f, () =>
         {
             this._velocity.y = -1 * this.hipDropVerticalSpeed;
@@ -412,42 +434,6 @@ public class PlayerMovementBasedCamera : MonoBehaviour
 
         //animation
         this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.JumpToTop);
-    }
-
-    /// <summary>
-    /// 速度を初期化(0f)
-    /// </summary>
-    /// <param name="initVector">初期化するベクトル</param>
-    public void InitVelocity(E_Vector initVector)
-    {
-        if (initVector == E_Vector.X || initVector == E_Vector.XY || initVector == E_Vector.XYZ || initVector == E_Vector.XZ)
-        {
-            this._velocity.x = 0f;
-        }
-        if (initVector == E_Vector.Y || initVector == E_Vector.XY || initVector == E_Vector.YZ || initVector == E_Vector.XYZ)
-        {
-            this._velocity.y = 0f;
-        }
-        if (initVector == E_Vector.Z || initVector == E_Vector.XZ || initVector == E_Vector.YZ || initVector == E_Vector.XYZ)
-        {
-            this._velocity.z = 0f;
-        }
-    }
-
-    public void ChangeVelocityByRate(E_Vector initVector, float rate)
-    {
-        if (initVector == E_Vector.X || initVector == E_Vector.XY || initVector == E_Vector.XYZ || initVector == E_Vector.XZ)
-        {
-            this._velocity.x = this._velocity.x * rate;
-        }
-        if (initVector == E_Vector.Y || initVector == E_Vector.XY || initVector == E_Vector.YZ || initVector == E_Vector.XYZ)
-        {
-            this._velocity.y = this._velocity.y * rate;
-        }
-        if (initVector == E_Vector.Z || initVector == E_Vector.XZ || initVector == E_Vector.YZ || initVector == E_Vector.XYZ)
-        {
-            this._velocity.z = this._velocity.z * rate;
-        }
     }
 
     /// <summary>
