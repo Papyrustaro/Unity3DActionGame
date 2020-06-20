@@ -10,8 +10,12 @@ public class PlayerAnimation : MonoBehaviour
 
     public Animator PlayerAnimator => this._animator;
 
+    private MonobitEngine.MonobitView _monobitView;
+
     private void Awake()
     {
+        this._monobitView = GetComponent<MonobitEngine.MonobitView>();
+        if (!this._monobitView.isMine) return;
         InitAnimation();
     }
 
@@ -22,6 +26,7 @@ public class PlayerAnimation : MonoBehaviour
 
     private void Update()
     {
+        if (!this._monobitView.isMine) return;
         if (Input.GetKeyDown(KeyCode.O))
         {
             Play(E_PlayerAnimationType.Damaged);

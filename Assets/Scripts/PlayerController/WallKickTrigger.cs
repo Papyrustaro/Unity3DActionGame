@@ -5,9 +5,16 @@ using UnityEngine;
 public class WallKickTrigger : MonoBehaviour
 {
     [SerializeField] private PlayerMovementBasedCamera playerMoveController;
+    private MonobitEngine.MonobitView _monobitView;
+
+    private void Awake()
+    {
+        this._monobitView = this.transform.root.GetComponent<MonobitEngine.MonobitView>();
+    }
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (!this._monobitView.isMine) return;
         if (collision.transform.CompareTag("Stage"))
         {
             Vector3 normalVector = collision.contacts[0].normal;
@@ -20,6 +27,7 @@ public class WallKickTrigger : MonoBehaviour
 
     private void OnCollisionExit(Collision collision)
     {
+        if (!this._monobitView.isMine) return;
         if (collision.transform.CompareTag("Stage"))
         {
             this.playerMoveController.StopStickingWall();

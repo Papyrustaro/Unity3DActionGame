@@ -2,3 +2,4 @@
 ・PrefabはAssets/Resourcesフォルダ内に入れる必要がある
 http://www.monobitengine.com/doc/mun/
 ・シーンに配置されたMonoBitViewのMonobitViewIDは1~999でなければならない
+・AnimationのTriggerには対応していない

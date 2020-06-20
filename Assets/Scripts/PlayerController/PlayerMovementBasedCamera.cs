@@ -40,6 +40,8 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     private Vector3 addForceDownPower = Vector3.down;
     private Vector3 _velocity;
 
+    private MonobitEngine.MonobitView _monobitView;
+
     [field: SerializeField]
     [field: RenameField("centerPosition")]
     public Transform CenterPosition { get; private set; }
@@ -69,6 +71,9 @@ public class PlayerMovementBasedCamera : MonoBehaviour
 
     private void Awake()
     {
+        this._monobitView = GetComponent<MonobitEngine.MonobitView>();
+
+        if (!this._monobitView.isMine) return;
         this._rigidbody = GetComponent<Rigidbody>();
         this._playerAnimation = GetComponent<PlayerAnimation>();
         this._characterController = GetComponent<CharacterController>();
@@ -81,7 +86,8 @@ public class PlayerMovementBasedCamera : MonoBehaviour
 
     private void Update()
     {
-        
+        if (!this._monobitView.isMine) return;
+
         FirstUpdateInit();
 
         UpdateInput();
