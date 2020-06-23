@@ -73,7 +73,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     {
         this._monobitView = GetComponent<MonobitEngine.MonobitView>();
 
-        if (!this._monobitView.isMine) return;
+        if (this._monobitView != null && !this._monobitView.isMine) return;
         this._rigidbody = GetComponent<Rigidbody>();
         this._playerAnimation = GetComponent<PlayerAnimation>();
         this._characterController = GetComponent<CharacterController>();
@@ -86,7 +86,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
 
     private void Update()
     {
-        if (!this._monobitView.isMine) return;
+        if (this._monobitView != null && !this._monobitView.isMine) return;
 
         FirstUpdateInit();
 
@@ -370,7 +370,8 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         if (!(this._velocity.x == 0f && this._velocity.z == 0f)) this.transform.forward = new Vector3(this._velocity.x, 0f, this._velocity.z);
         this._velocity = this.transform.forward * -1 * this.backFlipHorizontalSpeed + this.transform.up * this.backFlipVerticalSpeed;
 
-        StartCoroutine(TransformManager.RotateInCertainTimeByAxisFromAway(this.transform, this.CenterPosition, E_TransformAxis.Right, -360f, 1f));
+        StartCoroutine(TransformManager.RotateInCertainTimeByFixedAxisFromAway(this.transform, this.CenterPosition, E_TransformAxis.Right, -180f, 0.7f));
+        StartCoroutine(TransformManager.RotateInCertainTimeByAxisFromAway(this.transform, this.CenterPosition, E_TransformAxis.Up, 360f * 9.5f, 0.7f, 0.95f));
 
         this.currentState = E_State.BackFliping;
         this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.BackFlip);

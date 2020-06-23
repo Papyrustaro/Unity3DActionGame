@@ -29,13 +29,67 @@ public class TransformManager : MonoBehaviour
         //回転処理
         while (countTime < time)
         {
+            yield return null;
             countTime += Time.deltaTime;
             obj.RotateAround(centerPosition.position, GetAxis(centerPosition, axis), angle * Time.deltaTime / time);
-            yield return null;
         }
 
         //超過分修正
         obj.RotateAround(centerPosition.position, GetAxis(centerPosition, axis), -1 * angle * (countTime - time) / time);
+        yield break;
+    }
+
+    /// <summary>
+    /// 自分のgameObjectが中心にいないときの一定時間で一定角度回転処理
+    /// </summary>
+    /// <param name="obj">回転させるtransform</param>
+    /// <param name="centerPosition">実際の回転中心transform</param>
+    /// <param name="axis">回転させる軸</param>
+    /// <param name="angle">回転角度</param>
+    /// <param name="time">回転時間</param>
+    /// <returns></returns>
+    public static IEnumerator RotateInCertainTimeByAxisFromAway(Transform obj, Transform centerPosition, E_TransformAxis axis, float angle, float beginTime, float time)
+    {
+        yield return new WaitForSeconds(beginTime);
+        float countTime = 0f;
+
+        //回転処理
+        while (countTime < time)
+        {
+            yield return null;
+            countTime += Time.deltaTime;
+            obj.RotateAround(centerPosition.position, GetAxis(centerPosition, axis), angle * Time.deltaTime / time);
+        }
+
+        //超過分修正
+        obj.RotateAround(centerPosition.position, GetAxis(centerPosition, axis), -1 * angle * (countTime - time) / time);
+        yield break;
+    }
+
+    /// <summary>
+    /// 自分のgameObjectが中心にいないときの一定時間で一定角度回転処理
+    /// </summary>
+    /// <param name="obj">回転させるtransform</param>
+    /// <param name="centerPosition">実際の回転中心transform</param>
+    /// <param name="axis">回転させる軸</param>
+    /// <param name="angle">回転角度</param>
+    /// <param name="time">回転時間</param>
+    /// <returns></returns>
+    public static IEnumerator RotateInCertainTimeByFixedAxisFromAway(Transform obj, Transform centerPosition, E_TransformAxis axis, float angle, float time)
+    {
+        float countTime = 0f;
+        Vector3 rotateAxis = GetAxis(centerPosition, axis);
+
+        //回転処理
+        while (countTime < time)
+        {
+            yield return null;
+            countTime += Time.deltaTime;
+            obj.RotateAround(centerPosition.position, rotateAxis, angle * Time.deltaTime / time);
+        }
+
+        //超過分修正
+        obj.RotateAround(centerPosition.position, rotateAxis, -1 * angle * (countTime - time) / time);
         yield break;
     }
 
@@ -54,9 +108,9 @@ public class TransformManager : MonoBehaviour
         //回転処理
         while (countTime < time)
         {
+            yield return null;
             countTime += Time.deltaTime;
             obj.Rotate(GetAxis(obj, axis), angle * Time.deltaTime / time);
-            yield return null;
         }
 
         //超過分修正

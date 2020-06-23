@@ -14,7 +14,7 @@ public class WallKickTrigger : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (!this._monobitView.isMine) return;
+        if (this._monobitView != null && !this._monobitView.isMine) return;
         if (collision.transform.CompareTag("Stage"))
         {
             Vector3 normalVector = collision.contacts[0].normal;
@@ -27,7 +27,7 @@ public class WallKickTrigger : MonoBehaviour
 
     private void OnCollisionExit(Collision collision)
     {
-        if (!this._monobitView.isMine) return;
+        if (this._monobitView != null && !this._monobitView.isMine) return;
         if (collision.transform.CompareTag("Stage"))
         {
             this.playerMoveController.StopStickingWall();

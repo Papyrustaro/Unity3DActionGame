@@ -14,7 +14,7 @@ public class PlayerManager : MonoBehaviour
     private void Awake()
     {
         this._monobitView = GetComponent<MonobitEngine.MonobitView>();
-        if (!this._monobitView.isMine) return;
+        if (this._monobitView != null && !this._monobitView.isMine) return;
 
         if(Instance == null)
         {
