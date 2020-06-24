@@ -28,6 +28,9 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     [SerializeField] private float maxSpinJumpAirVerticalSpeed = 2f;
     [SerializeField] private float maxStickingWallFallSpeed = 1f;
 
+    //遊び用
+    [SerializeField] private GameObject explosion;
+
 
     private Rigidbody _rigidbody;
     private bool _isGrounded = false;
@@ -88,6 +91,10 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     {
         if (this._monobitView != null && !this._monobitView.isMine) return;
 
+        if(this.currentState == E_State.BackFliping && this._isGrounded)
+        {
+            Instantiate(this.explosion, this.transform.position, Quaternion.identity);
+        }
         FirstUpdateInit();
 
         UpdateInput();
