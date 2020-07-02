@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Debugger : MonoBehaviour
+public class DebugSample : MonoBehaviour
 {
     [SerializeField] private float rotateUpSpeed = 50f;
     [SerializeField] private float rotateRightSpeed = 10f;
