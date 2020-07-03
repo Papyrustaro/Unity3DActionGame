@@ -42,6 +42,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
 
     private Vector3 addForceDownPower = Vector3.down;
     private Vector3 _velocity;
+    private Vector3 addVelocityThisFrame;
 
     private MonobitEngine.MonobitView _monobitView;
 
@@ -68,8 +69,6 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     public Vector3 NormalOfStickingWall { get; private set; } = Vector3.zero;
 
     public PlayerAnimation _PlayerAnimation => this._playerAnimation;
-
-    public Vector3 Velocity { get; set; }
 
 
     private void Awake()
@@ -203,7 +202,10 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         }
 
         //velocityに応じた移動処理
-        this._characterController.Move(this._velocity * Time.deltaTime);
+        //Debug.Log(this._characterController.velocity.x + ": " + this._velocity.x);
+        
+        this._characterController.Move(this._velocity * Time.deltaTime + this.addVelocityThisFrame);
+        this.addVelocityThisFrame = Vector3.zero;
     }
 
     /// <summary>
@@ -475,6 +477,19 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         this.currentState = E_State.Falling;
         this.NormalOfStickingWall = Vector3.zero;
         this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.TopToGround);
+    }
+
+    /// <summary>
+    /// 現在の速度にベクトルを足す
+    /// </summary>
+    /// <param name="addValue">足すベクトル</param>
+    public void AddVelocity(Vector3 addValue)
+    {
+        this.addVelocityThisFrame = addValue;
+        //if (this._isGrounded) this.addVelocityThisFrame += Vector3.down * 0.01f;
+        //if (this._isGrounded) this._characterController.Move(addValue + Vector3.down * 0.01f);
+        //else this._characterController.Move(addValue);
+        //this._characterController.Move(addValue + Vector3.down * 0.01f);
     }
 
     /// <summary>

@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Stage
+  - MoveStage
   layers:
   - Default
   - TransparentFX

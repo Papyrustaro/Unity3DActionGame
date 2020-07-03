@@ -15,11 +15,11 @@ public class DoTweenSample : MonoBehaviour
         //MoveSquareSample(3f, 2f, 2f);
         //MoveSquareSample(3f, 2f, 2f);
         //MoveSquareSample(new Vector3(3f, 0f, 3f), 2f, 2f);
-        //MoveSquareSample(new Vector3(3f, 0f, 3f), 2f, 2f);
-        RotationSample(1f, 5f, new Vector3(2, 0, 1));
+        MoveSquareSample(new Vector3(5f, 0f, 0f), 0f, 10f);
+        //RotationSample(1f, 5f, new Vector3(2, 0, 1));
         //RotationSample();
         //Sampleple();
-        Invoke("DestroyMe", 10f);
+        Invoke("DestroyMe", 30f);
     }
 
     private void Update()
@@ -133,14 +133,16 @@ public class DoTweenSample : MonoBehaviour
             {
                 Debug.Log("1ループ終了");
             })
+            .AppendCallback(() => Debug.Log("ループ開始"))
             .Append(this.transform.DOBlendableLocalMoveBy(Vector3.up * verticalLength, verticalTime))
             .Append(this.transform.DOBlendableLocalMoveBy(horizontalDirection, horizontalTime))
             .Append(this.transform.DOBlendableLocalMoveBy(Vector3.down * verticalLength, verticalTime))
             .Append(this.transform.DOBlendableLocalMoveBy(horizontalDirection * -1, horizontalTime))
             .SetRelative()
             .SetLoops(-1)
+            .SetLink(this.gameObject)
             .Play();
-        this.onDestroy.AddListener(() => sequence.Kill());
+        //this.onDestroy.AddListener(() => sequence.Kill());
     }
 
 
