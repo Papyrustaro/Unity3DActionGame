@@ -42,7 +42,8 @@ public class PlayerMovementBasedCamera : MonoBehaviour
 
     private Vector3 addForceDownPower = Vector3.down;
     private Vector3 _velocity;
-    private Vector3 addVelocityThisFrame;
+    private Vector3 addVelocityThisFrameInGrounded = Vector3.zero;
+    private Vector3 addVelocityThisFrame = Vector3.zero;
 
     private MonobitEngine.MonobitView _monobitView;
 
@@ -203,9 +204,14 @@ public class PlayerMovementBasedCamera : MonoBehaviour
 
         //velocityに応じた移動処理
         //Debug.Log(this._characterController.velocity.x + ": " + this._velocity.x);
-        
-        this._characterController.Move(this._velocity * Time.deltaTime + this.addVelocityThisFrame);
+
+        this._velocity += this.addVelocityThisFrame;
+        if (this._isGrounded) this._velocity += this.addVelocityThisFrameInGrounded;
+        //this._velocity += this.addVelocityThisFrame;
+        this._characterController.Move(this._velocity * Time.deltaTime);
+        //this._characterController.Move(this._velocity * Time.deltaTime + this.addVelocityThisFrame);
         this.addVelocityThisFrame = Vector3.zero;
+        this.addVelocityThisFrameInGrounded = Vector3.zero;
     }
 
     /// <summary>
@@ -480,17 +486,22 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     }
 
     /// <summary>
-    /// 現在の速度にベクトルを足す
+    /// 現在の速度に速度ベクトルを足す(移動量を足すのではない)
     /// </summary>
-    /// <param name="addValue">足すベクトル</param>
-    public void AddVelocity(Vector3 addValue)
+    /// <param name="addVelocity">足す速度(移動量ではない)</param>
+    /// <param name="addInAir">プレイヤーが空中にいるときも足すかどうか</param>
+    public void AddVelocity(Vector3 addVelocity, bool addInAir)
     {
-        this.addVelocityThisFrame = addValue;
+        if (addInAir) this.addVelocityThisFrame += addVelocity;
+        else this.addVelocityThisFrameInGrounded += addVelocity;
+        //this.addVelocityThisFrame += addValue;
+        //this._velocity += addValue;
         //if (this._isGrounded) this.addVelocityThisFrame += Vector3.down * 0.01f;
         //if (this._isGrounded) this._characterController.Move(addValue + Vector3.down * 0.01f);
         //else this._characterController.Move(addValue);
         //this._characterController.Move(addValue + Vector3.down * 0.01f);
     }
+
 
     /// <summary>
     /// 現在の状態。移動処理の分岐やanimation再生に利用

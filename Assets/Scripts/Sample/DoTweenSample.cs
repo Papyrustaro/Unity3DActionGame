@@ -15,7 +15,7 @@ public class DoTweenSample : MonoBehaviour
         //MoveSquareSample(3f, 2f, 2f);
         //MoveSquareSample(3f, 2f, 2f);
         //MoveSquareSample(new Vector3(3f, 0f, 3f), 2f, 2f);
-        MoveSquareSample(new Vector3(5f, 0f, 0f), 0f, 10f);
+        MoveSquareSample(new Vector3(20f, 0f, 0f), 0f, 10f);
         //RotationSample(1f, 5f, new Vector3(2, 0, 1));
         //RotationSample();
         //Sampleple();
