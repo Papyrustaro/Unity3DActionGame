@@ -42,8 +42,11 @@ public class PlayerMovementBasedCamera : MonoBehaviour
 
     private Vector3 addForceDownPower = Vector3.down;
     private Vector3 _velocity;
-    private Vector3 addVelocityThisFrameInGrounded = Vector3.zero;
+    
     private Vector3 addVelocityThisFrame = Vector3.zero;
+    private Vector3 addVelocityThisFrameInGrounded = Vector3.zero;
+    private Vector3 addPositionThisFrame = Vector3.zero;
+    private Vector3 addPositionThisFrameInGrounded = Vector3.zero;
 
     private MonobitEngine.MonobitView _monobitView;
 
@@ -208,10 +211,12 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         this._velocity += this.addVelocityThisFrame;
         if (this._isGrounded) this._velocity += this.addVelocityThisFrameInGrounded;
         //this._velocity += this.addVelocityThisFrame;
-        this._characterController.Move(this._velocity * Time.deltaTime);
+        this._characterController.Move(this._velocity * Time.deltaTime + this.addPositionThisFrame + this.addPositionThisFrameInGrounded);
         //this._characterController.Move(this._velocity * Time.deltaTime + this.addVelocityThisFrame);
         this.addVelocityThisFrame = Vector3.zero;
         this.addVelocityThisFrameInGrounded = Vector3.zero;
+        this.addPositionThisFrame = Vector3.zero;
+        this.addPositionThisFrameInGrounded = Vector3.zero;
     }
 
     /// <summary>
@@ -303,8 +308,8 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         this._velocity.y = this.jumpVerticalSpeed;
         this._isGrounded = false;
 
-        //進行方向を向く
-        if(!(this._velocity.x == 0f && this._velocity.z == 0f)) this.transform.forward = new Vector3(this._velocity.x, 0f, this._velocity.z);
+        //進行方向を向く→入力方向と速度が一致しないこともあるため撤廃
+        //if(!(this._velocity.x == 0f && this._velocity.z == 0f)) this.transform.forward = new Vector3(this._velocity.x, 0f, this._velocity.z);
 
         this.currentState = E_State.JumpToTop;
         this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.JumpToTop);
@@ -500,6 +505,32 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         //if (this._isGrounded) this._characterController.Move(addValue + Vector3.down * 0.01f);
         //else this._characterController.Move(addValue);
         //this._characterController.Move(addValue + Vector3.down * 0.01f);
+    }
+
+    /// <summary>
+    /// CharacterController.Moveを使って移動させる。ただし次のフレームで。
+    /// </summary>
+    /// <param name="addPosition">移動量</param>
+    /// <param name="addInAir">空中時も移動するか</param>
+    public void AddPosition(Vector3 addPosition, bool addInAir)
+    {
+        if (addInAir) this.addPositionThisFrame += addPosition;
+        else this.addPositionThisFrameInGrounded += addPosition;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="addPosition"></param>
+    /// <param name="addInAir"></param>
+    public void MovePosition(Vector3 addPosition, bool addInAir)
+    {
+        if(addInAir || (!addInAir && this._isGrounded))
+        {
+            this._characterController.enabled = false;
+            this.transform.position += addPosition;
+            this._characterController.enabled = true;
+        }
     }
 
 

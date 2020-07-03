@@ -5,7 +5,7 @@ using UnityEngine;
 public class GoAndBackMovement : MonoBehaviour
 {
     //private float xLength = 3f;
-    private float moveSpeed = 1f;
+    private float moveSpeed = 3f;
 
     private void Update()
     {

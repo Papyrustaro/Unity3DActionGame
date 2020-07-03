@@ -9,6 +9,7 @@ public class PlayerGroundChecker : MonoBehaviour
     private Transform groundedMoveStageTransform;
     private Vector3 moveStagePositionBeforeFrame;
     private Vector3 moveStagePositionCurrentFrame;
+    [SerializeField] private bool jumpWithVelocity = true;
 
 
     private void Awake()
@@ -23,7 +24,9 @@ public class PlayerGroundChecker : MonoBehaviour
             //Debug.Log(this.moveStagePositionCurrentFrame - this.moveStagePositionBeforeFrame);
             //Debug.Log(this.moveStagePositionCurrentFrame.y - this.moveStagePositionBeforeFrame.y == 0);
             this.moveStagePositionCurrentFrame = this.groundedMoveStageTransform.position;
-            this.playerMoveController.AddVelocity((this.moveStagePositionCurrentFrame - this.moveStagePositionBeforeFrame) / Time.deltaTime, false);
+            if (this.jumpWithVelocity) this.playerMoveController.AddVelocity((this.moveStagePositionCurrentFrame - this.moveStagePositionBeforeFrame) / Time.deltaTime, false);
+            //else this.playerMoveController.AddPosition(this.moveStagePositionCurrentFrame - this.moveStagePositionBeforeFrame, false);
+            else this.playerMoveController.MovePosition(this.moveStagePositionCurrentFrame - this.moveStagePositionBeforeFrame, false);
             //this.playerMoveController.transform.position = this.playerMoveController.transform.position + (this.moveStagePositionCurrentFrame - this.moveStagePositionBeforeFrame);
             this.moveStagePositionBeforeFrame = this.moveStagePositionCurrentFrame;
         }
