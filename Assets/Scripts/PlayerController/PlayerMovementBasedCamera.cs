@@ -519,11 +519,11 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     }
 
     /// <summary>
-    /// 
+    /// characterControllerを一時的にfalseにし、positionを書き換える
     /// </summary>
-    /// <param name="addPosition"></param>
-    /// <param name="addInAir"></param>
-    public void MovePosition(Vector3 addPosition, bool addInAir)
+    /// <param name="addPosition">移動量</param>
+    /// <param name="addInAir">空中時も移動するか</param>
+    public void MovePositionImmediately(Vector3 addPosition, bool addInAir)
     {
         if(addInAir || (!addInAir && this._isGrounded))
         {

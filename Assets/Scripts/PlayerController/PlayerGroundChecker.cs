@@ -1,15 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Animations;
 
+/// <summary>
+/// 移動床用の座標チェック
+/// </summary>
 public class PlayerGroundChecker : MonoBehaviour
 {
     private PlayerMovementBasedCamera playerMoveController;
     private Transform groundedMoveStageTransform;
     private Vector3 moveStagePositionBeforeFrame;
     private Vector3 moveStagePositionCurrentFrame;
-    [SerializeField] private bool jumpWithVelocity = true;
+    [SerializeField] private bool jumpWithVelocity = false; //移動床上でジャンプしたときに床の移動速度を追加するか。しないでいく予定
 
 
     private void Awake()
@@ -21,26 +23,19 @@ public class PlayerGroundChecker : MonoBehaviour
     {
         if(this.groundedMoveStageTransform != null && this.playerMoveController.IsGrounded)
         {
-            //Debug.Log(this.moveStagePositionCurrentFrame - this.moveStagePositionBeforeFrame);
-            //Debug.Log(this.moveStagePositionCurrentFrame.y - this.moveStagePositionBeforeFrame.y == 0);
             this.moveStagePositionCurrentFrame = this.groundedMoveStageTransform.position;
             if (this.jumpWithVelocity) this.playerMoveController.AddVelocity((this.moveStagePositionCurrentFrame - this.moveStagePositionBeforeFrame) / Time.deltaTime, false);
-            //else this.playerMoveController.AddPosition(this.moveStagePositionCurrentFrame - this.moveStagePositionBeforeFrame, false);
-            else this.playerMoveController.MovePosition(this.moveStagePositionCurrentFrame - this.moveStagePositionBeforeFrame, false);
-            //this.playerMoveController.transform.position = this.playerMoveController.transform.position + (this.moveStagePositionCurrentFrame - this.moveStagePositionBeforeFrame);
+            else this.playerMoveController.MovePositionImmediately(this.moveStagePositionCurrentFrame - this.moveStagePositionBeforeFrame, false);
             this.moveStagePositionBeforeFrame = this.moveStagePositionCurrentFrame;
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.tag);
         if (other.CompareTag("MoveStage"))
         {
-            Debug.Log("B");
             this.groundedMoveStageTransform = other.transform;
             this.moveStagePositionBeforeFrame = this.groundedMoveStageTransform.position;
-            //this.playerTransform.SetParent(other.transform);
         }
     }
 
@@ -48,9 +43,7 @@ public class PlayerGroundChecker : MonoBehaviour
     {
         if (other.CompareTag("MoveStage"))
         {
-            Debug.Log("C");
             this.groundedMoveStageTransform = null;
-            //this.playerTransform.SetParent(null);
         }
     }
 }

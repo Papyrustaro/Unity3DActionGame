@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Stage
   - MoveStage
+  - PlayerGroundCheck
   layers:
   - Default
   - TransparentFX
