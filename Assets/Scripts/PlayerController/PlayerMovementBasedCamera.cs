@@ -28,6 +28,8 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     [SerializeField] private float maxSpinJumpAirVerticalSpeed = 2f;
     [SerializeField] private float maxStickingWallFallSpeed = 1f;
 
+    [SerializeField] private float rateOfRunHorizontalSpeedOnAccelerationGround = 3f;
+
     //遊び用
     [SerializeField] private GameObject explosion;
 
@@ -66,6 +68,8 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     public bool IsStickingWall { get; set; } = false;
 
     public bool IsGrounded => this._isGrounded;
+
+    public bool IsOnAccelerationGround { get; set; } = false;
 
     /// <summary>
     /// 張り付いている壁の法線ベクトル
@@ -291,6 +295,8 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         //this._velocity = moveForward * this.runHorizontalSpeed * Time.deltaTime + new Vector3(0f, this._velocity.y, 0f); 
         this._velocity = moveForward * this.runHorizontalSpeed + this.addForceDownPower;
 
+        if (this.IsOnAccelerationGround) this._velocity *= this.rateOfRunHorizontalSpeedOnAccelerationGround;
+
         //this._velocity += this.addForceDownPower; //いらんかも
 
         //移動方向に回転
@@ -448,7 +454,6 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     public void WallKick()
     {
         if (this._velocity.y >= -0.05f) return;
-        Debug.Log("壁キック");
 
         this._isGrounded = false;
         this.currentState = E_State.JumpToTop;

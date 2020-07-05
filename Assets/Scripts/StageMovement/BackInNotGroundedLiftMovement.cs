@@ -4,17 +4,20 @@ using UnityEngine;
 using DG.Tweening;
 using System.Linq;
 
+
 /// <summary>
-/// 決められた軌道で移動するリフト
+/// 乗っている間だけ移動、降りると戻っていくリフト。
 /// </summary>
-public class LiftMovement : MonoBehaviour
+public class BackInNotGroundedLiftMovement : MonoBehaviour
 {
-    [SerializeField] private E_GroundedState moveState;
     [SerializeField] private float moveSpeed = 1f;
+    [SerializeField] private float backSpeed = 0.5f;
     [SerializeField] private Vector3[] path;
-    private E_GroundedState currentGroundedState = E_GroundedState.NotGrounded;
     private Sequence sequence;
-    
+    private bool isRewarding = false;
+    private float moveTime = 0f;
+    private float currentMoveTime = 0f;
+
 
     private Renderer _renderer;
 
@@ -28,31 +31,31 @@ public class LiftMovement : MonoBehaviour
         this.sequence = DOTween.Sequence()
             .SetRelative()
             .SetLink(this.gameObject)
-            .SetLoops(-1);
-        foreach(Vector3 p in this.path.Concat(this.path.Reverse().Select(v => v * -1f)))
+            .OnUpdate(() =>
+            {
+                if (this.isRewarding) this.currentMoveTime -= Time.deltaTime * (this.backSpeed / this.moveSpeed);
+                else this.currentMoveTime += Time.deltaTime;
+
+                if (this.currentMoveTime > this.moveTime - 0.1f) { this.currentMoveTime = this.moveTime - 0.1f; this.sequence.Pause(); }
+            });
+
+        foreach (Vector3 p in this.path)
         {
             this.sequence.Append(this.transform.DOMove(p, p.magnitude / this.moveSpeed));
+            this.moveTime += p.magnitude / this.moveSpeed;
         }
-        this.sequence.Play();
+        this.sequence.Pause();
     }
 
     private void Update()
     {
-        if (this.sequence.IsPlaying())
+        if (this.sequence.IsPlaying() && !StageTimeManager.Instance.StageAbleMove)
         {
-            if (!StageTimeManager.Instance.StageAbleMove || (this.moveState == E_GroundedState.Grounded && this.currentGroundedState == E_GroundedState.NotGrounded) ||
-            (this.moveState == E_GroundedState.NotGrounded && this.currentGroundedState == E_GroundedState.Grounded))
-            {
-                this.sequence.Pause();
-            }
+            this.sequence.Pause();
         }
-        else
+        else if(!this.sequence.IsPlaying() && StageTimeManager.Instance.StageAbleMove)
         {
-            if (StageTimeManager.Instance.StageAbleMove && ((this.moveState == E_GroundedState.Grounded && this.currentGroundedState == E_GroundedState.Grounded) ||
-            (this.moveState == E_GroundedState.NotGrounded && this.moveState == E_GroundedState.NotGrounded) || this.moveState == E_GroundedState.All))
-            {
-                this.sequence.Play();
-            }
+            this.sequence.Play();
         }
     }
 
@@ -60,7 +63,9 @@ public class LiftMovement : MonoBehaviour
     {
         if (other.CompareTag("PlayerGroundCheck"))
         {
-            this.currentGroundedState = E_GroundedState.Grounded;
+            this.sequence.timeScale = 1f;
+            this.sequence.PlayForward();
+            this.isRewarding = false;
             this._renderer.material.color = Color.red;
         }
     }
@@ -69,7 +74,10 @@ public class LiftMovement : MonoBehaviour
     {
         if (other.CompareTag("PlayerGroundCheck"))
         {
-            this.currentGroundedState = E_GroundedState.NotGrounded;
+            this.sequence.timeScale = this.backSpeed / this.moveSpeed;
+            this.sequence.SmoothRewind();
+            this.sequence.Play();
+            this.isRewarding = true;
             this._renderer.material.color = Color.white;
         }
     }
@@ -82,7 +90,7 @@ public class LiftMovement : MonoBehaviour
     {
         List<Vector3> paths = new List<Vector3>();
         paths.Add(this.transform.position);
-        for(int i = 0; i < this.path.Length; i++)
+        for (int i = 0; i < this.path.Length; i++)
         {
             paths.Add(this.path[i] + paths[i]);
         }
@@ -92,15 +100,4 @@ public class LiftMovement : MonoBehaviour
         lineRenderer.startWidth = 0.1f;
         lineRenderer.endWidth = 0.1f;
     }
-}
-
-/// <summary>
-/// 接地判定※記述場所等は要修正
-/// </summary>
-public enum E_GroundedState
-{
-    All,
-    Grounded,
-    NotGrounded,
-    Other
 }

@@ -37,6 +37,10 @@ public class PlayerGroundChecker : MonoBehaviour
             this.groundedMoveStageTransform = other.transform;
             this.moveStagePositionBeforeFrame = this.groundedMoveStageTransform.position;
         }
+        if (other.CompareTag("AccelerationGround"))
+        {
+            this.playerMoveController.IsOnAccelerationGround = true;
+        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -44,6 +48,10 @@ public class PlayerGroundChecker : MonoBehaviour
         if (other.CompareTag("MoveStage"))
         {
             this.groundedMoveStageTransform = null;
+        }
+        if (other.CompareTag("AccelerationGround"))
+        {
+            this.playerMoveController.IsOnAccelerationGround = false;
         }
     }
 }
