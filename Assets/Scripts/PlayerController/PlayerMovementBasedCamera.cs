@@ -52,6 +52,9 @@ public class PlayerMovementBasedCamera : MonoBehaviour
 
     private MonobitEngine.MonobitView _monobitView;
 
+    private int pressJumpButtonFrame = 0;
+    private bool checkPressJumpButton = false;
+
     [field: SerializeField]
     [field: RenameField("centerPosition")]
     public Transform CenterPosition { get; private set; }
@@ -147,6 +150,22 @@ public class PlayerMovementBasedCamera : MonoBehaviour
                 break;
             case E_State.JumpToTop:
             case E_State.TopOfJump:
+                if (Input.GetButtonDown("HipDrop")) this.waitingAction = E_ActionFlag.HipDrop;
+                else if (this.checkPressJumpButton)
+                {
+                    if (Input.GetButton("Jump"))
+                    {
+                        this.pressJumpButtonFrame++;
+                        if (this.pressJumpButtonFrame == 5) this._velocity.y += 15f;
+                        if (this.pressJumpButtonFrame == 10) { this._velocity.y += 10f; }
+                    }
+                    else
+                    {
+                        this.checkPressJumpButton = false;
+                        this.pressJumpButtonFrame = 0;
+                    }
+                }
+                break;
             case E_State.Falling:
             case E_State.LongJumpToTop:
             case E_State.SpinJumping:
@@ -319,6 +338,35 @@ public class PlayerMovementBasedCamera : MonoBehaviour
 
         this.currentState = E_State.JumpToTop;
         this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.JumpToTop);
+
+        this.checkPressJumpButton = true;
+        StartCoroutine(CoroutineManager.DelayMethod(11, () =>
+        {
+            this.checkPressJumpButton = false;
+            this.pressJumpButtonFrame = 0;
+        }));
+    }
+
+    /// <summary>
+    /// 上への速度を追加、ジャンプモーションへ移行
+    /// </summary>
+    /// <param name="jumpVerticalSpeed">上方向への初速度</param>
+    public void Jump(float jumpVerticalSpeed)
+    {
+        this._velocity.y = 0f;
+        if (this._velocity.magnitude >= this.maxNormalAirHorizontalSpeed) this._velocity *= this.maxNormalAirHorizontalSpeed / this._velocity.magnitude;
+        this._velocity.y = jumpVerticalSpeed;
+        this._isGrounded = false;
+
+        this.currentState = E_State.JumpToTop;
+        this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.JumpToTop);
+
+        this.checkPressJumpButton = true;
+        StartCoroutine(CoroutineManager.DelayMethod(11, () =>
+        {
+            this.checkPressJumpButton = false;
+            this.pressJumpButtonFrame = 0;
+        }));
     }
 
     /// <summary>
@@ -504,12 +552,6 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     {
         if (addInAir) this.addVelocityThisFrame += addVelocity;
         else this.addVelocityThisFrameInGrounded += addVelocity;
-        //this.addVelocityThisFrame += addValue;
-        //this._velocity += addValue;
-        //if (this._isGrounded) this.addVelocityThisFrame += Vector3.down * 0.01f;
-        //if (this._isGrounded) this._characterController.Move(addValue + Vector3.down * 0.01f);
-        //else this._characterController.Move(addValue);
-        //this._characterController.Move(addValue + Vector3.down * 0.01f);
     }
 
     /// <summary>
@@ -536,6 +578,17 @@ public class PlayerMovementBasedCamera : MonoBehaviour
             this.transform.position += addPosition;
             this._characterController.enabled = true;
         }
+    }
+
+    /// <summary>
+    /// 特定の座標にワープする
+    /// </summary>
+    /// <param name="toWarpPosition">ワープ先の座標</param>
+    public void Warp(Vector3 toWarpPosition)
+    {
+        this._characterController.enabled = false;
+        this.transform.position = toWarpPosition;
+        this._characterController.enabled = true;
     }
 
 

@@ -38,9 +38,9 @@ public class LiftMovement : MonoBehaviour
 
     private void Update()
     {
-        if (this.sequence.IsPlaying())
+        if(this.sequence.IsPlaying())
         {
-            if (!StageTimeManager.Instance.StageAbleMove || (this.moveState == E_GroundedState.Grounded && this.currentGroundedState == E_GroundedState.NotGrounded) ||
+            if (!StageTimeManager.Instance.IsStageMoving || (this.moveState == E_GroundedState.Grounded && this.currentGroundedState == E_GroundedState.NotGrounded) ||
             (this.moveState == E_GroundedState.NotGrounded && this.currentGroundedState == E_GroundedState.Grounded))
             {
                 this.sequence.Pause();
@@ -48,8 +48,8 @@ public class LiftMovement : MonoBehaviour
         }
         else
         {
-            if (StageTimeManager.Instance.StageAbleMove && ((this.moveState == E_GroundedState.Grounded && this.currentGroundedState == E_GroundedState.Grounded) ||
-            (this.moveState == E_GroundedState.NotGrounded && this.moveState == E_GroundedState.NotGrounded) || this.moveState == E_GroundedState.All))
+            if (StageTimeManager.Instance.IsStageMoving && ((this.moveState == E_GroundedState.Grounded && this.currentGroundedState == E_GroundedState.Grounded) ||
+            (this.moveState == E_GroundedState.NotGrounded && this.currentGroundedState == E_GroundedState.NotGrounded) || this.moveState == E_GroundedState.All))
             {
                 this.sequence.Play();
             }

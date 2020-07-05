@@ -21,11 +21,11 @@ public class PlayerGroundChecker : MonoBehaviour
 
     private void Update()
     {
-        if(this.groundedMoveStageTransform != null && this.playerMoveController.IsGrounded)
+        if(this.groundedMoveStageTransform)
         {
             this.moveStagePositionCurrentFrame = this.groundedMoveStageTransform.position;
             if (this.jumpWithVelocity) this.playerMoveController.AddVelocity((this.moveStagePositionCurrentFrame - this.moveStagePositionBeforeFrame) / Time.deltaTime, false);
-            else this.playerMoveController.MovePositionImmediately(this.moveStagePositionCurrentFrame - this.moveStagePositionBeforeFrame, false);
+            else this.playerMoveController.MovePositionImmediately(this.moveStagePositionCurrentFrame - this.moveStagePositionBeforeFrame, true);
             this.moveStagePositionBeforeFrame = this.moveStagePositionCurrentFrame;
         }
     }

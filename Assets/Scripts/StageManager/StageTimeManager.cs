@@ -30,5 +30,5 @@ public class StageTimeManager : MonoBehaviour
     /// <summary>
     /// 移動するステージが今移動できるかどうか
     /// </summary>
-    public bool StageAbleMove => (!AllStop && !StageStop);
+    public bool IsStageMoving => (!AllStop && !StageStop);
 }

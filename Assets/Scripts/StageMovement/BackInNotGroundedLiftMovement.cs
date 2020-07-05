@@ -49,11 +49,11 @@ public class BackInNotGroundedLiftMovement : MonoBehaviour
 
     private void Update()
     {
-        if (this.sequence.IsPlaying() && !StageTimeManager.Instance.StageAbleMove)
+        if (this.sequence.IsPlaying() && !StageTimeManager.Instance.IsStageMoving)
         {
             this.sequence.Pause();
         }
-        else if(!this.sequence.IsPlaying() && StageTimeManager.Instance.StageAbleMove)
+        else if(!this.sequence.IsPlaying() && StageTimeManager.Instance.IsStageMoving && this.currentMoveTime > 0f)
         {
             this.sequence.Play();
         }
