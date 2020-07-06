@@ -8,6 +8,8 @@ TagManager:
   - MoveStage
   - PlayerGroundCheck
   - AccelerationGround
+  - PlayerHitHeadCheck
+  - SwitchOnOffStage
   layers:
   - Default
   - TransparentFX
