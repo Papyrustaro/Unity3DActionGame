@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 /// <summary>
-/// 時間経過でonOffStageのフラグが変わる
+/// 時間経過でonOffStageのフラグが変わる。
 /// </summary>
 public class SwitchOnOffStageInCountTimeController : MonoBehaviour
 {
