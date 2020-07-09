@@ -9,10 +9,10 @@ using NaughtyAttributes;
 public class SwitchOnOffStage : MonoBehaviour
 {
     [SerializeField] private bool initOn = true;
-    [SerializeField] private Material initOnInOnMaterial;
-    [SerializeField] private Material initOnInOffMaterial;
-    [SerializeField] private Material initOffInOnMaterial;
-    [SerializeField] private Material initOffInOffMaterial;
+    [SerializeField, ReadOnly] private Material initOnInOnMaterial;
+    [SerializeField, ReadOnly] private Material initOnInOffMaterial;
+    [SerializeField, ReadOnly] private Material initOffInOnMaterial;
+    [SerializeField, ReadOnly] private Material initOffInOffMaterial;
 
     [SerializeField, ReadOnly]
     private bool currentOn = true;
@@ -39,8 +39,12 @@ public class SwitchOnOffStage : MonoBehaviour
         }
     }
 
-    public void InitSet()
+    public void InitSet(Material initOnInOnMaterial, Material initOnInOffMaterial, Material initOffInOnMaterial, Material initOffInOffMaterial)
     {
+        this.initOnInOnMaterial = initOnInOnMaterial;
+        this.initOnInOffMaterial = initOnInOffMaterial;
+        this.initOffInOnMaterial = initOffInOnMaterial;
+        this.initOffInOffMaterial = initOffInOffMaterial;
         this._meshRenderer = GetComponent<MeshRenderer>();
         this._collider = GetComponent<BoxCollider>();
         if (this.initOn) this._meshRenderer.material = this.initOnInOnMaterial;

@@ -1,0 +1,77 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8751197471520988134
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8751197471520988132}
+  - component: {fileID: 8751197471520988133}
+  - component: {fileID: 8751197471520988131}
+  m_Layer: 0
+  m_Name: StageManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8751197471520988132
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8751197471520988134}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.6121109, y: 1.6690558, z: 1.8571513}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8751197471520988133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8751197471520988134}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d307e0863813067489c5610461767f70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <StageStop>k__BackingField: 0
+--- !u!114 &8751197471520988131
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8751197471520988134}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db022ba50c75f4844aabeecbdc8303fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  switchToOffMaterial: {fileID: 2100000, guid: 732af0a37113b474890bc2329996e946, type: 2}
+  switchToOnMaterial: {fileID: 2100000, guid: 1a891ae9e3982ee46a47f3845d322867, type: 2}
+  onSwitch:
+    m_PersistentCalls:
+      m_Calls: []
+  initOnInOnSwitchStageMaterial: {fileID: 2100000, guid: 4f8e7f35d26439640ba3ea1047399884,
+    type: 2}
+  initOnInOffSwitchStageMaterial: {fileID: 2100000, guid: 46e709bb511700a4e8557d9bbeae1cf1,
+    type: 2}
+  initOffInOnSwitchStageMaterial: {fileID: 2100000, guid: 9a77c5c4400e07142896192754cfe443,
+    type: 2}
+  initOffInOffSwitchStageMaterial: {fileID: 2100000, guid: 3cddecfb16f942b4e96d7c46c050d080,
+    type: 2}
+  switches:
+  - {fileID: 0}
+  switchStages:
+  - {fileID: 0}
+  - {fileID: 0}

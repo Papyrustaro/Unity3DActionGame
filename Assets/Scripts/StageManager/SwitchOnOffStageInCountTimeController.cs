@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using NaughtyAttributes;
 
 /// <summary>
 /// 時間経過でonOffStageのフラグが変わる。
@@ -11,6 +12,10 @@ public class SwitchOnOffStageInCountTimeController : MonoBehaviour
     [SerializeField] private List<SwitchOnOffStage> switchStages;
     [SerializeField] private UnityEvent onSwitch;
     [SerializeField] private float switchInterval = 3f;
+    [SerializeField] private Material initOnInOnSwitchStageMaterial;
+    [SerializeField] private Material initOnInOffSwitchStageMaterial;
+    [SerializeField] private Material initOffInOnSwitchStageMaterial;
+    [SerializeField] private Material initOffInOffSwitchStageMaterial;
     private float countTime = 0f;
 
     private void Update()
@@ -31,7 +36,7 @@ public class SwitchOnOffStageInCountTimeController : MonoBehaviour
     /// <summary>
     /// シーンに存在するonOffStageを代入・初期化。Inspector上から
     /// </summary>
-    [ContextMenu("SetSwitchOnOffStages")]
+    [Button(enabledMode: EButtonEnableMode.Editor)]
     private void SetSwitchOnOffStages()
     {
         this.switchStages = new List<SwitchOnOffStage>();
@@ -41,7 +46,7 @@ public class SwitchOnOffStageInCountTimeController : MonoBehaviour
         }
         foreach (SwitchOnOffStage switchStage in this.switchStages)
         {
-            switchStage.InitSet();
+            switchStage.InitSet(this.initOnInOnSwitchStageMaterial, this.initOnInOffSwitchStageMaterial, this.initOffInOnSwitchStageMaterial, this.initOffInOffSwitchStageMaterial);
         }
     }
 }

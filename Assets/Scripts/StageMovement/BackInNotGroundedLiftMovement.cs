@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using System.Linq;
-
+using NaughtyAttributes;
 
 /// <summary>
 /// 乗っている間だけ移動、降りると戻っていくリフト。
@@ -13,6 +13,10 @@ public class BackInNotGroundedLiftMovement : MonoBehaviour
     [SerializeField] private float moveSpeed = 1f;
     [SerializeField] private float backSpeed = 0.5f;
     [SerializeField] private Vector3[] path;
+    [SerializeField] private Color onPlayForwardColor;
+    [SerializeField] private Color onNotPlayForwardColor;
+    [SerializeField] private Color orbitLineColor;
+    [SerializeField] private Material orbitLineMaterial;
     private Sequence sequence;
     private bool isRewarding = false;
     private float moveTime = 0f;
@@ -24,6 +28,7 @@ public class BackInNotGroundedLiftMovement : MonoBehaviour
     private void Awake()
     {
         this._renderer = GetComponent<Renderer>();
+        this._renderer.material.color = this.onNotPlayForwardColor;
     }
 
     private void Start()
@@ -66,7 +71,7 @@ public class BackInNotGroundedLiftMovement : MonoBehaviour
             this.sequence.timeScale = 1f;
             this.sequence.PlayForward();
             this.isRewarding = false;
-            this._renderer.material.color = Color.red;
+            this._renderer.material.color = this.onPlayForwardColor;
         }
     }
 
@@ -78,14 +83,14 @@ public class BackInNotGroundedLiftMovement : MonoBehaviour
             this.sequence.SmoothRewind();
             this.sequence.Play();
             this.isRewarding = true;
-            this._renderer.material.color = Color.white;
+            this._renderer.material.color = this.onNotPlayForwardColor;
         }
     }
 
     /// <summary>
     /// Inspectorからリフトの軌道上の線を作成
     /// </summary>
-    [ContextMenu("GenerateLineOfOrbit")]
+    [Button(enabledMode: EButtonEnableMode.Editor)]
     public void GenericLineOfOrbit()
     {
         List<Vector3> paths = new List<Vector3>();
@@ -97,7 +102,10 @@ public class BackInNotGroundedLiftMovement : MonoBehaviour
         LineRenderer lineRenderer = this.gameObject.AddComponent<LineRenderer>();
         lineRenderer.positionCount = paths.Count;
         lineRenderer.SetPositions(paths.ToArray());
-        lineRenderer.startWidth = 0.1f;
-        lineRenderer.endWidth = 0.1f;
+        lineRenderer.material = this.orbitLineMaterial;
+        lineRenderer.startColor = this.orbitLineColor;
+        lineRenderer.endColor = this.orbitLineColor;
+        lineRenderer.startWidth = 0.2f;
+        lineRenderer.endWidth = 0.2f;
     }
 }

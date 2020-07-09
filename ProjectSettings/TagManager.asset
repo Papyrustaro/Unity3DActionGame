@@ -11,6 +11,7 @@ TagManager:
   - PlayerHitHeadCheck
   - SwitchOnOffStage
   - PlayerMoveGroundCheck
+  - SwitchOnOff
   layers:
   - Default
   - TransparentFX

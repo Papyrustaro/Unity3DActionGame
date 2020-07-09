@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using NaughtyAttributes;
 
 public class KeepRotation : MonoBehaviour
 {
@@ -14,5 +15,11 @@ public class KeepRotation : MonoBehaviour
         {
             this.transform.RotateAround(this.rotateCenterPosition, this.axis, this.rotateSpeed * Time.deltaTime);
         }
+    }
+
+    [Button(enabledMode: EButtonEnableMode.Editor)]
+    public void SetRotateCenterByTransformCenter()
+    {
+        this.rotateCenterPosition = this.transform.position;
     }
 }
