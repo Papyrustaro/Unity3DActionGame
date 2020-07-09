@@ -4,11 +4,12 @@ using UnityEngine;
 using UnityEngine.Events;
 
 /// <summary>
-/// プレイヤーが着地して一定時間後に崩れる床
+/// プレイヤーが着地して一定時間後に崩れる床(消えた後復活しない: 要修正)
 /// </summary>
 public class BreakOnGroundedAfterCertainTime : MonoBehaviour
 {
-    [SerializeField] private float breakTime = 3f;
+    [SerializeField] private float breakTime = 1f;
+    [SerializeField] private float respawnTime = 3f;
     [SerializeField] private UnityEvent onBreak;
     private bool startCount = false;
     private float countTime = 0f;
@@ -20,7 +21,9 @@ public class BreakOnGroundedAfterCertainTime : MonoBehaviour
             if(this.countTime > this.breakTime)
             {
                 this.onBreak.Invoke();
-                Destroy(this.gameObject);
+                this.countTime = 0f;
+                StartCoroutine(DelayRespawn(this.respawnTime));
+                this.gameObject.SetActive(false);
             }
         }
     }
@@ -31,5 +34,12 @@ public class BreakOnGroundedAfterCertainTime : MonoBehaviour
         {
             this.startCount = true;
         }
+    }
+
+    public IEnumerator DelayRespawn(float waitTime)
+    {
+        if (!StageTimeManager.Instance.IsStageMoving) yield return null;
+        yield return new WaitForSeconds(waitTime);
+        this.gameObject.SetActive(true);
     }
 }

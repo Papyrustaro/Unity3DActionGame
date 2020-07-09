@@ -156,8 +156,8 @@ public class PlayerMovementBasedCamera : MonoBehaviour
                     if (Input.GetButton("Jump"))
                     {
                         this.pressJumpButtonFrame++;
-                        if (this.pressJumpButtonFrame == 5) this._velocity.y += 15f;
-                        if (this.pressJumpButtonFrame == 10) { this._velocity.y += 10f; }
+                        if (this.pressJumpButtonFrame == 5) this._velocity.y += 10f;
+                        if (this.pressJumpButtonFrame == 10) { this._velocity.y += 7f; }
                     }
                     else
                     {
