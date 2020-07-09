@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using System.Linq;
+using UniRx;
 
 /// <summary>
 /// 決められた軌道で移動するリフト
@@ -14,6 +15,7 @@ public class LiftMovement : MonoBehaviour
     [SerializeField] private Vector3[] path;
     private E_GroundedState currentGroundedState = E_GroundedState.NotGrounded;
     private Sequence sequence;
+    private int fromExitCount = 0;
     
 
     private Renderer _renderer;
@@ -21,6 +23,10 @@ public class LiftMovement : MonoBehaviour
     private void Awake()
     {
         this._renderer = GetComponent<Renderer>();
+        /*this
+            .ObserveEveryValueChanged(x => x.currentGroundedState)
+            .ThrottleFrame(5)
+            .Subscribe(x => this.currentGroundedState = x);*/
     }
 
     private void Start()
@@ -58,7 +64,7 @@ public class LiftMovement : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("PlayerGroundCheck"))
+        if (other.CompareTag("PlayerMoveGroundCheck"))
         {
             this.currentGroundedState = E_GroundedState.Grounded;
             this._renderer.material.color = Color.red;
@@ -67,7 +73,7 @@ public class LiftMovement : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("PlayerGroundCheck"))
+        if (other.CompareTag("PlayerMoveGroundCheck"))
         {
             this.currentGroundedState = E_GroundedState.NotGrounded;
             this._renderer.material.color = Color.white;

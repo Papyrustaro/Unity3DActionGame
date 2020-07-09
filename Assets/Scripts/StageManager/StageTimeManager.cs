@@ -11,6 +11,8 @@ public class StageTimeManager : MonoBehaviour
 
     public bool AllStop { get; set; } = false;
 
+    [field: SerializeField]
+    [field: RenameField("StageStop")]
     public bool StageStop { get; set; } = false;
 
     public bool PlayerStop { get; set; } = false;

@@ -61,7 +61,7 @@ public class BackInNotGroundedLiftMovement : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("PlayerGroundCheck"))
+        if (other.CompareTag("PlayerMoveGroundCheck"))
         {
             this.sequence.timeScale = 1f;
             this.sequence.PlayForward();
@@ -72,7 +72,7 @@ public class BackInNotGroundedLiftMovement : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("PlayerGroundCheck"))
+        if (other.CompareTag("PlayerMoveGroundCheck"))
         {
             this.sequence.timeScale = this.backSpeed / this.moveSpeed;
             this.sequence.SmoothRewind();

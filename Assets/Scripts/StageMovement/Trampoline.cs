@@ -7,9 +7,17 @@ public class Trampoline : MonoBehaviour
     [SerializeField] private float boundPower = 10f;
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("PlayerGroundCheck"))
         {   
-            other.GetComponent<PlayerMovementBasedCamera>().Jump(this.boundPower);
+            other.transform.parent.GetComponent<PlayerMovementBasedCamera>().Jump(this.boundPower);
         }
     }
+
+    /*private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.transform.CompareTag("PlayerGroundCheck"))
+        {
+            collision.transform.GetComponent<PlayerMovementBasedCamera>().Jump(this.boundPower);
+        }
+    }*/
 }
