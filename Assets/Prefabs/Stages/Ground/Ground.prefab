@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 9097426934355861842}
   - component: {fileID: 9097426934355861843}
   - component: {fileID: 9097426934355861852}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Ground
-  m_TagString: Untagged
+  m_TagString: Stage
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

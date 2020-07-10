@@ -7,14 +7,15 @@ using UnityEngine;
 /// </summary>
 public class ThirdPersonCameraController : MonoBehaviour
 {
-    [SerializeField] private Vector3 defaultPosition = new Vector3(0f, 2f, -5f);
-    [SerializeField] private Vector3 onePersonPosition = new Vector3(0f, 1f, 0.5f);
+    //[SerializeField] private Vector3 defaultPosition = new Vector3(0f, 2f, -5f);
+    //[SerializeField] private Vector3 onePersonPosition = new Vector3(0f, 1f, 0.5f);
 
-    [SerializeField] private Vector3 overheadPosition = new Vector3(0f, 15f, -1f);
-    [SerializeField] private Vector3 overheadRotation = new Vector3(85f, 0f, 0f);
+    //[SerializeField] private Vector3 overheadPosition = new Vector3(0f, 15f, -1f);
+    //[SerializeField] private Vector3 overheadRotation = new Vector3(85f, 0f, 0f);
 
     private float rotationByMouseForce = 200f;
     private Vector3 targetPositionBeforeFrame;
+    private float defaultCameraRotationX;
 
     public static ThirdPersonCameraController Instance { get; private set; }
 
@@ -37,6 +38,7 @@ public class ThirdPersonCameraController : MonoBehaviour
         {
             throw new System.Exception();
         }
+        this.defaultCameraRotationX = this.transform.rotation.eulerAngles.x;
     }
 
     private void LateUpdate()
@@ -53,19 +55,28 @@ public class ThirdPersonCameraController : MonoBehaviour
         this.transform.position += this.TargetPlayerCenterTransform.position - this.targetPositionBeforeFrame;
         this.targetPositionBeforeFrame = this.TargetPlayerCenterTransform.position;
 
-        if (Input.GetMouseButton(1))
+        float cameraAxisY = Input.GetAxis("RotateCameraAxisY");
+        float cameraAxisHorizontal = Input.GetAxis("RotateCameraAxisHorizontal");
+        float cameraRotationAxisHorizontal = this.transform.rotation.eulerAngles.x;
+        if(cameraAxisY != 0) this.transform.RotateAround(this.targetPositionBeforeFrame, Vector3.up, cameraAxisY * Time.deltaTime * this.rotationByMouseForce);
+        if((((355f < cameraRotationAxisHorizontal && cameraRotationAxisHorizontal <= 360f) || (cameraRotationAxisHorizontal < 75f)) && cameraAxisHorizontal != 0) ||
+            (340f < cameraRotationAxisHorizontal && cameraRotationAxisHorizontal <= 355f && cameraAxisHorizontal > 0) ||
+            (75f < cameraRotationAxisHorizontal && cameraRotationAxisHorizontal < 90f && cameraAxisHorizontal < 0))
+            this.transform.RotateAround(this.targetPositionBeforeFrame, this.transform.right, cameraAxisHorizontal * Time.deltaTime * this.rotationByMouseForce);
+        /*if (Input.GetMouseButton(1))
         {
-            float mouseInputX = Input.GetAxis("Mouse X");
-            float mouseInputY = Input.GetAxis("Mouse Y");
-            this.transform.RotateAround(this.targetPositionBeforeFrame, Vector3.up, mouseInputX * Time.deltaTime * this.rotationByMouseForce);
-            if(this.CameraViewType != E_CameraViewType.Overhead) this.transform.RotateAround(this.targetPositionBeforeFrame, this.transform.right, mouseInputY * Time.deltaTime * this.rotationByMouseForce);
-        }
+            //float mouseInputX = Input.GetAxis("Mouse X");
+            //float mouseInputY = Input.GetAxis("Mouse Y");
+            //this.transform.RotateAround(this.targetPositionBeforeFrame, Vector3.up, mouseInputX * Time.deltaTime * this.rotationByMouseForce);
+            
+            //if(this.CameraViewType != E_CameraViewType.Overhead) this.transform.RotateAround(this.targetPositionBeforeFrame, this.transform.right, mouseInputY * Time.deltaTime * this.rotationByMouseForce);
+        }*/
 
         if (Input.GetButtonDown("CameraMoveToPlayerBehind"))
         {
             WatchFromPlayerBack();
         }
-        if (Input.GetButtonDown("DefaultCamera"))
+        /*if (Input.GetButtonDown("DefaultCamera"))
         {
             WatchDefault();
         }
@@ -76,7 +87,7 @@ public class ThirdPersonCameraController : MonoBehaviour
         if (Input.GetButtonDown("OverheadCamera"))
         {
             WatchFromOverHead();
-        }
+        }*/
     }
 
     /// <summary>
@@ -97,14 +108,14 @@ public class ThirdPersonCameraController : MonoBehaviour
         //上下も戻すとき
         if(this.CameraViewType != E_CameraViewType.Overhead)
         {
-            this.transform.RotateAround(this.TargetPlayerCenterTransform.position, this.transform.right, this.TargetPlayerCenterTransform.rotation.eulerAngles.x - this.transform.rotation.eulerAngles.x);
+            this.transform.RotateAround(this.TargetPlayerCenterTransform.position, this.transform.right, this.defaultCameraRotationX - this.transform.rotation.eulerAngles.x);
         }
     }
 
     /// <summary>
     /// プレイヤーを真上から見る(カメラをプレイヤーの真上に移動)
     /// </summary>
-    private void WatchFromOverHead()
+    /*private void WatchFromOverHead()
     {
         this.CameraViewType = E_CameraViewType.Overhead;
         this.transform.position = this.TargetPlayerCenterTransform.position + this.overheadPosition;
@@ -129,7 +140,7 @@ public class ThirdPersonCameraController : MonoBehaviour
         this.CameraViewType = E_CameraViewType.Default;
         this.transform.position = this.TargetPlayerCenterTransform.position + this.defaultPosition;
         this.transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, 0f));
-    }
+    }*/
 
     public enum E_CameraViewType
     {

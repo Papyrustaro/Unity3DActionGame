@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 8155078922176310587}
   - component: {fileID: 1359900525797855270}
   - component: {fileID: 3385609936023264093}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: CubeGround
-  m_TagString: Untagged
+  m_TagString: Stage
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
