@@ -32,6 +32,8 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     [SerializeField] private float rateOfRunHorizontalSpeedOnAccelerationGround = 3f;
     [SerializeField] private float jumpSecondVerticalSpeed = 8f;
     [SerializeField] private float jumpThirdVerticalSpeed = 5f;
+    [SerializeField] private ParticleSystem stickingWallSmoke;
+    [SerializeField] private GameObject hipDropOnGroundShock;
 
 
     private Rigidbody _rigidbody;
@@ -240,6 +242,9 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         //ここで接地判定をおこなうため、jumpなどの処理時に念のため_isGrounded = falseにするべき
         if (this._isGrounded)
         {
+            if (this.currentState == E_State.HipDropping) Instantiate(this.hipDropOnGroundShock, this.transform.position, Quaternion.identity);
+            if(this.currentState == E_State.StickingWall) this.stickingWallSmoke.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+
             if (this.inputVelocity == Vector2.zero) this.currentState = E_State.Standing;
             else this.currentState = E_State.Running;
         }
@@ -410,6 +415,8 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         this._velocity = new Vector3(moveVelocity.x, this._velocity.y, moveVelocity.z);
 
         if (this._velocity.y < -1 * this.maxStickingWallFallSpeed) this._velocity.y = -1 * this.maxStickingWallFallSpeed;
+
+        Instantiate(this.stickingWallSmoke, this.transform.position + this.transform.forward * 0.1f, Quaternion.identity);
     }
 
     /// <summary>
@@ -535,6 +542,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         this.NormalOfStickingWall = normalOfStickingWall;
         this.currentState = E_State.StickingWall;
         this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.StickingWall);
+        this.stickingWallSmoke.Play(true);
     }
 
     /// <summary>
@@ -547,6 +555,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         this.currentState = E_State.Falling;
         this.NormalOfStickingWall = Vector3.zero;
         this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.TopToGround);
+        this.stickingWallSmoke.Stop(true, ParticleSystemStopBehavior.StopEmitting);
     }
 
     /// <summary>
