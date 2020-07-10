@@ -16,8 +16,8 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     [SerializeField] private float wallKickVerticalSpeed = 3f;
     [SerializeField] private float backFlipHorizontalSpeed = 3f;
     [SerializeField] private float backFlipVerticalSpeed = 3f;
-    [SerializeField] private float longJumpHorizontalSpeed = 3f;
-    [SerializeField] private float longJumpVerticalSpeed = 3f;
+    //[SerializeField] private float longJumpHorizontalSpeed = 3f;
+    //[SerializeField] private float longJumpVerticalSpeed = 3f;
     [SerializeField] private float normalAirHorizontalForce = 3f;
     [SerializeField] private float spinJumpAirHorizontalForce = 3f;
     [SerializeField] private float hipDropVerticalSpeed = 3f;
@@ -27,11 +27,11 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     [SerializeField] private float maxSpinJumpAirHorizontalSpeed = 2f;
     [SerializeField] private float maxSpinJumpAirVerticalSpeed = 2f;
     [SerializeField] private float maxStickingWallFallSpeed = 1f;
+    //[SerializeField] private float maxLongJumpAirHorizontalSpeed = 10f;
 
     [SerializeField] private float rateOfRunHorizontalSpeedOnAccelerationGround = 3f;
-
-    //遊び用
-    [SerializeField] private GameObject explosion;
+    [SerializeField] private float jumpSecondVerticalSpeed = 8f;
+    [SerializeField] private float jumpThirdVerticalSpeed = 5f;
 
 
     private Rigidbody _rigidbody;
@@ -101,10 +101,6 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     {
         if (this._monobitView != null && !this._monobitView.isMine) return;
 
-        if(this.currentState == E_State.BackFliping && this._isGrounded)
-        {
-            Instantiate(this.explosion, this.transform.position, Quaternion.identity);
-        }
         FirstUpdateInit();
 
         UpdateInput();
@@ -141,7 +137,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
             case E_State.Running:
                 if (Input.GetButtonDown("Jump")) this.waitingAction = E_ActionFlag.NormalJump;
                 else if (Input.GetButtonDown("SpinJump")) this.waitingAction = E_ActionFlag.SpinJump;
-                else if (Input.GetButtonDown("LongJump")) this.waitingAction = E_ActionFlag.LongJump;
+                //else if (Input.GetButtonDown("LongJump")) this.waitingAction = E_ActionFlag.LongJump;
                 else if (Input.GetButtonDown("BackFlip")) this.waitingAction = E_ActionFlag.BackFlip;
                 break;
             case E_State.StickingWall:
@@ -156,8 +152,8 @@ public class PlayerMovementBasedCamera : MonoBehaviour
                     if (Input.GetButton("Jump"))
                     {
                         this.pressJumpButtonFrame++;
-                        if (this.pressJumpButtonFrame == 5) this._velocity.y += 10f;
-                        if (this.pressJumpButtonFrame == 10) { this._velocity.y += 7f; }
+                        if (this.pressJumpButtonFrame == 4) this._velocity.y += this.jumpSecondVerticalSpeed;
+                        if (this.pressJumpButtonFrame == 7) this._velocity.y += this.jumpThirdVerticalSpeed;
                     }
                     else
                     {
@@ -167,7 +163,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
                 }
                 break;
             case E_State.Falling:
-            case E_State.LongJumpToTop:
+            //case E_State.LongJumpToTop:
             case E_State.SpinJumping:
             case E_State.BackFliping:
                 if (Input.GetButtonDown("HipDrop")) this.waitingAction = E_ActionFlag.HipDrop;
@@ -181,9 +177,6 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         {
             case E_ActionFlag.NormalJump:
                 NormalJump();
-                break;
-            case E_ActionFlag.LongJump:
-                LongJump();
                 break;
             case E_ActionFlag.HipDrop:
                 HipDrop();
@@ -223,19 +216,15 @@ public class PlayerMovementBasedCamera : MonoBehaviour
             case E_State.JumpToTop: 
             case E_State.TopOfJump:
             case E_State.Falling:
-            case E_State.LongJumpToTop:
+            //case E_State.LongJumpToTop:
                 MoveNormalAir();
                 break;
         }
 
         //velocityに応じた移動処理
-        //Debug.Log(this._characterController.velocity.x + ": " + this._velocity.x);
-
         this._velocity += this.addVelocityThisFrame;
         if (this._isGrounded) this._velocity += this.addVelocityThisFrameInGrounded;
-        //this._velocity += this.addVelocityThisFrame;
         this._characterController.Move(this._velocity * Time.deltaTime + this.addPositionThisFrame + this.addPositionThisFrameInGrounded);
-        //this._characterController.Move(this._velocity * Time.deltaTime + this.addVelocityThisFrame);
         this.addVelocityThisFrame = Vector3.zero;
         this.addVelocityThisFrameInGrounded = Vector3.zero;
         this.addPositionThisFrame = Vector3.zero;
@@ -362,7 +351,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.JumpToTop);
 
         this.checkPressJumpButton = true;
-        StartCoroutine(CoroutineManager.DelayMethod(11, () =>
+        StartCoroutine(CoroutineManager.DelayMethod(8, () =>
         {
             this.checkPressJumpButton = false;
             this.pressJumpButtonFrame = 0;
@@ -378,8 +367,13 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         Vector3 moveForward = cameraForward * this.inputVelocity.y + Camera.main.transform.right * this.inputVelocity.x;
         Vector3 moveVelocity = moveForward * this.normalAirHorizontalForce * Time.deltaTime + this._velocity;
 
-        //最高速度を超えていなければ入力した横方向に加速
-        if (Mathf.Sqrt(moveVelocity.x * moveVelocity.x + moveVelocity.z * moveVelocity.z) < this.maxNormalAirHorizontalSpeed) this._velocity = new Vector3(moveVelocity.x, this._velocity.y, moveVelocity.z);
+        float horizontalSpeed = Mathf.Sqrt(moveVelocity.x * moveVelocity.x + moveVelocity.z * moveVelocity.z);
+        if(horizontalSpeed > this.maxNormalAirHorizontalSpeed)
+        {
+            moveVelocity.x *= this.maxNormalAirHorizontalSpeed / horizontalSpeed;
+            moveVelocity.z *= this.maxNormalAirHorizontalSpeed / horizontalSpeed;
+        }
+        this._velocity = new Vector3(moveVelocity.x, this._velocity.y, moveVelocity.z);
 
         //vertical下方向に最高速度を越えていれば、最高速度にする
         if (this._velocity.y < -1 * this.maxNormalAirVerticalSpeed) this._velocity.y = -1 * this.maxNormalAirVerticalSpeed;
@@ -407,8 +401,13 @@ public class PlayerMovementBasedCamera : MonoBehaviour
             else if (incidenceAngle > 0) moveVelocity = Quaternion.Euler(0f, -1 * (90 - incidenceAngle), 0f) * moveVelocity; //正面左方向
         }
 
-        //最高速度を超えていなければ入力した水平方向に加速
-        if (Mathf.Sqrt(moveVelocity.x * moveVelocity.x + moveVelocity.z * moveVelocity.z) < this.maxNormalAirHorizontalSpeed) this._velocity = new Vector3(moveVelocity.x, this._velocity.y, moveVelocity.z);
+        float horizontalSpeed = Mathf.Sqrt(moveVelocity.x * moveVelocity.x + moveVelocity.z * moveVelocity.z);
+        if (horizontalSpeed > this.maxNormalAirHorizontalSpeed)
+        {
+            moveVelocity.x *= this.maxNormalAirHorizontalSpeed / horizontalSpeed;
+            moveVelocity.z *= this.maxNormalAirHorizontalSpeed / horizontalSpeed;
+        }
+        this._velocity = new Vector3(moveVelocity.x, this._velocity.y, moveVelocity.z);
 
         if (this._velocity.y < -1 * this.maxStickingWallFallSpeed) this._velocity.y = -1 * this.maxStickingWallFallSpeed;
     }
@@ -422,8 +421,13 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         Vector3 moveForward = cameraForward * this.inputVelocity.y + Camera.main.transform.right * this.inputVelocity.x;
         Vector3 moveVelocity = moveForward * this.spinJumpAirHorizontalForce * Time.deltaTime + this._velocity;
 
-        //最高速度を超えていなければ入力した横方向に加速
-        if (Mathf.Sqrt(moveVelocity.x * moveVelocity.x + moveVelocity.z * moveVelocity.z) < this.maxSpinJumpAirHorizontalSpeed) this._velocity = new Vector3(moveVelocity.x, this._velocity.y, moveVelocity.z);
+        float horizontalSpeed = Mathf.Sqrt(moveVelocity.x * moveVelocity.x + moveVelocity.z * moveVelocity.z);
+        if (horizontalSpeed > this.maxSpinJumpAirHorizontalSpeed)
+        {
+            moveVelocity.x *= this.maxSpinJumpAirHorizontalSpeed / horizontalSpeed;
+            moveVelocity.z *= this.maxSpinJumpAirHorizontalSpeed / horizontalSpeed;
+        }
+        this._velocity = new Vector3(moveVelocity.x, this._velocity.y, moveVelocity.z);
 
         //vertical下方向に最高速度を越えていれば、最高速度にする
         if (this._velocity.y < -1 * this.maxSpinJumpAirVerticalSpeed) this._velocity.y = -1 * this.maxSpinJumpAirVerticalSpeed;
@@ -444,8 +448,8 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         if (!(this._velocity.x == 0f && this._velocity.z == 0f)) this.transform.forward = new Vector3(this._velocity.x, 0f, this._velocity.z);
         this._velocity = this.transform.forward * -1 * this.backFlipHorizontalSpeed + this.transform.up * this.backFlipVerticalSpeed;
 
-        StartCoroutine(TransformManager.RotateInCertainTimeByFixedAxisFromAway(this.transform, this.CenterPosition, E_TransformAxis.Right, -180f, 0.7f));
-        StartCoroutine(TransformManager.RotateInCertainTimeByAxisFromAway(this.transform, this.CenterPosition, E_TransformAxis.Up, 360f * 9.5f, 0.7f, 0.95f));
+        StartCoroutine(TransformManager.RotateInCertainTimeByFixedAxisFromAway(this.transform, this.CenterPosition, E_TransformAxis.Right, -360f, 1f));
+        //StartCoroutine(TransformManager.RotateInCertainTimeByAxisFromAway(this.transform, this.CenterPosition, E_TransformAxis.Up, 360f * 9.5f, 0.7f, 0.95f));
 
         this.currentState = E_State.BackFliping;
         this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.BackFlip);
@@ -454,7 +458,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     /// <summary>
     /// 幅跳び
     /// </summary>
-    private void LongJump()
+    /*private void LongJump()
     {
         this._isGrounded = false;
         //とりあえず地上の移動速度の0.3倍を初速に足しておく
@@ -465,7 +469,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         //とりあえず通常ジャンプと同じ
         this.currentState = E_State.JumpToTop;
         this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.JumpToTop);
-    }
+    }*/
 
     /// <summary>
     /// スピンジャンプ。水平方向に移動しやすい。
@@ -485,12 +489,14 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     private void HipDrop()
     {
         StopAllCoroutines(); //現在はbackFlipのコルーチンのみ
+        bool canRotate = (this.currentState != E_State.StickingWall);
         this._velocity = Vector3.zero;
         this.transform.rotation = new Quaternion(0f, this.transform.rotation.y, 0f, this.transform.rotation.w);
         this.currentState = E_State.HipDropping;
         this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.HipDrop);
-        StartCoroutine(TransformManager.RotateInCertainTimeByAxisFromAway(this.transform, this.CenterPosition, E_TransformAxis.Right, 360f, 0.14f));
-        StartCoroutine(CoroutineManager.DelayMethod(0.15f, () =>
+        CapsuleCollider _collider = GetComponent<CapsuleCollider>();
+        if(canRotate) StartCoroutine(TransformManager.RotateInCertainTimeByAxisFromAway(this.transform, this.CenterPosition, E_TransformAxis.Right, 360f, 0.14f));
+        StartCoroutine(CoroutineManager.DelayMethod(0.3f, () =>
         {
             this._velocity.y = -1 * this.hipDropVerticalSpeed;
         }));
@@ -523,7 +529,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     public void StickWall(Vector3 normalOfStickingWall)
     {
         if (this._isGrounded) return;
-
+        if (this.currentState != E_State.HipDropping) StopAllCoroutines();
         this._velocity = new Vector3(0f, this._velocity.y, 0f);
         this.transform.rotation = Quaternion.LookRotation(-1 * normalOfStickingWall, Vector3.up);
         this.NormalOfStickingWall = normalOfStickingWall;
@@ -604,7 +610,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         Falling,
         SpinJumping,
         StickingWall,
-        LongJumpToTop, //animationは普通のジャンプと変わらない(初速度だけ違う)→いらないかも
+        //LongJumpToTop, //animationは普通のジャンプと変わらない(初速度だけ違う)→いらないかも
         HipDropping,
         BackFliping,
 
@@ -622,7 +628,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     {
         None,
         NormalJump,
-        LongJump,
+        //LongJump,
         SpinJump,
         WallKick,
         HipDrop,
