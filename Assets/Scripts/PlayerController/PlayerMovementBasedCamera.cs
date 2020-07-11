@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
+using KanKikuchi.AudioManager;
 
 /// <summary>
 /// カメラの向きから相対的に移動する
@@ -32,7 +33,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     [SerializeField] private float rateOfRunHorizontalSpeedOnAccelerationGround = 3f;
     [SerializeField] private float jumpSecondVerticalSpeed = 8f;
     [SerializeField] private float jumpThirdVerticalSpeed = 5f;
-    [SerializeField] private ParticleSystem stickingWallSmoke;
+    [SerializeField] private GameObject stickingWallSmoke;
     [SerializeField] private GameObject hipDropOnGroundShock;
 
 
@@ -243,7 +244,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         if (this._isGrounded)
         {
             if (this.currentState == E_State.HipDropping) Instantiate(this.hipDropOnGroundShock, this.transform.position, Quaternion.identity);
-            if(this.currentState == E_State.StickingWall) this.stickingWallSmoke.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+            //if(this.currentState == E_State.StickingWall) this.stickingWallSmoke.Stop(true, ParticleSystemStopBehavior.StopEmitting);
 
             if (this.inputVelocity == Vector2.zero) this.currentState = E_State.Standing;
             else this.currentState = E_State.Running;
@@ -332,7 +333,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
 
         this.currentState = E_State.JumpToTop;
         this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.JumpToTop);
-
+        SEManager.Instance.Play(SEPath.JUMP_VOICE0);
         this.checkPressJumpButton = true;
         StartCoroutine(CoroutineManager.DelayMethod(11, () =>
         {
@@ -354,6 +355,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
 
         this.currentState = E_State.JumpToTop;
         this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.JumpToTop);
+        SEManager.Instance.Play(SEPath.JUMP_VOICE0);
 
         this.checkPressJumpButton = true;
         StartCoroutine(CoroutineManager.DelayMethod(8, () =>
@@ -460,6 +462,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
 
         this.currentState = E_State.BackFliping;
         this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.BackFlip);
+        SEManager.Instance.Play(SEPath.JUMP_VOICE1);
     }
 
     /// <summary>
@@ -488,6 +491,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
 
         this.currentState = E_State.SpinJumping;
         this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.SpinJump);
+        SEManager.Instance.Play(SEPath.JUMP_VOICE7);
     }
 
     /// <summary>
@@ -501,6 +505,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         this.transform.rotation = new Quaternion(0f, this.transform.rotation.y, 0f, this.transform.rotation.w);
         this.currentState = E_State.HipDropping;
         this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.HipDrop);
+        SEManager.Instance.Play(SEPath.JUMP_VOICE8);
         CapsuleCollider _collider = GetComponent<CapsuleCollider>();
         if(canRotate) StartCoroutine(TransformManager.RotateInCertainTimeByAxisFromAway(this.transform, this.CenterPosition, E_TransformAxis.Right, 360f, 0.14f));
         StartCoroutine(CoroutineManager.DelayMethod(0.3f, () =>
@@ -527,6 +532,8 @@ public class PlayerMovementBasedCamera : MonoBehaviour
 
         //animation
         this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.JumpToTop);
+
+        SEManager.Instance.Play(SEPath.JUMP_VOICE3);
     }
 
     /// <summary>
@@ -542,7 +549,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         this.NormalOfStickingWall = normalOfStickingWall;
         this.currentState = E_State.StickingWall;
         this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.StickingWall);
-        this.stickingWallSmoke.Play(true);
+        //this.stickingWallSmoke.Play(true);
     }
 
     /// <summary>
@@ -555,7 +562,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         this.currentState = E_State.Falling;
         this.NormalOfStickingWall = Vector3.zero;
         this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.TopToGround);
-        this.stickingWallSmoke.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+        //this.stickingWallSmoke.Stop(true, ParticleSystemStopBehavior.StopEmitting);
     }
 
     /// <summary>

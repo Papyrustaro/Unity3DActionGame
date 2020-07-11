@@ -3464,26 +3464,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bcbdccc6225c5b4081bc9a056bf8f54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  runHorizontalSpeed: 5
-  jumpVerticalSpeed: 20
-  gravityVerticalForce: 80
-  spinJumpVerticalSpeed: 35
+  runHorizontalSpeed: 7
+  jumpVerticalSpeed: 10
+  gravityVerticalForce: 40
+  spinJumpVerticalSpeed: 19
   wallKickHorizontalSpeed: 6
-  wallKickVerticalSpeed: 20
-  backFlipHorizontalSpeed: 3
-  backFlipVerticalSpeed: 60
-  longJumpHorizontalSpeed: 15
-  longJumpVerticalSpeed: 35
+  wallKickVerticalSpeed: 15
+  backFlipHorizontalSpeed: 5
+  backFlipVerticalSpeed: 30
   normalAirHorizontalForce: 10
   spinJumpAirHorizontalForce: 20
-  hipDropVerticalSpeed: 70
-  maxNormalAirHorizontalSpeed: 10
-  maxNormalAirVerticalSpeed: 300
+  hipDropVerticalSpeed: 40
+  maxNormalAirHorizontalSpeed: 7
+  maxNormalAirVerticalSpeed: 50
   maxSpinJumpAirHorizontalSpeed: 6
-  maxSpinJumpAirVerticalSpeed: 5
-  maxStickingWallFallSpeed: 5
+  maxSpinJumpAirVerticalSpeed: 2
+  maxStickingWallFallSpeed: 4
   rateOfRunHorizontalSpeedOnAccelerationGround: 3
-  explosion: {fileID: 1000011797152326, guid: acf39d9f4addf294d93fa56fa373961b, type: 3}
+  jumpSecondVerticalSpeed: 7
+  jumpThirdVerticalSpeed: 6
+  stickingWallSmoke: {fileID: 6490135546232167698, guid: 5b0fa4fb9e155e94899e432e7132732f,
+    type: 3}
+  hipDropOnGroundShock: {fileID: 5802212179394768573, guid: 351fa9cec629a6342bc84f68a79d0a58,
+    type: 3}
   <CenterPosition>k__BackingField: {fileID: 2197645392723777279}
 --- !u!114 &2197645392119970362
 MonoBehaviour:
