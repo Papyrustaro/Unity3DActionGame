@@ -29,6 +29,10 @@ public class PlayerAnimation : MonoBehaviour
         if (this._monobitView != null && !this._monobitView.isMine) return;
     }
 
+    public string GetCurrentAnimationStateName()
+    {
+        return this._animator.GetCurrentAnimatorStateInfo(0).ToString();
+    }
     public void Play(E_PlayerAnimationType animationType)
     {
         _animator.SetBool("IsStanding", false);

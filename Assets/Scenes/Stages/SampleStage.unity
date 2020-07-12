@@ -3195,6 +3195,24 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 72eacf47f77ef20418f658209950dd25, type: 3}
+--- !u!1 &1023328872 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 276142322, guid: ef3e0a55d62e9ce4484d129ce981bd3a,
+    type: 3}
+  m_PrefabInstance: {fileID: 1184156130}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1023328875
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1023328872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2ddf88eda23bb5468ac07b1477a9373, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1048236260
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4072,6 +4090,85 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1448202900
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3995837065326632788, guid: d84084087e2d213458a78dd785f03768,
+        type: 3}
+      propertyPath: m_Name
+      value: InitOnSwitchStage (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995837065326632793, guid: d84084087e2d213458a78dd785f03768,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995837065326632793, guid: d84084087e2d213458a78dd785f03768,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995837065326632793, guid: d84084087e2d213458a78dd785f03768,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995837065326632793, guid: d84084087e2d213458a78dd785f03768,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995837065326632793, guid: d84084087e2d213458a78dd785f03768,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995837065326632793, guid: d84084087e2d213458a78dd785f03768,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995837065326632793, guid: d84084087e2d213458a78dd785f03768,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995837065326632793, guid: d84084087e2d213458a78dd785f03768,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995837065326632793, guid: d84084087e2d213458a78dd785f03768,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995837065326632793, guid: d84084087e2d213458a78dd785f03768,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995837065326632793, guid: d84084087e2d213458a78dd785f03768,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995837065326632793, guid: d84084087e2d213458a78dd785f03768,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995837065326632793, guid: d84084087e2d213458a78dd785f03768,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 4
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d84084087e2d213458a78dd785f03768, type: 3}
 --- !u!4 &1451798765 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4872405414017555107, guid: 634ae94efcf9d01458a193f4669e4948,

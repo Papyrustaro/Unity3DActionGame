@@ -57,8 +57,6 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     private int pressJumpButtonFrame = 0;
     private bool checkPressJumpButton = false;
 
-    private bool canStickWall = true;
-
     [field: SerializeField]
     [field: RenameField("centerPosition")]
     public Transform CenterPosition { get; private set; }
@@ -244,6 +242,10 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         //ここで接地判定をおこなうため、jumpなどの処理時に念のため_isGrounded = falseにするべき
         if (this._isGrounded)
         {
+            if (this.currentState == E_State.BackFliping)
+            {
+                this.StopAllCoroutineOfRotation();
+            }
             if (this.currentState == E_State.HipDropping)
             {
                 SEManager.Instance.Play(SEPath.HIP_DROP_GROUNDED, volumeRate: 0.5f);
@@ -478,8 +480,8 @@ public class PlayerMovementBasedCamera : MonoBehaviour
             this._hitHeadCheck.localRotation = Quaternion.Euler(Vector3.zero);
         }));
 
-        this.canStickWall = false;
-        StartCoroutine(CoroutineManager.DelayMethod(0.3f, () => this.canStickWall = true));
+        //this.canStickWall = false;
+        //StartCoroutine(CoroutineManager.DelayMethod(0.3f, () => this.canStickWall = true));
 
         this.currentState = E_State.BackFliping;
         this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.BackFlip);
@@ -524,7 +526,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     /// </summary>
     private void HipDrop()
     {
-        StopAllCoroutines(); //現在はbackFlipのコルーチンのみ
+        this.StopAllCoroutineOfRotation(); //現在はbackFlipのコルーチンのみ
         this._velocity = Vector3.zero;
         this.transform.rotation = new Quaternion(0f, this.transform.rotation.y, 0f, this.transform.rotation.w);
         this.currentState = E_State.HipDropping;
@@ -579,8 +581,8 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     /// <param name="normalOfStickingWall">壁面の垂直方向(自身のほうへの)</param>
     public void StickWall(Vector3 normalOfStickingWall)
     { 
-        if (this._isGrounded || !this.canStickWall || this.currentState == E_State.HipDropping) return;
-        if (this.currentState != E_State.HipDropping) StopAllCoroutines();
+        if (this._isGrounded || this.currentState == E_State.HipDropping) return;
+        if (this.currentState != E_State.HipDropping) this.StopAllCoroutineOfRotation();
         this._velocity = new Vector3(0f, this._velocity.y, 0f);
         this.transform.rotation = Quaternion.LookRotation(-1 * normalOfStickingWall, Vector3.up);
         this.NormalOfStickingWall = normalOfStickingWall;
@@ -651,6 +653,29 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         this._characterController.enabled = true;
     }
 
+    /// <summary>
+    /// ステージに頭をぶつけたときに、垂直上方向の加速を消す
+    /// </summary>
+    public void HitHeadOnStage()
+    {
+        if (this._velocity.y > 3f) this._velocity.y = 3f;
+        /*if(this.currentState == E_State.BackFliping)
+        {
+            this.currentState = E_State.Falling;
+            StopAllCoroutineOfRotation();
+        }*/
+    }
+
+    /// <summary>
+    /// このクラス内のコルーチン処理を停止する(回転処理の停止)
+    /// </summary>
+    public void StopAllCoroutineOfRotation()
+    {
+        StopAllCoroutines();
+        this.transform.localRotation = Quaternion.Euler(new Vector3(0f, this.transform.rotation.eulerAngles.y, 0f));
+        this._hitHeadCheck.transform.localPosition = Vector3.zero;
+        this._hitHeadCheck.transform.localRotation = Quaternion.Euler(Vector3.zero);
+    }
 
     /// <summary>
     /// 現在の状態。移動処理の分岐やanimation再生に利用

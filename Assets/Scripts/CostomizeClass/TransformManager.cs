@@ -118,31 +118,31 @@ public class TransformManager : MonoBehaviour
         yield break;
     }
 
-    public static IEnumerator KeepPosition(Transform obj, float keepTime)
+    public static IEnumerator KeepLocalPosition(Transform obj, float keepTime)
     {
         float countTime = 0f;
-        Vector3 initPosition = obj.position;
+        Vector3 initPosition = obj.localPosition;
         while (countTime < keepTime)
         {
             yield return null;
             countTime += Time.deltaTime;
-            obj.position = initPosition;
+            obj.localPosition = initPosition;
         }
-        obj.position = initPosition;
+        obj.localPosition = initPosition;
         yield break;
     }
 
-    public static IEnumerator KeepRotation(Transform obj, float keepTime)
+    public static IEnumerator KeepLocalRotation(Transform obj, float keepTime)
     {
         float countTime = 0f;
-        Quaternion initRotation = obj.rotation;
+        Quaternion initRotation = obj.localRotation;
         while (countTime < keepTime)
         {
             yield return null;
             countTime += Time.deltaTime;
-            obj.rotation = initRotation;
+            obj.localRotation = initRotation;
         }
-        obj.rotation = initRotation;
+        obj.localRotation = initRotation;
         yield break;
     }
 }
