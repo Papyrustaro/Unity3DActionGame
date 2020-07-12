@@ -18,8 +18,6 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     [SerializeField] private float wallKickVerticalSpeed = 3f;
     [SerializeField] private float backFlipHorizontalSpeed = 3f;
     [SerializeField] private float backFlipVerticalSpeed = 3f;
-    //[SerializeField] private float longJumpHorizontalSpeed = 3f;
-    //[SerializeField] private float longJumpVerticalSpeed = 3f;
     [SerializeField] private float normalAirHorizontalForce = 3f;
     [SerializeField] private float spinJumpAirHorizontalForce = 3f;
     [SerializeField] private float hipDropVerticalSpeed = 3f;
@@ -29,7 +27,6 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     [SerializeField] private float maxSpinJumpAirHorizontalSpeed = 2f;
     [SerializeField] private float maxSpinJumpAirVerticalSpeed = 2f;
     [SerializeField] private float maxStickingWallFallSpeed = 1f;
-    //[SerializeField] private float maxLongJumpAirHorizontalSpeed = 10f;
 
     [SerializeField] private float rateOfRunHorizontalSpeedOnAccelerationGround = 3f;
     [SerializeField] private float jumpSecondVerticalSpeed = 8f;
@@ -59,6 +56,8 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     private int pressJumpButtonFrame = 0;
     private bool checkPressJumpButton = false;
 
+    private bool canStickWall = true;
+
     [field: SerializeField]
     [field: RenameField("centerPosition")]
     public Transform CenterPosition { get; private set; }
@@ -84,7 +83,6 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     public Vector3 NormalOfStickingWall { get; private set; } = Vector3.zero;
 
     public PlayerAnimation _PlayerAnimation => this._playerAnimation;
-
 
     private void Awake()
     {
@@ -472,6 +470,9 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         StartCoroutine(TransformManager.RotateInCertainTimeByFixedAxisFromAway(this.transform, this.CenterPosition, E_TransformAxis.Right, -720f, 1f));
         //StartCoroutine(TransformManager.RotateInCertainTimeByAxisFromAway(this.transform, this.CenterPosition, E_TransformAxis.Up, 360f * 9.5f, 0.7f, 0.95f));
 
+        this.canStickWall = false;
+        StartCoroutine(CoroutineManager.DelayMethod(0.3f, () => this.canStickWall = true));
+
         this.currentState = E_State.BackFliping;
         this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.BackFlip);
         SEManager.Instance.Play(SEPath.JUMP_VOICE1);
@@ -516,7 +517,6 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     private void HipDrop()
     {
         StopAllCoroutines(); //現在はbackFlipのコルーチンのみ
-        bool canRotate = (this.currentState != E_State.StickingWall);
         this._velocity = Vector3.zero;
         this.transform.rotation = new Quaternion(0f, this.transform.rotation.y, 0f, this.transform.rotation.w);
         this.currentState = E_State.HipDropping;
@@ -525,7 +525,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         SEManager.Instance.Play(SEPath.JUMP_VOICE8);
         SEManager.Instance.Play(SEPath.HIP_DROP_ROTATE);
         CapsuleCollider _collider = GetComponent<CapsuleCollider>();
-        if(canRotate) StartCoroutine(TransformManager.RotateInCertainTimeByAxisFromAway(this.transform, this.CenterPosition, E_TransformAxis.Right, 360f, 0.14f));
+        StartCoroutine(TransformManager.RotateInCertainTimeByAxisFromAway(this.transform, this.CenterPosition, E_TransformAxis.Right, 360f, 0.14f));
         StartCoroutine(CoroutineManager.DelayMethod(0.3f, () =>
         {
             this._velocity.y = -1 * this.hipDropVerticalSpeed;
@@ -562,8 +562,8 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     /// </summary>
     /// <param name="normalOfStickingWall">壁面の垂直方向(自身のほうへの)</param>
     public void StickWall(Vector3 normalOfStickingWall)
-    {
-        if (this._isGrounded) return;
+    { 
+        if (this._isGrounded || !this.canStickWall || this.currentState == E_State.HipDropping) return;
         if (this.currentState != E_State.HipDropping) StopAllCoroutines();
         this._velocity = new Vector3(0f, this._velocity.y, 0f);
         this.transform.rotation = Quaternion.LookRotation(-1 * normalOfStickingWall, Vector3.up);
@@ -578,7 +578,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     /// </summary>
     public void StopStickingWall()
     {
-        if (this._isGrounded) return;
+        if (this._isGrounded || this.currentState != E_State.StickingWall) return;
 
         this.currentState = E_State.Falling;
         this.NormalOfStickingWall = Vector3.zero;
