@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 using KanKikuchi.AudioManager;
+using System.Linq;
 
 /// <summary>
 /// カメラの向きから相対的に移動する
@@ -243,8 +244,13 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         //ここで接地判定をおこなうため、jumpなどの処理時に念のため_isGrounded = falseにするべき
         if (this._isGrounded)
         {
-            if (this.currentState == E_State.HipDropping) Instantiate(this.hipDropOnGroundShock, this.transform.position, Quaternion.identity);
-            //if(this.currentState == E_State.StickingWall) this.stickingWallSmoke.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+            if (this.currentState == E_State.HipDropping)
+            {
+                SEManager.Instance.Play(SEPath.HIP_DROP_GROUNDED, volumeRate: 0.5f);
+                SEManager.Instance.Play(SEPath.HIP_DROP_GROUNDED1, volumeRate: 0.5f);
+                Instantiate(this.hipDropOnGroundShock, this.transform.position, Quaternion.identity);
+            }
+            if(this.currentState == E_State.StickingWall) SEManager.Instance.Stop(SEPath.STICKING_WALL);
 
             if (this.inputVelocity == Vector2.zero) this.currentState = E_State.Standing;
             else this.currentState = E_State.Running;
@@ -334,6 +340,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         this.currentState = E_State.JumpToTop;
         this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.JumpToTop);
         SEManager.Instance.Play(SEPath.JUMP_VOICE0);
+        SEManager.Instance.Play(SEPath.JUMP_WIND0, volumeRate: 0.5f);
         this.checkPressJumpButton = true;
         StartCoroutine(CoroutineManager.DelayMethod(11, () =>
         {
@@ -356,6 +363,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         this.currentState = E_State.JumpToTop;
         this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.JumpToTop);
         SEManager.Instance.Play(SEPath.JUMP_VOICE0);
+        SEManager.Instance.Play(SEPath.JUMP_WIND0, volumeRate: 0.5f);
 
         this.checkPressJumpButton = true;
         StartCoroutine(CoroutineManager.DelayMethod(8, () =>
@@ -398,7 +406,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
 
         //壁方向への速度は0にする(いつでもすぐに壁から離れられるようにするため)
         float incidenceAngle = Vector3.SignedAngle(moveVelocity, -1 * this.NormalOfStickingWall, Vector3.up); //移動ベクトルと壁の法線ベクトル間の角度
-        if(incidenceAngle > -90 && incidenceAngle < 90) //壁方向への速度があるとき→壁方向の速さのみ0にする
+        if (incidenceAngle > -90 && incidenceAngle < 90) //壁方向への速度があるとき→壁方向の速さのみ0にする
         {
             //壁に平行方向への速さに(ベクトルはそのまま)
             moveVelocity *= Mathf.Abs(Mathf.Sin(incidenceAngle * Mathf.Deg2Rad));
@@ -418,7 +426,9 @@ public class PlayerMovementBasedCamera : MonoBehaviour
 
         if (this._velocity.y < -1 * this.maxStickingWallFallSpeed) this._velocity.y = -1 * this.maxStickingWallFallSpeed;
 
-        Instantiate(this.stickingWallSmoke, this.transform.position + this.transform.forward * 0.1f, Quaternion.identity);
+        Instantiate(this.stickingWallSmoke, this.transform.position + this.transform.forward * 0.08f, Quaternion.identity);
+
+        if (!SEManager.Instance.GetCurrentAudioNames().Any(s => s == "StickingWall")) SEManager.Instance.Play(SEPath.STICKING_WALL, volumeRate: 0.5f);
     }
 
     /// <summary>
@@ -443,6 +453,8 @@ public class PlayerMovementBasedCamera : MonoBehaviour
 
         //回転運動
         this.transform.Rotate(new Vector3(0f, 2000f, 0f) * Time.deltaTime, Space.World);
+
+        if (!SEManager.Instance.GetCurrentAudioNames().Any(s => s == "JumpWind1")) SEManager.Instance.Play(SEPath.JUMP_WIND1);
     }
 
     /// <summary>
@@ -457,12 +469,15 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         if (!(this._velocity.x == 0f && this._velocity.z == 0f)) this.transform.forward = new Vector3(this._velocity.x, 0f, this._velocity.z);
         this._velocity = this.transform.forward * -1 * this.backFlipHorizontalSpeed + this.transform.up * this.backFlipVerticalSpeed;
 
-        StartCoroutine(TransformManager.RotateInCertainTimeByFixedAxisFromAway(this.transform, this.CenterPosition, E_TransformAxis.Right, -360f, 1f));
+        StartCoroutine(TransformManager.RotateInCertainTimeByFixedAxisFromAway(this.transform, this.CenterPosition, E_TransformAxis.Right, -720f, 1f));
         //StartCoroutine(TransformManager.RotateInCertainTimeByAxisFromAway(this.transform, this.CenterPosition, E_TransformAxis.Up, 360f * 9.5f, 0.7f, 0.95f));
 
         this.currentState = E_State.BackFliping;
         this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.BackFlip);
         SEManager.Instance.Play(SEPath.JUMP_VOICE1);
+        SEManager.Instance.Play(SEPath.JUMP_WIND0);
+        StartCoroutine(CoroutineManager.DelayMethod(0.4f, () => SEManager.Instance.Play(SEPath.JUMP_WIND0)));
+        StartCoroutine(CoroutineManager.DelayMethod(0.8f, () => SEManager.Instance.Play(SEPath.JUMP_WIND0)));
     }
 
     /// <summary>
@@ -492,6 +507,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         this.currentState = E_State.SpinJumping;
         this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.SpinJump);
         SEManager.Instance.Play(SEPath.JUMP_VOICE7);
+        SEManager.Instance.Play(SEPath.JUMP_WIND1);
     }
 
     /// <summary>
@@ -505,7 +521,9 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         this.transform.rotation = new Quaternion(0f, this.transform.rotation.y, 0f, this.transform.rotation.w);
         this.currentState = E_State.HipDropping;
         this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.HipDrop);
+        SEManager.Instance.Stop(SEPath.STICKING_WALL);
         SEManager.Instance.Play(SEPath.JUMP_VOICE8);
+        SEManager.Instance.Play(SEPath.HIP_DROP_ROTATE);
         CapsuleCollider _collider = GetComponent<CapsuleCollider>();
         if(canRotate) StartCoroutine(TransformManager.RotateInCertainTimeByAxisFromAway(this.transform, this.CenterPosition, E_TransformAxis.Right, 360f, 0.14f));
         StartCoroutine(CoroutineManager.DelayMethod(0.3f, () =>
@@ -533,7 +551,10 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         //animation
         this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.JumpToTop);
 
+        SEManager.Instance.Stop(SEPath.STICKING_WALL);
         SEManager.Instance.Play(SEPath.JUMP_VOICE3);
+        SEManager.Instance.Play(SEPath.JUMP_WIND0, volumeRate: 0.5f);
+
     }
 
     /// <summary>
@@ -562,6 +583,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         this.currentState = E_State.Falling;
         this.NormalOfStickingWall = Vector3.zero;
         this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.TopToGround);
+        SEManager.Instance.Stop(SEPath.STICKING_WALL);
         //this.stickingWallSmoke.Stop(true, ParticleSystemStopBehavior.StopEmitting);
     }
 

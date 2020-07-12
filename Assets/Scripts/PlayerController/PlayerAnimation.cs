@@ -27,10 +27,6 @@ public class PlayerAnimation : MonoBehaviour
     private void Update()
     {
         if (this._monobitView != null && !this._monobitView.isMine) return;
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            Play(E_PlayerAnimationType.Damaged);
-        }
     }
 
     public void Play(E_PlayerAnimationType animationType)

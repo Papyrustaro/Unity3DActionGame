@@ -1,0 +1,19 @@
+・ヒップドロップ着地: HipDropGrounded1/2同時再生
+・壁張り付き: StickingWall
+・バク天: JumpWind0が3回
+・スピンジャンプ: JumpWind1無限
+・壁キック: JumpWind
+・ヒップドロップ回転: HipDropRotate
+
+・加速
+・スイッチ切り替え: SwitchStage1とSwitchStage2同時再生
+
+・決定
+・選択
+・キャンセル
+・ポーズ
+
+・ランクイン
+・ゲームオーバー
+・ゲームクリア
+

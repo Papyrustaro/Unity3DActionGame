@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using NaughtyAttributes;
+using KanKikuchi.AudioManager;
 
 
 public class SwitchOnOffStageInHitHeadController : MonoBehaviour
@@ -35,7 +36,8 @@ public class SwitchOnOffStageInHitHeadController : MonoBehaviour
 
     public void SwitchAll()
     {
-        Debug.Log("切り替わった");
+        SEManager.Instance.Play(SEPath.SWITCH_STAGE1, volumeRate: 0.5f);
+        SEManager.Instance.Play(SEPath.SWITCH_STAGE2, volumeRate: 0.5f);
         if (this.isOn)
         {
             foreach(SwitchOnOffStageInHitHead switchInHitHead in this.switches)
