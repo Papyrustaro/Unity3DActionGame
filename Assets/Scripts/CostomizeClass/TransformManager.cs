@@ -117,6 +117,34 @@ public class TransformManager : MonoBehaviour
         obj.Rotate(GetAxis(obj, axis), -1 * angle * (countTime - time) / time);
         yield break;
     }
+
+    public static IEnumerator KeepPosition(Transform obj, float keepTime)
+    {
+        float countTime = 0f;
+        Vector3 initPosition = obj.position;
+        while (countTime < keepTime)
+        {
+            yield return null;
+            countTime += Time.deltaTime;
+            obj.position = initPosition;
+        }
+        obj.position = initPosition;
+        yield break;
+    }
+
+    public static IEnumerator KeepRotation(Transform obj, float keepTime)
+    {
+        float countTime = 0f;
+        Quaternion initRotation = obj.rotation;
+        while (countTime < keepTime)
+        {
+            yield return null;
+            countTime += Time.deltaTime;
+            obj.rotation = initRotation;
+        }
+        obj.rotation = initRotation;
+        yield break;
+    }
 }
 
 public enum E_TransformAxis

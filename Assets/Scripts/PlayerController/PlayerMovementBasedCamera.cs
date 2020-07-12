@@ -39,6 +39,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     private bool _isGrounded = false;
     private E_State currentState = E_State.Standing;
     private E_ActionFlag waitingAction = E_ActionFlag.None;
+    private Transform _hitHeadCheck;
 
     private CharacterController _characterController;
     private PlayerAnimation _playerAnimation;
@@ -92,6 +93,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         this._rigidbody = GetComponent<Rigidbody>();
         this._playerAnimation = GetComponent<PlayerAnimation>();
         this._characterController = GetComponent<CharacterController>();
+        this._hitHeadCheck = this.transform.Find("HitHeadCheck").transform;
 
         this._characterController
             .ObserveEveryValueChanged(x => x.isGrounded)
@@ -466,9 +468,15 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         //進行方向を向く
         if (!(this._velocity.x == 0f && this._velocity.z == 0f)) this.transform.forward = new Vector3(this._velocity.x, 0f, this._velocity.z);
         this._velocity = this.transform.forward * -1 * this.backFlipHorizontalSpeed + this.transform.up * this.backFlipVerticalSpeed;
-
+        this._hitHeadCheck.localPosition = Vector3.zero;
+        this._hitHeadCheck.localRotation = Quaternion.Euler(Vector3.zero);
         StartCoroutine(TransformManager.RotateInCertainTimeByFixedAxisFromAway(this.transform, this.CenterPosition, E_TransformAxis.Right, -720f, 1f));
-        //StartCoroutine(TransformManager.RotateInCertainTimeByAxisFromAway(this.transform, this.CenterPosition, E_TransformAxis.Up, 360f * 9.5f, 0.7f, 0.95f));
+        StartCoroutine(TransformManager.RotateInCertainTimeByFixedAxisFromAway(this._hitHeadCheck, this.CenterPosition, E_TransformAxis.Right, 720f, 1f));
+        StartCoroutine(CoroutineManager.DelayMethod(1.1f, () =>
+        {
+            this._hitHeadCheck.localPosition = Vector3.zero;
+            this._hitHeadCheck.localRotation = Quaternion.Euler(Vector3.zero);
+        }));
 
         this.canStickWall = false;
         StartCoroutine(CoroutineManager.DelayMethod(0.3f, () => this.canStickWall = true));
@@ -525,7 +533,15 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         SEManager.Instance.Play(SEPath.JUMP_VOICE8);
         SEManager.Instance.Play(SEPath.HIP_DROP_ROTATE);
         CapsuleCollider _collider = GetComponent<CapsuleCollider>();
+        this._hitHeadCheck.localPosition = Vector3.zero;
+        this._hitHeadCheck.localRotation = Quaternion.Euler(Vector3.zero);
         StartCoroutine(TransformManager.RotateInCertainTimeByAxisFromAway(this.transform, this.CenterPosition, E_TransformAxis.Right, 360f, 0.14f));
+        StartCoroutine(TransformManager.RotateInCertainTimeByAxisFromAway(this._hitHeadCheck, this.CenterPosition, E_TransformAxis.Right, -360f, 0.14f));
+        StartCoroutine(CoroutineManager.DelayMethod(0.15f, () =>
+        {
+            this._hitHeadCheck.localPosition = Vector3.zero;
+            this._hitHeadCheck.localRotation = Quaternion.Euler(Vector3.zero);
+        }));
         StartCoroutine(CoroutineManager.DelayMethod(0.3f, () =>
         {
             this._velocity.y = -1 * this.hipDropVerticalSpeed;
