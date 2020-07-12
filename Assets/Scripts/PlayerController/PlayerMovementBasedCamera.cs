@@ -27,6 +27,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     [SerializeField] private float maxSpinJumpAirHorizontalSpeed = 2f;
     [SerializeField] private float maxSpinJumpAirVerticalSpeed = 2f;
     [SerializeField] private float maxStickingWallFallSpeed = 1f;
+    [SerializeField] private float maxStickingWallHorizontalSpeed = 5f;
 
     [SerializeField] private float rateOfRunHorizontalSpeedOnAccelerationGround = 3f;
     [SerializeField] private float jumpSecondVerticalSpeed = 8f;
@@ -139,7 +140,6 @@ public class PlayerMovementBasedCamera : MonoBehaviour
             case E_State.Running:
                 if (Input.GetButtonDown("Jump")) this.waitingAction = E_ActionFlag.NormalJump;
                 else if (Input.GetButtonDown("SpinJump")) this.waitingAction = E_ActionFlag.SpinJump;
-                //else if (Input.GetButtonDown("LongJump")) this.waitingAction = E_ActionFlag.LongJump;
                 else if (Input.GetButtonDown("BackFlip")) this.waitingAction = E_ActionFlag.BackFlip;
                 break;
             case E_State.StickingWall:
@@ -165,7 +165,6 @@ public class PlayerMovementBasedCamera : MonoBehaviour
                 }
                 break;
             case E_State.Falling:
-            //case E_State.LongJumpToTop:
             case E_State.SpinJumping:
             case E_State.BackFliping:
                 if (Input.GetButtonDown("HipDrop")) this.waitingAction = E_ActionFlag.HipDrop;
@@ -218,7 +217,6 @@ public class PlayerMovementBasedCamera : MonoBehaviour
             case E_State.JumpToTop: 
             case E_State.TopOfJump:
             case E_State.Falling:
-            //case E_State.LongJumpToTop:
                 MoveNormalAir();
                 break;
         }
@@ -319,8 +317,6 @@ public class PlayerMovementBasedCamera : MonoBehaviour
 
         if (this.IsOnAccelerationGround) this._velocity *= this.rateOfRunHorizontalSpeedOnAccelerationGround;
 
-        //this._velocity += this.addForceDownPower; //いらんかも
-
         //移動方向に回転
         if (moveForward != Vector3.zero)
         {
@@ -385,11 +381,12 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         Vector3 moveVelocity = moveForward * this.normalAirHorizontalForce * Time.deltaTime + this._velocity;
 
         float horizontalSpeed = Mathf.Sqrt(moveVelocity.x * moveVelocity.x + moveVelocity.z * moveVelocity.z);
-        if(horizontalSpeed > this.maxNormalAirHorizontalSpeed)
+        if(horizontalSpeed > this.maxNormalAirHorizontalSpeed && horizontalSpeed < this.maxNormalAirHorizontalSpeed + 3f)
         {
             moveVelocity.x *= this.maxNormalAirHorizontalSpeed / horizontalSpeed;
             moveVelocity.z *= this.maxNormalAirHorizontalSpeed / horizontalSpeed;
         }
+
         this._velocity = new Vector3(moveVelocity.x, this._velocity.y, moveVelocity.z);
 
         //vertical下方向に最高速度を越えていれば、最高速度にする
@@ -443,7 +440,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         Vector3 moveVelocity = moveForward * this.spinJumpAirHorizontalForce * Time.deltaTime + this._velocity;
 
         float horizontalSpeed = Mathf.Sqrt(moveVelocity.x * moveVelocity.x + moveVelocity.z * moveVelocity.z);
-        if (horizontalSpeed > this.maxSpinJumpAirHorizontalSpeed)
+        if (horizontalSpeed > this.maxSpinJumpAirHorizontalSpeed && horizontalSpeed < this.maxSpinJumpAirHorizontalSpeed + 3f)
         {
             moveVelocity.x *= this.maxSpinJumpAirHorizontalSpeed / horizontalSpeed;
             moveVelocity.z *= this.maxSpinJumpAirHorizontalSpeed / horizontalSpeed;
@@ -490,22 +487,6 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         StartCoroutine(CoroutineManager.DelayMethod(0.4f, () => SEManager.Instance.Play(SEPath.JUMP_WIND0)));
         StartCoroutine(CoroutineManager.DelayMethod(0.8f, () => SEManager.Instance.Play(SEPath.JUMP_WIND0)));
     }
-
-    /// <summary>
-    /// 幅跳び
-    /// </summary>
-    /*private void LongJump()
-    {
-        this._isGrounded = false;
-        //とりあえず地上の移動速度の0.3倍を初速に足しておく
-        this._velocity = this.transform.forward * this.longJumpHorizontalSpeed + Vector3.up * this.longJumpVerticalSpeed + this._velocity * 0.3f;
-
-        this.transform.forward = new Vector3(this._velocity.x, 0f, this._velocity.z);
-
-        //とりあえず通常ジャンプと同じ
-        this.currentState = E_State.JumpToTop;
-        this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.JumpToTop);
-    }*/
 
     /// <summary>
     /// スピンジャンプ。水平方向に移動しやすい。
