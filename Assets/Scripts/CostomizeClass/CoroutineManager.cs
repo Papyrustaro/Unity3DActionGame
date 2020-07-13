@@ -7,7 +7,13 @@ public class CoroutineManager : MonoBehaviour
 {
     public static IEnumerator DelayMethod(float waitTime, Action action)
     {
-        yield return new WaitForSeconds(waitTime);
+        float countTime = 0f;
+        while(countTime < waitTime)
+        {
+            if (!StageTimeManager.Instance.AllStop) countTime += Time.deltaTime;
+            yield return null;
+        }
+        //yield return new WaitForSeconds(waitTime);
         action();
     }
 
@@ -16,6 +22,7 @@ public class CoroutineManager : MonoBehaviour
         for (int i = 0; i < delayFrameCount; i++)
         {
             yield return null;
+            if (StageTimeManager.Instance.AllStop) i--;
         }
         action();
     }

@@ -27,6 +27,8 @@ public class PlayerAnimation : MonoBehaviour
     private void Update()
     {
         if (this._monobitView != null && !this._monobitView.isMine) return;
+        if (this._animator.speed != 0 && !StageTimeManager.Instance.IsPlayerMoving) this._animator.speed = 0;
+        else if (this._animator.speed == 0 && StageTimeManager.Instance.IsPlayerMoving) this._animator.speed = 1f;
     }
 
     public string GetCurrentAnimationStateName()

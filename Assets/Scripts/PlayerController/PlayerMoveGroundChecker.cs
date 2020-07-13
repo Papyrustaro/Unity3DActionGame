@@ -21,6 +21,7 @@ public class PlayerMoveGroundChecker : MonoBehaviour
 
     private void Update()
     {
+        if (!StageTimeManager.Instance.IsPlayerMoving) return;
         if(this.groundedMoveStageTransform && StageTimeManager.Instance.IsStageMoving)
         {
             this.moveStagePositionCurrentFrame = this.groundedMoveStageTransform.position;

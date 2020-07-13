@@ -33,4 +33,6 @@ public class StageTimeManager : MonoBehaviour
     /// 移動するステージが今移動できるかどうか
     /// </summary>
     public bool IsStageMoving => (!AllStop && !StageStop);
+
+    public bool IsPlayerMoving => (!AllStop && !PlayerStop);
 }

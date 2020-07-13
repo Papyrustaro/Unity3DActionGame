@@ -105,7 +105,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
 
     private void Update()
     {
-        if (this._monobitView != null && !this._monobitView.isMine) return;
+        if (this._monobitView != null && !this._monobitView.isMine || !StageTimeManager.Instance.IsPlayerMoving) return;
 
         FirstUpdateInit();
 

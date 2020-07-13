@@ -30,8 +30,11 @@ public class TransformManager : MonoBehaviour
         while (countTime < time)
         {
             yield return null;
-            countTime += Time.deltaTime;
-            obj.RotateAround(centerPosition.position, GetAxis(centerPosition, axis), angle * Time.deltaTime / time);
+            if (StageTimeManager.Instance.IsPlayerMoving)
+            {
+                countTime += Time.deltaTime;
+                obj.RotateAround(centerPosition.position, GetAxis(centerPosition, axis), angle * Time.deltaTime / time);
+            }
         }
 
         //超過分修正
@@ -84,8 +87,11 @@ public class TransformManager : MonoBehaviour
         while (countTime < time)
         {
             yield return null;
-            countTime += Time.deltaTime;
-            obj.RotateAround(centerPosition.position, rotateAxis, angle * Time.deltaTime / time);
+            if (StageTimeManager.Instance.IsPlayerMoving)
+            {
+                countTime += Time.deltaTime;
+                obj.RotateAround(centerPosition.position, rotateAxis, angle * Time.deltaTime / time);
+            }
         }
 
         //超過分修正

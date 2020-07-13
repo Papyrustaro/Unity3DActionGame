@@ -19,6 +19,7 @@ public class WallKickTrigger : MonoBehaviour
 
     private void Update()
     {
+        if (!StageTimeManager.Instance.IsPlayerMoving) return;
         if (this.playerMoveController.IsGrounded && this._collider.enabled) {this._collider.enabled = false; this.stickWallCount = 0; }
         if (!this.playerMoveController.IsGrounded && !this._collider.enabled) StartCoroutine(CoroutineManager.DelayMethod(10, () => this._collider.enabled = true)); 
     }
