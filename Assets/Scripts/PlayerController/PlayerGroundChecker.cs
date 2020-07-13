@@ -8,6 +8,7 @@ using UnityEngine;
 public class PlayerGroundChecker : MonoBehaviour
 {
     private PlayerMovementBasedCamera playerMoveController;
+    private int accelerationGroundColliderCount = 0;
 
     private void Awake()
     {
@@ -18,6 +19,7 @@ public class PlayerGroundChecker : MonoBehaviour
     {
         if (other.CompareTag("AccelerationGround"))
         {
+            this.accelerationGroundColliderCount++;
             this.playerMoveController.IsOnAccelerationGround = true;
         }
     }
@@ -26,7 +28,8 @@ public class PlayerGroundChecker : MonoBehaviour
     {
         if (other.CompareTag("AccelerationGround"))
         {
-            this.playerMoveController.IsOnAccelerationGround = false;
+            this.accelerationGroundColliderCount--;
+            if(this.accelerationGroundColliderCount == 0) this.playerMoveController.IsOnAccelerationGround = false;
         }
     }
 }

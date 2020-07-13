@@ -5,14 +5,15 @@ using System;
 
 public class WallKickTrigger : MonoBehaviour
 {
-    [SerializeField] private PlayerMovementBasedCamera playerMoveController;
+    private PlayerMovementBasedCamera playerMoveController;
     private BoxCollider _collider;
     private MonobitEngine.MonobitView _monobitView;
     private int stickWallCount = 0;
 
     private void Awake()
     {
-        this._monobitView = this.transform.root.GetComponent<MonobitEngine.MonobitView>();
+        this._monobitView = this.transform.parent.GetComponent<MonobitEngine.MonobitView>();
+        this.playerMoveController = this.transform.parent.GetComponent<PlayerMovementBasedCamera>();
         this._collider = this.GetComponent<BoxCollider>();
     }
 
@@ -24,7 +25,6 @@ public class WallKickTrigger : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("Enter: " + this.stickWallCount);
         if (this._monobitView != null && !this._monobitView.isMine) return;
         if (collision.transform.CompareTag("Stage") || collision.transform.CompareTag("MoveStage") || collision.transform.CompareTag("AccelerationGround"))
         {
@@ -39,7 +39,6 @@ public class WallKickTrigger : MonoBehaviour
 
     private void OnCollisionExit(Collision collision)
     {
-        Debug.Log("Exit: " + this.stickWallCount);
         if (this._monobitView != null && !this._monobitView.isMine) return;
         if (collision.transform.CompareTag("Stage") || collision.transform.CompareTag("MoveStage") || collision.transform.CompareTag("AccelerationGround"))
         {
