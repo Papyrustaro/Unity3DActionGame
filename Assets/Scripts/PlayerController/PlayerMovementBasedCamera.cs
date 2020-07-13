@@ -40,6 +40,8 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     private E_State currentState = E_State.Standing;
     private E_ActionFlag waitingAction = E_ActionFlag.None;
     private Transform _hitHeadCheck;
+    private Transform _groundCheck;
+    private WallKickTrigger _wallKickTrigger;
 
     private CharacterController _characterController;
     private PlayerAnimation _playerAnimation;
@@ -92,6 +94,8 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         this._playerAnimation = GetComponent<PlayerAnimation>();
         this._characterController = GetComponent<CharacterController>();
         this._hitHeadCheck = this.transform.Find("HitHeadCheck").transform;
+        this._groundCheck = this.transform.Find("GroundCheck").transform;
+        this._wallKickTrigger = this.transform.Find("WallCheck").GetComponent<WallKickTrigger>();
 
         this._characterController
             .ObserveEveryValueChanged(x => x.isGrounded)
@@ -163,8 +167,24 @@ public class PlayerMovementBasedCamera : MonoBehaviour
                     }
                 }
                 break;
-            case E_State.Falling:
             case E_State.SpinJumping:
+                if (Input.GetButtonDown("HipDrop")) this.waitingAction = E_ActionFlag.HipDrop;
+                else if (this.checkPressJumpButton)
+                {
+                    if (Input.GetButton("SpinJump"))
+                    {
+                        this.pressJumpButtonFrame++;
+                        if (this.pressJumpButtonFrame == 4) this._velocity.y += this.jumpSecondVerticalSpeed;
+                        if (this.pressJumpButtonFrame == 7) this._velocity.y += this.jumpThirdVerticalSpeed;
+                    }
+                    else
+                    {
+                        this.checkPressJumpButton = false;
+                        this.pressJumpButtonFrame = 0;
+                    }
+                }
+                break;
+            case E_State.Falling:
             case E_State.BackFliping:
                 if (Input.GetButtonDown("HipDrop")) this.waitingAction = E_ActionFlag.HipDrop;
                 break;
@@ -357,8 +377,11 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         this._velocity.y = jumpVerticalSpeed;
         this._isGrounded = false;
 
-        this.currentState = E_State.JumpToTop;
-        this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.JumpToTop);
+        if (this.currentState != E_State.SpinJumping)
+        {
+            this.currentState = E_State.JumpToTop;
+            this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.JumpToTop);
+        }
         SEManager.Instance.Play(SEPath.JUMP_VOICE0);
         SEManager.Instance.Play(SEPath.JUMP_WIND0, volumeRate: 0.5f);
 
@@ -368,6 +391,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
             this.checkPressJumpButton = false;
             this.pressJumpButtonFrame = 0;
         }));
+        this._wallKickTrigger.ResetTrigger();
     }
 
     /// <summary>
@@ -452,7 +476,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         //回転運動
         this.transform.Rotate(new Vector3(0f, 2000f, 0f) * Time.deltaTime, Space.World);
 
-        if (!SEManager.Instance.GetCurrentAudioNames().Any(s => s == "JumpWind1")) SEManager.Instance.Play(SEPath.JUMP_WIND1);
+        if (!SEManager.Instance.GetCurrentAudioNames().Any(s => s == "JumpWind1")) SEManager.Instance.Play(SEPath.JUMP_WIND1, volumeRate: 0.5f);
     }
 
     /// <summary>
@@ -468,12 +492,17 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         this._velocity = this.transform.forward * -1 * this.backFlipHorizontalSpeed + this.transform.up * this.backFlipVerticalSpeed;
         this._hitHeadCheck.localPosition = Vector3.zero;
         this._hitHeadCheck.localRotation = Quaternion.Euler(Vector3.zero);
+        this._groundCheck.localPosition = Vector3.zero;
+        this._groundCheck.localRotation = Quaternion.Euler(Vector3.zero);
         StartCoroutine(TransformManager.RotateInCertainTimeByFixedAxisFromAway(this.transform, this.CenterPosition, E_TransformAxis.Right, -720f, 1f));
         StartCoroutine(TransformManager.RotateInCertainTimeByFixedAxisFromAway(this._hitHeadCheck, this.CenterPosition, E_TransformAxis.Right, 720f, 1f));
+        StartCoroutine(TransformManager.RotateInCertainTimeByFixedAxisFromAway(this._groundCheck, this.CenterPosition, E_TransformAxis.Right, 720f, 1f));
         StartCoroutine(CoroutineManager.DelayMethod(1.1f, () =>
         {
             this._hitHeadCheck.localPosition = Vector3.zero;
             this._hitHeadCheck.localRotation = Quaternion.Euler(Vector3.zero);
+            this._groundCheck.localPosition = Vector3.zero;
+            this._groundCheck.localRotation = Quaternion.Euler(Vector3.zero);
         }));
 
         //this.canStickWall = false;
@@ -517,12 +546,17 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         CapsuleCollider _collider = GetComponent<CapsuleCollider>();
         this._hitHeadCheck.localPosition = Vector3.zero;
         this._hitHeadCheck.localRotation = Quaternion.Euler(Vector3.zero);
+        this._groundCheck.localPosition = Vector3.zero;
+        this._groundCheck.localRotation = Quaternion.Euler(Vector3.zero);
         StartCoroutine(TransformManager.RotateInCertainTimeByAxisFromAway(this.transform, this.CenterPosition, E_TransformAxis.Right, 360f, 0.14f));
         StartCoroutine(TransformManager.RotateInCertainTimeByAxisFromAway(this._hitHeadCheck, this.CenterPosition, E_TransformAxis.Right, -360f, 0.14f));
+        StartCoroutine(TransformManager.RotateInCertainTimeByAxisFromAway(this._groundCheck, this.CenterPosition, E_TransformAxis.Right, -360f, 0.14f));
         StartCoroutine(CoroutineManager.DelayMethod(0.15f, () =>
         {
             this._hitHeadCheck.localPosition = Vector3.zero;
             this._hitHeadCheck.localRotation = Quaternion.Euler(Vector3.zero);
+            this._groundCheck.localPosition = Vector3.zero;
+            this._groundCheck.localRotation = Quaternion.Euler(Vector3.zero);
         }));
         StartCoroutine(CoroutineManager.DelayMethod(0.3f, () =>
         {
@@ -655,6 +689,8 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         this.transform.localRotation = Quaternion.Euler(new Vector3(0f, this.transform.rotation.eulerAngles.y, 0f));
         this._hitHeadCheck.transform.localPosition = Vector3.zero;
         this._hitHeadCheck.transform.localRotation = Quaternion.Euler(Vector3.zero);
+        this._groundCheck.transform.localPosition = Vector3.zero;
+        this._groundCheck.transform.localRotation = Quaternion.Euler(Vector3.zero);
     }
 
     /// <summary>

@@ -4,20 +4,12 @@ using UnityEngine;
 
 public class Trampoline : MonoBehaviour
 {
-    [SerializeField] private float boundPower = 10f;
+    private const float boundPower = 20f;
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("PlayerGroundCheck"))
-        {   
-            other.transform.parent.GetComponent<PlayerMovementBasedCamera>().Jump(this.boundPower);
+        {
+            other.transform.parent.GetComponent<PlayerMovementBasedCamera>().Jump(boundPower);
         }
     }
-
-    /*private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.transform.CompareTag("PlayerGroundCheck"))
-        {
-            collision.transform.GetComponent<PlayerMovementBasedCamera>().Jump(this.boundPower);
-        }
-    }*/
 }

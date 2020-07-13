@@ -47,4 +47,11 @@ public class WallKickTrigger : MonoBehaviour
             if(this.stickWallCount == 0) this.playerMoveController.StopStickingWall();
         }
     }
+
+    public void ResetTrigger()
+    {
+        this.stickWallCount = 0;
+        this._collider.enabled = false;
+        StartCoroutine(CoroutineManager.DelayMethod(8, () => this._collider.enabled = true));
+    }
 }
