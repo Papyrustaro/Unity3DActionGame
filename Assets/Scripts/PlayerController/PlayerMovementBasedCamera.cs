@@ -334,7 +334,14 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         //this._velocity = moveForward * this.runHorizontalSpeed * Time.deltaTime + new Vector3(0f, this._velocity.y, 0f); 
         this._velocity = moveForward * this.runHorizontalSpeed + this.addForceDownPower;
 
-        if (this.IsOnAccelerationGround) this._velocity *= this.rateOfRunHorizontalSpeedOnAccelerationGround;
+        if (this.IsOnAccelerationGround)
+        {
+            this._velocity *= this.rateOfRunHorizontalSpeedOnAccelerationGround;
+            if (this.currentState == E_State.Running && !SEManager.Instance.GetCurrentAudioNames().Any(s => s == "Acceleration"))
+            {
+                SEManager.Instance.Play(SEPath.ACCELERATION, volumeRate: 0.3f);
+            }
+        }
 
         //移動方向に回転
         if (moveForward != Vector3.zero)
@@ -384,6 +391,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         }
         SEManager.Instance.Play(SEPath.JUMP_VOICE0);
         SEManager.Instance.Play(SEPath.JUMP_WIND0, volumeRate: 0.5f);
+        SEManager.Instance.Play(SEPath.TRAMPOLINE_JUMP, volumeRate: 0.5f);
 
         this.checkPressJumpButton = true;
         StartCoroutine(CoroutineManager.DelayMethod(8, () =>
