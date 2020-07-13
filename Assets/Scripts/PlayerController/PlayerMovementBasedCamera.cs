@@ -35,7 +35,6 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     [SerializeField] private GameObject stickingWallSmoke;
     [SerializeField] private GameObject hipDropOnGroundShock;
 
-
     private Rigidbody _rigidbody;
     private bool _isGrounded = false;
     private E_State currentState = E_State.Standing;
@@ -561,7 +560,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     /// </summary>
     /// <param name="normalOfStickingWall">壁面の垂直方向(自身のほうへの)</param>
     public void StickWall(Vector3 normalOfStickingWall)
-    { 
+    {
         if (this._isGrounded || this.currentState == E_State.HipDropping) return;
         if (this.currentState != E_State.HipDropping) this.StopAllCoroutineOfRotation();
         this._velocity = new Vector3(0f, this._velocity.y, 0f);
