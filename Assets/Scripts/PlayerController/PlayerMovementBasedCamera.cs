@@ -135,6 +135,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     private void UpdateInput()
     {
         this.inputVelocity = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        if (this.inputVelocity.magnitude > 1f) this.inputVelocity = this.inputVelocity.normalized;
 
         if (this.currentState == E_State.Standing && this.inputVelocity != Vector2.zero) this.currentState = E_State.Running;
         switch (this.currentState)

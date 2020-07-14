@@ -1,12 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 /// <summary>
 /// ステージ全体の一時停止などの処理
 /// </summary>
 public class StageTimeManager : MonoBehaviour
 {
+    [SerializeField] private TextMeshProUGUI countTimeText;
+    [SerializeField] private GameObject timeIcon;
     public static StageTimeManager Instance { get; private set; }
 
     public bool AllStop { get; set; } = false;
@@ -16,6 +20,8 @@ public class StageTimeManager : MonoBehaviour
     public bool StageStop { get; set; } = false;
 
     public bool PlayerStop { get; set; } = false;
+
+    public float CountTime { get; private set; } = 0f;
 
     private void Awake()
     {
@@ -27,6 +33,17 @@ public class StageTimeManager : MonoBehaviour
         {
             throw new System.Exception();
         }
+        if (StaticData.showCountTime)
+        {
+            this.countTimeText.gameObject.SetActive(true);
+            this.timeIcon.SetActive(true);
+        }
+    }
+
+    private void Update()
+    {
+        if (!this.AllStop) this.CountTime += Time.deltaTime;
+        if (StaticData.showCountTime) this.countTimeText.text = ((int)this.CountTime).ToString();
     }
 
     /// <summary>
