@@ -32,4 +32,14 @@ public class StageManager : MonoBehaviour
         StageTimeManager.Instance.AllStop = !StageTimeManager.Instance.AllStop;
         this.pausePanel.SetActive(!this.pausePanel.activeSelf);
     }
+
+    public void StageClear()
+    {
+
+    }
+
+    public void StageFailed()
+    {
+
+    }
 }

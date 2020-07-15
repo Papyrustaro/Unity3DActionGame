@@ -4,6 +4,7 @@ using UnityEngine;
 using UniRx;
 using KanKikuchi.AudioManager;
 using System.Linq;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// カメラの向きから相対的に移動する
@@ -58,6 +59,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
 
     private int pressJumpButtonFrame = 0;
     private bool checkPressJumpButton = false;
+    private bool isTitleScene = false;
 
     [field: SerializeField]
     [field: RenameField("centerPosition")]
@@ -101,6 +103,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
             .ObserveEveryValueChanged(x => x.isGrounded)
             .ThrottleFrame(5)
             .Subscribe(x => this._isGrounded = x);
+        this.isTitleScene = SceneManager.GetActiveScene().name == "Title";
     }
 
     private void Update()
@@ -134,7 +137,9 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     /// </summary>
     private void UpdateInput()
     {
-        this.inputVelocity = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        if (!this.isTitleScene) this.inputVelocity = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        else this.inputVelocity = new Vector2(Input.GetAxis("Horizontal"), 0f);
+
         if (this.inputVelocity.magnitude > 1f) this.inputVelocity = this.inputVelocity.normalized;
 
         if (this.currentState == E_State.Standing && this.inputVelocity != Vector2.zero) this.currentState = E_State.Running;

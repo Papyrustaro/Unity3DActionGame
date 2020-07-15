@@ -16,7 +16,7 @@ public class WarpZone : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             this.onWarp.Invoke();
-            other.GetComponent<PlayerMovementBasedCamera>().Warp(this.toWarpPosition.position + Vector3.forward * 2.5f);
+            other.GetComponent<PlayerMovementBasedCamera>().Warp(this.toWarpPosition.position + other.transform.forward * 1f);
         }
     }
 }

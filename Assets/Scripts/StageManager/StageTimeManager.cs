@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// ステージ全体の一時停止などの処理
@@ -11,6 +12,8 @@ public class StageTimeManager : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI countTimeText;
     [SerializeField] private GameObject timeIcon;
+
+    private bool currentSceneIsStage = true;
     public static StageTimeManager Instance { get; private set; }
 
     public bool AllStop { get; set; } = false;
@@ -33,7 +36,10 @@ public class StageTimeManager : MonoBehaviour
         {
             throw new System.Exception();
         }
-        if (StaticData.showCountTime)
+        
+        string currentScene = SceneManager.GetActiveScene().name;
+        this.currentSceneIsStage = currentScene != "Title" && currentScene != "Menu" && currentScene != "StageSelect";
+        if (StaticData.showCountTime && this.currentSceneIsStage)
         {
             this.countTimeText.gameObject.SetActive(true);
             this.timeIcon.SetActive(true);
@@ -42,6 +48,7 @@ public class StageTimeManager : MonoBehaviour
 
     private void Update()
     {
+        if (!this.currentSceneIsStage) return;
         if (!this.AllStop) this.CountTime += Time.deltaTime;
         if (StaticData.showCountTime) this.countTimeText.text = ((int)this.CountTime).ToString();
     }
