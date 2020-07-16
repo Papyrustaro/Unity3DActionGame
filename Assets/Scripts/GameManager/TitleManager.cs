@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
 using System;
+using KanKikuchi.AudioManager;
 
 public class TitleManager : MonoBehaviour
 {

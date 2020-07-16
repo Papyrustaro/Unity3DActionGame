@@ -71,7 +71,8 @@ public class MenuUIManager : MonoBehaviour
         switch (menuType)
         {
             case E_MenuButton.GoBackTitle:
-
+                this.confirmGoTitleView.SetActive(true);
+                this.currentScene = E_MenuScene.ConfirmGoBackTitle;
                 break;
             case E_MenuButton.GoTutorial:
                 this.confirmGoTutorialView.SetActive(true);
@@ -84,6 +85,8 @@ public class MenuUIManager : MonoBehaviour
             case E_MenuButton.ShowManual:
                 break;
             case E_MenuButton.ShowOption:
+                this.showOptionView.SetActive(true);
+                this.currentScene = E_MenuScene.ShowOption;
                 break;
             case E_MenuButton.ShowRanking:
                 break;
@@ -107,7 +110,7 @@ public class MenuUIManager : MonoBehaviour
                 this.showRankingView.SetActive(false);
                 break;
             case E_MenuScene.ConfirmGoBackTitle:
-                
+                this.confirmGoTitleView.SetActive(false);
                 break;
             case E_MenuScene.ConfirmGoTutorial:
                 this.confirmGoTutorialView.SetActive(false);
@@ -135,6 +138,14 @@ public class MenuUIManager : MonoBehaviour
     public void GoTutorial()
     {
         SceneManager.LoadScene("Tutorial");
+    }
+
+    /// <summary>
+    /// タイトル画面にもどる
+    /// </summary>
+    public void GoTitle()
+    {
+        SceneManager.LoadScene("Title");
     }
 
 
