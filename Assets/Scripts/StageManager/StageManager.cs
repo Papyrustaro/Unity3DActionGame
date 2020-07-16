@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using NCMB;
+using UnityEngine.SceneManagement;
 
 public class StageManager : MonoBehaviour
 {
@@ -41,5 +43,13 @@ public class StageManager : MonoBehaviour
     public void StageFailed()
     {
 
+    }
+
+    public void SavePlayerResult()
+    {
+        NCMBObject obj = new NCMBObject(SceneManager.GetActiveScene().name);
+        obj["PlayerName"] = StaticData.playerName;
+        obj["ClearTime"] = StageTimeManager.Instance.CountTime;
+        obj.SaveAsync();
     }
 }
