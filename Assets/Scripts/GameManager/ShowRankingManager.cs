@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using NCMB;
 using System;
+using NaughtyAttributes;
 
 public class ShowRankingManager : MonoBehaviour
 {
@@ -11,14 +12,15 @@ public class ShowRankingManager : MonoBehaviour
     [SerializeField] private List<Text> playerNamesTexts = new List<Text>();
     [SerializeField] private List<Text> clearTimesTexts = new List<Text>();
     [SerializeField] private int stageCount = 11;
-    [SerializeField] private Text rankingTitleText;
-    [SerializeField] private Button nextRankingIndexButton;
+    [SerializeField] private Text stageTitleText;
     private int showingStageIndex = 0;
 
-    public Text RankingTitleText => this.rankingTitleText;
     public int ShowingStageIndex => this.showingStageIndex;
-    public Button NextRankingIndexButton => this.nextRankingIndexButton;
 
+    private void Awake()
+    {
+        
+    }
 
     public void SetRanking()
     {
@@ -78,28 +80,31 @@ public class ShowRankingManager : MonoBehaviour
 
     public void PressNextStageRankingButton()
     {
-        //SEManager.PlaySE(SEManager.select);
         this.scrollViews[this.showingStageIndex].SetActive(false);
         this.showingStageIndex++;
         if (this.showingStageIndex > this.stageCount - 1) this.showingStageIndex = 0;
         this.scrollViews[this.showingStageIndex].SetActive(true);
-        this.RankingTitleText.text = "ランキング(Stage" + (this.showingStageIndex + 1).ToString() + ")";
+        this.stageTitleText.text = "Stage" + (this.showingStageIndex + 1).ToString();
     }
 
     public void PressBackStageRankingButton()
     {
-        //SEManager.PlaySE(SEManager.select);
         this.scrollViews[this.showingStageIndex].SetActive(false);
         this.showingStageIndex--;
         if (this.showingStageIndex < 0) this.showingStageIndex = this.stageCount - 1;
         this.scrollViews[this.showingStageIndex].SetActive(true);
-        this.RankingTitleText.text = "ランキング(Stage" + (this.showingStageIndex + 1).ToString() + ")";
+        this.stageTitleText.text = "Stage" + (this.showingStageIndex + 1).ToString();
     }
 
-    public void Resume()
+    [Button(enabledMode: EButtonEnableMode.Editor)]
+    public void SetText()
     {
-        //StageManager.Instance.IsStop = false;
-        //SEManager.PlaySE(SEManager.back);
-        this.gameObject.SetActive(false);
+        this.playerNamesTexts = new List<Text>();
+        this.clearTimesTexts = new List<Text>();
+        for(int i = 0; i < this.scrollViews.Count; i++)
+        {
+            this.playerNamesTexts.Add(this.scrollViews[i].transform.Find("Viewport/Content/PlayerNameText").GetComponent<Text>());
+            this.clearTimesTexts.Add(this.scrollViews[i].transform.Find("Viewport/Content/TimeOrDateText").GetComponent<Text>());
+        }
     }
 }

@@ -89,6 +89,8 @@ public class MenuUIManager : MonoBehaviour
                 this.currentScene = E_MenuScene.ShowOption;
                 break;
             case E_MenuButton.ShowRanking:
+                this.showRankingView.SetActive(true);
+                this.currentScene = E_MenuScene.ShowRanking;
                 break;
         }
     }
