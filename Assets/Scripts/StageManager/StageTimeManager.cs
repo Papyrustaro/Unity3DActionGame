@@ -44,13 +44,25 @@ public class StageTimeManager : MonoBehaviour
             this.countTimeText.gameObject.SetActive(true);
             this.timeIcon.SetActive(true);
         }
+        else
+        {
+            this.countTimeText.gameObject.SetActive(false);
+            this.timeIcon.SetActive(false);
+        }
     }
 
     private void Update()
     {
         if (!this.currentSceneIsStage) return;
         if (!this.AllStop) this.CountTime += Time.deltaTime;
+
         if (StaticData.showCountTime) this.countTimeText.text = ((int)this.CountTime).ToString();
+    }
+
+    public void SetActiveCountTime(bool flag)
+    {
+        this.countTimeText.gameObject.SetActive(flag);
+        this.timeIcon.SetActive(flag);
     }
 
     /// <summary>

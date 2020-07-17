@@ -133,7 +133,7 @@ public class MenuUIManager : MonoBehaviour
     public void SelectStage(int selectStageIndex)
     {
         
-        SceneManager.LoadScene("Stage" + selectStageIndex.ToString());
+        SceneManager.LoadScene("Stage" + (selectStageIndex + 1).ToString());
     }
 
     /// <summary>

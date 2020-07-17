@@ -13,6 +13,11 @@ public class OptionUIManager : MonoBehaviour
     [SerializeField] private InputField seVolumeInputField;
     [SerializeField] private Toggle showTimeFlag;
 
+    private void OnEnable()
+    {
+        this.showTimeFlag.isOn = StaticData.showCountTime;
+    }
+
     private void Start()
     {
         this.bgmVolumeSlider.onValueChanged.AddListener((x) =>
@@ -63,6 +68,7 @@ public class OptionUIManager : MonoBehaviour
         this.showTimeFlag.onValueChanged.AddListener((x) =>
         {
             StaticData.showCountTime = x;
+            if (StageTimeManager.Instance != null) StageTimeManager.Instance.SetActiveCountTime(x);
         });
     }
 }
