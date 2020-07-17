@@ -54,7 +54,7 @@ public class MenuUIManager : MonoBehaviour
                 this.announceTextInInitMenu.text = "ステージ選択に移ります";
                 break;
             case E_MenuButton.ShowManual:
-                this.announceTextInInitMenu.text = "以下について確認できます\n\n・操作方法\n・アクション\n・ステージギミック\n・使用した素材";
+                this.announceTextInInitMenu.text = "以下について確認できます\n\n・操作方法\n・アクション\n・ステージギミック\n・制作";
                 break;
             case E_MenuButton.ShowOption:
                 this.announceTextInInitMenu.text = "設定を変更します";
@@ -83,6 +83,8 @@ public class MenuUIManager : MonoBehaviour
                 this.currentScene = E_MenuScene.SelectStage;
                 break;
             case E_MenuButton.ShowManual:
+                this.showManualView.SetActive(true);
+                this.currentScene = E_MenuScene.ShowManual;
                 break;
             case E_MenuButton.ShowOption:
                 this.showOptionView.SetActive(true);

@@ -1,6 +1,1 @@
 # 使いたい技術
-
-## リアルタイム通信
-・monobit engine
-(今回はたぶん使わない: photon engine)
-(今回はたぶん使わない: Azure PlayFab, Amazon GameLift)
