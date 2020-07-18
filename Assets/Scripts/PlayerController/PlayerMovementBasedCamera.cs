@@ -606,11 +606,12 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         this._isGrounded = false;
         this.currentState = E_State.JumpToTop;
 
-        //法線ベクトルのyの大きさに制限を加える？
-        this.transform.forward = this.NormalOfStickingWall;
-
         //移動させる
         this._velocity = new Vector3(this.NormalOfStickingWall.x * this.wallKickHorizontalSpeed + this._velocity.x, this.wallKickVerticalSpeed, this.NormalOfStickingWall.z * this.wallKickHorizontalSpeed + this._velocity.z);
+
+        //回転
+        //this.transform.forward = this.NormalOfStickingWall; //壁の法線ベクトルを向く
+        this.transform.forward = new Vector3(this._velocity.x, 0f, this._velocity.z); //移動方向を向く
 
         //animation
         this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.JumpToTop);
