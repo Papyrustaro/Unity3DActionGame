@@ -25,4 +25,6 @@ public class PlayerManager : MonoBehaviour
             throw new System.Exception();
         }
     }
+
+    
 }

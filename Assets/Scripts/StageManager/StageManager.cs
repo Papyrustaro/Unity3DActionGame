@@ -32,24 +32,27 @@ public class StageManager : MonoBehaviour
     private void OnPressPause()
     {
         StageTimeManager.Instance.AllStop = !StageTimeManager.Instance.AllStop;
+        StageCameraManager.Instance.SetAbleRotateByInput(this.pausePanel.activeSelf);
         this.pausePanel.SetActive(!this.pausePanel.activeSelf);
     }
 
     public void StageClear()
     {
-
+        StageUIManager.Instance.GameClear();
     }
 
     public void StageFailed()
     {
-
+        StageUIManager.Instance.GameOver();
     }
 
-    public void SavePlayerResult()
+    public void ContinueStage()
     {
-        NCMBObject obj = new NCMBObject(SceneManager.GetActiveScene().name);
-        obj["PlayerName"] = StaticData.playerName;
-        obj["ClearTime"] = StageTimeManager.Instance.CountTime;
-        obj.SaveAsync();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void GoMenu()
+    {
+        SceneManager.LoadScene("Menu");
     }
 }

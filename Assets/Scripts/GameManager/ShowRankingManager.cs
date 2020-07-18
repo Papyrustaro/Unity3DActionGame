@@ -17,11 +17,6 @@ public class ShowRankingManager : MonoBehaviour
 
     public int ShowingStageIndex => this.showingStageIndex;
 
-    private void Awake()
-    {
-        
-    }
-
     public void SetRanking()
     {
         for (int i = 0; i < stageCount; i++)

@@ -24,6 +24,8 @@ public class StageTimeManager : MonoBehaviour
 
     public bool PlayerStop { get; set; } = false;
 
+    public bool CountTimeStop { get; set; } = false;
+
     public float CountTime { get; private set; } = 0f;
 
     private void Awake()
@@ -54,7 +56,7 @@ public class StageTimeManager : MonoBehaviour
     private void Update()
     {
         if (!this.currentSceneIsStage) return;
-        if (!this.AllStop) this.CountTime += Time.deltaTime;
+        if (!this.AllStop && !this.CountTimeStop) this.CountTime += Time.deltaTime;
 
         if (StaticData.showCountTime) this.countTimeText.text = ((int)this.CountTime).ToString();
     }

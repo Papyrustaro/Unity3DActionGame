@@ -10,22 +10,59 @@ using UnityEngine.Networking;
 
 
 public class StageUIManager : MonoBehaviour
-{
-    [SerializeField] private Text recentPlayerNameText;
-    [SerializeField] private Text recentDateText;
-    [SerializeField] private Text rankingPlayerNameText;
-    [SerializeField] private Text rankingTimeText;
+{   
+    [SerializeField] private GameObject gameClearText;
+    [SerializeField] private GameObject gameClearPanel;
+    [SerializeField] private Text recentPlayerNameTextInClear;
+    [SerializeField] private Text recentDateTextInClear;
+    [SerializeField] private Text rankingPlayerNameTextInClear;
+    [SerializeField] private Text rankingTimeTextInClear;
+    [SerializeField] private Text playerResultText;
 
-    [SerializeField] private GameObject smogPanel;
     [SerializeField] private GameObject gameOverText;
-    [SerializeField] private GameObject rankingPanel;
-    [SerializeField] private GameObject stageClearText;
+    [SerializeField] private GameObject gameOverPanel;
+    [SerializeField] private Text recentPlayerNameTextInFailed;
+    [SerializeField] private Text recentDateTextInFailed;
+    [SerializeField] private Text rankingPlayerNameTextInFailed;
+    [SerializeField] private Text rankingTimeTextInFailed;
 
-    [SerializeField] private Button continueButton;
-    [SerializeField] private Button tweetResultButton;
-
-    private Text playerResultText;
     private int thisTimePlayerRank;
+
+    private bool isClear = false;
+
+    public static StageUIManager Instance { get; private set; }
+
+    private void Awake()
+    {
+        if (Instance == null) Instance = this;
+        else throw new Exception();
+    }
+
+    public void GameOver()
+    {
+        StageTimeManager.Instance.CountTimeStop = true;
+        StageTimeManager.Instance.SetActiveCountTime(false);
+        StageCameraManager.Instance.SetAbleFollow(false);
+        StartCoroutine(this.SetAndShowRankingWhenFailed());
+    }
+
+    public void GameClear()
+    {
+        this.isClear = true;
+        StageTimeManager.Instance.CountTimeStop = true;
+        StageTimeManager.Instance.SetActiveCountTime(false);
+        StageCameraManager.Instance.SetAbleFollow(false);
+        StartCoroutine(this.SetAndShowRankingWhenClear());
+    }
+
+    public void SavePlayerResult()
+    {
+        NCMBObject obj = new NCMBObject(SceneManager.GetActiveScene().name);
+        obj["PlayerName"] = StaticData.playerName;
+        obj["ClearTime"] = StageTimeManager.Instance.CountTime;
+        obj.SaveAsync();
+    }
+
     public IEnumerator SetHighRankingTextFromClearResult()
     {
         NCMBQuery<NCMBObject> query = new NCMBQuery<NCMBObject>(SceneManager.GetActiveScene().name);
@@ -96,8 +133,8 @@ public class StageUIManager : MonoBehaviour
             clearDate += cDate.ToString("yyyy/MM/dd") + "\n";
         }
 
-        this.recentPlayerNameText.text = playerName;
-        this.recentDateText.text = clearDate;
+        this.recentPlayerNameTextInClear.text = playerName;
+        this.recentDateTextInClear.text = clearDate;
 
         if (StaticData.recentResults.ContainsKey(SceneManager.GetActiveScene().name))
         {
@@ -172,8 +209,8 @@ public class StageUIManager : MonoBehaviour
             clearDate += cDate.ToString("yyyy/MM/dd") + "\n";
         }
 
-        this.recentPlayerNameText.text = playerName;
-        this.recentDateText.text = clearDate;
+        this.recentPlayerNameTextInFailed.text = playerName;
+        this.recentDateTextInFailed.text = clearDate;
         if (StaticData.recentResults.ContainsKey(SceneManager.GetActiveScene().name)) StaticData.recentResults[SceneManager.GetActiveScene().name] = new ResultDataNameAndDate(playerName, clearDate);
         else StaticData.recentResults.Add(SceneManager.GetActiveScene().name, new ResultDataNameAndDate(playerName, clearDate));
     }
@@ -188,8 +225,8 @@ public class StageUIManager : MonoBehaviour
             playerName += (i + 1).ToString() + ". " + highRanks[i]["PlayerName"].ToString() + "\n";
             resultTime += highRanks[i]["ClearTime"].ToString() + "\n";
         }
-        this.rankingPlayerNameText.text = playerName;
-        this.rankingTimeText.text = resultTime;
+        this.rankingPlayerNameTextInFailed.text = playerName;
+        this.rankingTimeTextInFailed.text = resultTime;
         if (StaticData.highRankResults.ContainsKey(SceneManager.GetActiveScene().name)) StaticData.highRankResults[SceneManager.GetActiveScene().name] = new ResultDataNameAndTime(playerName, resultTime);
         else StaticData.highRankResults.Add(SceneManager.GetActiveScene().name, new ResultDataNameAndTime(playerName, resultTime));
     }
@@ -234,8 +271,8 @@ public class StageUIManager : MonoBehaviour
             }
         }
 
-        this.rankingPlayerNameText.text = playerName;
-        this.rankingTimeText.text = resultTime;
+        this.rankingPlayerNameTextInClear.text = playerName;
+        this.rankingTimeTextInClear.text = resultTime;
         if (StaticData.highRankResults.ContainsKey(SceneManager.GetActiveScene().name))
         {
             StaticData.highRankResults[SceneManager.GetActiveScene().name] = new ResultDataNameAndTime(playerName, resultTime);
@@ -246,109 +283,85 @@ public class StageUIManager : MonoBehaviour
         }
     }
 
-
-
-
     public void SetResultAndShowUsedStaticData()
     {
-        this.rankingPlayerNameText.text = StaticData.highRankResults[SceneManager.GetActiveScene().name].PlayerNameText;
+        /*this.rankingPlayerNameText.text = StaticData.highRankResults[SceneManager.GetActiveScene().name].PlayerNameText;
         this.rankingTimeText.text = StaticData.highRankResults[SceneManager.GetActiveScene().name].ResultTimeText;
         this.recentPlayerNameText.text = StaticData.recentResults[SceneManager.GetActiveScene().name].PlayerNameText;
-        this.recentDateText.text = StaticData.recentResults[SceneManager.GetActiveScene().name].ClearDateText;
+        this.recentDateText.text = StaticData.recentResults[SceneManager.GetActiveScene().name].ClearDateText;*/
 
         this.playerResultText.text = StaticData.playerName + ": " + StageTimeManager.Instance.CountTime;
         StageTimeManager.Instance.AllStop = true;
-        //StartCoroutine(DelayMethodRealTime(0.3f, () =>
-        //{
-        //this.scoreText.SetActive(false);
-        //this.timeText.SetActive(false);
-        //this.flagCountText.transform.gameObject.SetActive(false);
         this.gameOverText.SetActive(true);
-        this.smogPanel.SetActive(true);
-        //}));
         StartCoroutine(CoroutineManager.DelayMethodRealTime(0.3f, () =>
         {
             this.gameOverText.SetActive(false);
         }));
-        StartCoroutine(CoroutineManager.DelayMethodRealTime(0.5f, () =>
-        {
-            //SEManager.PlaySE(SEManager.getItem);
-            this.rankingPanel.SetActive(true);
-            this.tweetResultButton.gameObject.SetActive(false);
-            this.continueButton.Select();
-        }));
     }
 
+    /// <summary>
+    /// クリアしたときの描画処理
+    /// </summary>
+    /// <returns></returns>
     public IEnumerator SetAndShowRankingWhenClear()
     {
         this.playerResultText.text = StaticData.playerName + ": " + StageTimeManager.Instance.CountTime;
         StageTimeManager.Instance.AllStop = true; 
 
-        //StartCoroutine(DelayMethodRealTime(0.5f, () =>
-        //{
-        //SEManager.PlaySE(SEManager.success);
-        //this.scoreText.SetActive(false);
-        //this.timeText.SetActive(false);
-        //this.flagCountText.transform.gameObject.SetActive(false);
-        this.stageClearText.SetActive(true);
-        this.smogPanel.SetActive(true);
-        //}));
-        StartCoroutine(CoroutineManager.DelayMethodRealTime(0.5f, () =>
-        {
-            this.stageClearText.SetActive(false);
-        }));
-
-        StartCoroutine(SetHighRankingTextFromClearResult());
+        this.gameClearText.SetActive(true);
+        
+        ///ランキング情報の代入処理
+        yield return StartCoroutine(SetHighRankingTextFromClearResult());
         yield return StartCoroutine(SetRecentClearTextFromClearResult());
 
-        //SEManager.PlaySE(SEManager.getItem);
-        this.rankingPanel.SetActive(true);
-        this.continueButton.Select();
-        StageManager.Instance.SavePlayerResult();
+        SavePlayerResult();
+
+        StartCoroutine(CoroutineManager.DelayMethodRealTime(2f, () =>
+        {
+            this.gameClearText.SetActive(false);
+            this.gameClearPanel.SetActive(true);
+            StageTimeManager.Instance.PlayerStop = true;
+        }));
+        
     }
 
+    /// <summary>
+    /// ゲームオーバーになったときの描画処理
+    /// </summary>
+    /// <returns></returns>
     public IEnumerator SetAndShowRankingWhenFailed()
     {
-        this.playerResultText.text = StaticData.playerName + ": " + StageTimeManager.Instance.CountTime;
-        StageTimeManager.Instance.AllStop = true;
-
-        //StartCoroutine(DelayMethodRealTime(0.5f, () =>
-        //{
-        //SEManager.PlaySE(SEManager.failed);
-        //this.scoreText.SetActive(false);
-        //this.timeText.SetActive(false);
-        //this.flagCountText.transform.gameObject.SetActive(false);
         this.gameOverText.SetActive(true);
-        this.smogPanel.SetActive(true);
-        //}));
-        StartCoroutine(CoroutineManager.DelayMethodRealTime(0.5f, () =>
-        {
-            this.gameOverText.SetActive(false);
-        }));
 
+        //タイムランキング情報を取得
         if (StaticData.highRankResults.ContainsKey(SceneManager.GetActiveScene().name))
         {
-            this.rankingPlayerNameText.text = StaticData.highRankResults[SceneManager.GetActiveScene().name].PlayerNameText;
-            this.rankingTimeText.text = StaticData.highRankResults[SceneManager.GetActiveScene().name].ResultTimeText;
+            this.rankingPlayerNameTextInFailed.text = StaticData.highRankResults[SceneManager.GetActiveScene().name].PlayerNameText;
+            this.rankingTimeTextInFailed.text = StaticData.highRankResults[SceneManager.GetActiveScene().name].ResultTimeText;
         }
         else
         {
             yield return StartCoroutine(SetHighRankingTextFromFailedResult());
         }
 
+        //最近クリアした人を取得
         if (StaticData.recentResults.ContainsKey(SceneManager.GetActiveScene().name))
         {
-            this.recentPlayerNameText.text = StaticData.recentResults[SceneManager.GetActiveScene().name].PlayerNameText;
-            this.recentDateText.text = StaticData.recentResults[SceneManager.GetActiveScene().name].ClearDateText;
+            this.recentPlayerNameTextInFailed.text = StaticData.recentResults[SceneManager.GetActiveScene().name].PlayerNameText;
+            this.recentDateTextInFailed.text = StaticData.recentResults[SceneManager.GetActiveScene().name].ClearDateText;
         }
         else
         {
             yield return StartCoroutine(SetRecentClearTextFromFailedResult());
         }
 
-        //SEManager.PlaySE(SEManager.getItem);
-        this.rankingPanel.SetActive(true);
-        this.tweetResultButton.gameObject.SetActive(false);
-        this.continueButton.Select();
+        StartCoroutine(CoroutineManager.DelayMethodRealTime(2f, () =>
+        {
+            this.gameOverText.SetActive(false);
+            this.gameOverPanel.SetActive(true);
+            StageTimeManager.Instance.PlayerStop = true;
+        }));
     }
+
+
 }
