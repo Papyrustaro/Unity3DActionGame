@@ -428,10 +428,14 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         Vector3 moveVelocity = moveForward * this.normalAirHorizontalForce * Time.deltaTime + this._velocity;
 
         float horizontalSpeed = Mathf.Sqrt(moveVelocity.x * moveVelocity.x + moveVelocity.z * moveVelocity.z);
-        if(horizontalSpeed > this.maxNormalAirHorizontalSpeed && horizontalSpeed < this.maxNormalAirHorizontalSpeed + 3f)
+        if (horizontalSpeed > this.maxNormalAirHorizontalSpeed && horizontalSpeed < this.maxNormalAirHorizontalSpeed + 3f)
         {
             moveVelocity.x *= this.maxNormalAirHorizontalSpeed / horizontalSpeed;
             moveVelocity.z *= this.maxNormalAirHorizontalSpeed / horizontalSpeed;
+        } else if (horizontalSpeed > this.maxNormalAirHorizontalSpeed * this.rateOfRunHorizontalSpeedOnAccelerationGround)
+        {
+            moveVelocity.x *= (this.maxNormalAirHorizontalSpeed * this.rateOfRunHorizontalSpeedOnAccelerationGround) / horizontalSpeed;
+            moveVelocity.z *= (this.maxNormalAirHorizontalSpeed * this.rateOfRunHorizontalSpeedOnAccelerationGround) / horizontalSpeed;
         }
 
         this._velocity = new Vector3(moveVelocity.x, this._velocity.y, moveVelocity.z);
@@ -491,6 +495,10 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         {
             moveVelocity.x *= this.maxSpinJumpAirHorizontalSpeed / horizontalSpeed;
             moveVelocity.z *= this.maxSpinJumpAirHorizontalSpeed / horizontalSpeed;
+        }else if(horizontalSpeed > this.maxSpinJumpAirHorizontalSpeed * this.rateOfRunHorizontalSpeedOnAccelerationGround)
+        {
+            moveVelocity.x *= (this.maxSpinJumpAirHorizontalSpeed * this.rateOfRunHorizontalSpeedOnAccelerationGround) / horizontalSpeed;
+            moveVelocity.z *= (this.maxSpinJumpAirHorizontalSpeed * this.rateOfRunHorizontalSpeedOnAccelerationGround) / horizontalSpeed;
         }
         this._velocity = new Vector3(moveVelocity.x, this._velocity.y, moveVelocity.z);
 

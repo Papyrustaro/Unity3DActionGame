@@ -5687,6 +5687,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2197645392119970363, guid: ef3e0a55d62e9ce4484d129ce981bd3a,
+        type: 3}
+      propertyPath: rateOfRunHorizontalSpeedOnAccelerationGround
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 2197645392934514447, guid: ef3e0a55d62e9ce4484d129ce981bd3a,
         type: 3}
       propertyPath: m_LocalPosition.x
