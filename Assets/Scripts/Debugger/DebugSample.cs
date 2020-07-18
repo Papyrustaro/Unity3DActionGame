@@ -5,10 +5,8 @@ using System;
 
 public class DebugSample : MonoBehaviour
 {
-
-    private void Start()
+    private void OnTriggerEnter(Collider other)
     {
-        StartCoroutine(CoroutineManager.DelayMethod(3f, () => Debug.Log("C")));
-
+        if (other.CompareTag("Player")) Debug.Log(other.gameObject.name);
     }
 }

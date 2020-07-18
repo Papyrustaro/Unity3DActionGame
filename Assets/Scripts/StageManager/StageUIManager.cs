@@ -40,6 +40,7 @@ public class StageUIManager : MonoBehaviour
 
     public void GameOver()
     {
+        Debug.Log("gameOver");
         StageTimeManager.Instance.CountTimeStop = true;
         StageTimeManager.Instance.SetActiveCountTime(false);
         StageCameraManager.Instance.SetAbleFollow(false);
@@ -306,7 +307,6 @@ public class StageUIManager : MonoBehaviour
     public IEnumerator SetAndShowRankingWhenClear()
     {
         this.playerResultText.text = StaticData.playerName + ": " + StageTimeManager.Instance.CountTime;
-        StageTimeManager.Instance.AllStop = true; 
 
         this.gameClearText.SetActive(true);
         
@@ -361,6 +361,27 @@ public class StageUIManager : MonoBehaviour
             this.gameOverPanel.SetActive(true);
             StageTimeManager.Instance.PlayerStop = true;
         }));
+    }
+
+    public void Tweeting()
+    {
+        string tweetText = "";
+        if (this.thisTimePlayerRank != -1) tweetText = "【現在" + this.thisTimePlayerRank.ToString() + "位】";
+        tweetText += SceneManager.GetActiveScene().name + "を" + StageTimeManager.Instance.CountTime.ToString() + "秒でクリア!!";
+
+        string url = "https://twitter.com/intent/tweet?"
+            + "text=" + tweetText
+            + "&url=" + "https://unityroom.com/games/underrocket"
+            + "&hashtags=" + "UnderRocket,unityroom";
+
+#if UNITY_EDITOR
+        Application.OpenURL(url);
+#elif UNITY_WEBGL
+            // WebGLの場合は、ゲームプレイ画面と同じウィンドウでツイート画面が開かないよう、処理を変える
+            Application.ExternalEval(string.Format("window.open('{0}','_blank')", url));
+#else
+            Application.OpenURL(url);
+#endif
     }
 
 

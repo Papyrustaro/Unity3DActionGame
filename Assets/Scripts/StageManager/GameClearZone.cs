@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Goal : MonoBehaviour
+public class GameClearZone : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            this.gameObject.SetActive(false);
-            //ゴール処理
             StageManager.Instance.StageClear();
         }
     }

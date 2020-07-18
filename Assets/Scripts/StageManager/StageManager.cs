@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class StageManager : MonoBehaviour
 {
     [SerializeField] private GameObject pausePanel;
+    public bool IsFinished { get; private set; } = false;
     public static StageManager Instance { get; private set; }
 
     private void Awake()
@@ -23,7 +24,7 @@ public class StageManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetButtonDown("Pause"))
+        if (!this.IsFinished && Input.GetButtonDown("Pause"))
         {
             this.OnPressPause();
         }
@@ -38,11 +39,13 @@ public class StageManager : MonoBehaviour
 
     public void StageClear()
     {
+        this.IsFinished = true;
         StageUIManager.Instance.GameClear();
     }
 
     public void StageFailed()
     {
+        this.IsFinished = true;
         StageUIManager.Instance.GameOver();
     }
 
