@@ -3,19 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using NaughtyAttributes;
+using KanKikuchi.AudioManager;
 
 /// <summary>
 /// 時間経過でonOffStageのフラグが変わる。
 /// </summary>
 public class SwitchOnOffStageInCountTimeController : MonoBehaviour
 {
-    [SerializeField] private List<SwitchOnOffStage> switchStages;
-    [SerializeField] private UnityEvent onSwitch;
     [SerializeField] private float switchInterval = 3f;
     [SerializeField] private Material initOnInOnSwitchStageMaterial;
     [SerializeField] private Material initOnInOffSwitchStageMaterial;
     [SerializeField] private Material initOffInOnSwitchStageMaterial;
     [SerializeField] private Material initOffInOffSwitchStageMaterial;
+    [SerializeField] private UnityEvent onSwitch;
+    [SerializeField, ReadOnly] private List<SwitchOnOffStage> switchStages;
     private float countTime = 0f;
 
     private void Update()
@@ -25,8 +26,9 @@ public class SwitchOnOffStageInCountTimeController : MonoBehaviour
             this.countTime += Time.deltaTime;
             if(this.countTime >= this.switchInterval)
             {
-                Debug.Log("切り替わった");
                 this.onSwitch.Invoke();
+                SEManager.Instance.Play(SEPath.SWITCH_STAGE1, volumeRate: 0.5f);
+                SEManager.Instance.Play(SEPath.SWITCH_STAGE2, volumeRate: 0.5f);
                 foreach (SwitchOnOffStage switchStage in this.switchStages) switchStage.SwitchOnOff();
                 this.countTime = 0f;
             }
