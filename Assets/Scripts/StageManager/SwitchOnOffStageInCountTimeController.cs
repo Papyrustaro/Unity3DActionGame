@@ -18,6 +18,7 @@ public class SwitchOnOffStageInCountTimeController : MonoBehaviour
     [SerializeField] private UnityEvent onSwitch;
     [SerializeField, ReadOnly] private List<SwitchOnOffStage> switchStages;
     private float countTime = 0f;
+    private bool playSE = false;
 
     private void Update()
     {
@@ -27,11 +28,30 @@ public class SwitchOnOffStageInCountTimeController : MonoBehaviour
             if(this.countTime >= this.switchInterval)
             {
                 this.onSwitch.Invoke();
-                SEManager.Instance.Play(SEPath.SWITCH_STAGE1, volumeRate: 0.5f);
-                SEManager.Instance.Play(SEPath.SWITCH_STAGE2, volumeRate: 0.5f);
+                if (this.playSE)
+                {
+                    SEManager.Instance.Play(SEPath.SWITCH_STAGE1, volumeRate: 0.5f);
+                    SEManager.Instance.Play(SEPath.SWITCH_STAGE2, volumeRate: 0.5f);
+                }
                 foreach (SwitchOnOffStage switchStage in this.switchStages) switchStage.SwitchOnOff();
                 this.countTime = 0f;
             }
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            this.playSE = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            this.playSE = false;
         }
     }
 

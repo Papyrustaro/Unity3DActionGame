@@ -94,13 +94,15 @@ public class LiftMovement : MonoBehaviour
     [Button(enabledMode: EButtonEnableMode.Editor)]
     public void GenericLineOfOrbit()
     {
+        LineRenderer lineRenderer = GetComponent<LineRenderer>();
+        if (lineRenderer == null) lineRenderer = this.gameObject.AddComponent<LineRenderer>();
+
         List<Vector3> paths = new List<Vector3>();
         paths.Add(this.transform.position);
         for(int i = 0; i < this.path.Length; i++)
         {
             paths.Add(this.path[i] + paths[i]);
         }
-        LineRenderer lineRenderer = this.gameObject.AddComponent<LineRenderer>();
         lineRenderer.material = this.orbitLineMaterial;
         lineRenderer.startWidth = 0.2f;
         lineRenderer.endWidth = 0.2f;
