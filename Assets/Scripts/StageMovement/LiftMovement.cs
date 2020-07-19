@@ -53,7 +53,7 @@ public class LiftMovement : MonoBehaviour
 
     private void Update()
     {
-        if (!StageTimeManager.Instance.IsStageMoving) return;
+        //if (!StageTimeManager.Instance.IsStageMoving) return;
         if(this.sequence.IsPlaying())
         {
             if (!StageTimeManager.Instance.IsStageMoving || (this.moveState == E_GroundedState.Grounded && this.currentGroundedState == E_GroundedState.NotGrounded) ||
