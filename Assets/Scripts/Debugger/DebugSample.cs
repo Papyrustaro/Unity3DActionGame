@@ -5,8 +5,10 @@ using System;
 
 public class DebugSample : MonoBehaviour
 {
-    private void OnTriggerEnter(Collider other)
+    public void PressButton()
     {
-        if (other.CompareTag("Player")) Debug.Log(other.gameObject.name);
+        Debug.Log("推されたよ");
     }
+
+    
 }

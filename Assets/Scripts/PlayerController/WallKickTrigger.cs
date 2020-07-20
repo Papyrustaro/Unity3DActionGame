@@ -9,6 +9,7 @@ public class WallKickTrigger : MonoBehaviour
     private BoxCollider _collider;
     private MonobitEngine.MonobitView _monobitView;
     private int stickWallCount = 0;
+    public bool IsStickingOnDisappearableWall { get; set; } = false;
 
     private void Awake()
     {
@@ -27,7 +28,7 @@ public class WallKickTrigger : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         if (this._monobitView != null && !this._monobitView.isMine) return;
-        if (collision.transform.CompareTag("Stage") || collision.transform.CompareTag("MoveStage") || collision.transform.CompareTag("AccelerationGround"))
+        if (collision.transform.CompareTag("Stage") || collision.transform.CompareTag("MoveStage") || collision.transform.CompareTag("AccelerationGround") || collision.transform.CompareTag("SwitchOnOffStage"))
         {
             Vector3 normalVector = collision.contacts[0].normal;
             float angle = Vector3.Angle(new Vector3(normalVector.x, 0f, normalVector.z), new Vector3(this.transform.forward.x, 0f, this.transform.forward.z));
@@ -37,18 +38,27 @@ public class WallKickTrigger : MonoBehaviour
                 if(this.stickWallCount == 0) this.playerMoveController.StickWall(normalVector);
                 this.stickWallCount++;
             }
+            if (collision.transform.CompareTag("SwitchOnOffStage"))
+            {
+                this.IsStickingOnDisappearableWall = true;
+            }
         }
     }
 
     private void OnCollisionExit(Collision collision)
     {
         if (this._monobitView != null && !this._monobitView.isMine) return;
-        if (collision.transform.CompareTag("Stage") || collision.transform.CompareTag("MoveStage") || collision.transform.CompareTag("AccelerationGround"))
+        if (collision.transform.CompareTag("Stage") || collision.transform.CompareTag("MoveStage") || collision.transform.CompareTag("AccelerationGround") || collision.transform.CompareTag("SwitchOnOffStage"))
         {
-            this.stickWallCount--;
-            if (this.stickWallCount < 0) this.stickWallCount = 0;
-            if(this.stickWallCount == 0) this.playerMoveController.StopStickingWall();
+            AwayFromOneWall();
         }
+    }
+
+    public void AwayFromOneWall()
+    {
+        this.stickWallCount--;
+        if (this.stickWallCount < 0) this.stickWallCount = 0;
+        if (this.stickWallCount == 0) this.playerMoveController.StopStickingWall();
     }
 
     public void ResetTrigger()

@@ -21,6 +21,7 @@ public class LiftMovement : MonoBehaviour
     private Sequence sequence;
     private Color defaultColor;
     private Renderer _renderer;
+    private bool firstGrounded = false;
 
     private void Awake()
     {
@@ -57,7 +58,7 @@ public class LiftMovement : MonoBehaviour
         if(this.sequence.IsPlaying())
         {
             if (!StageTimeManager.Instance.IsStageMoving || (this.moveState == E_GroundedState.Grounded && this.currentGroundedState == E_GroundedState.NotGrounded) ||
-            (this.moveState == E_GroundedState.NotGrounded && this.currentGroundedState == E_GroundedState.Grounded))
+            (this.moveState == E_GroundedState.NotGrounded && this.currentGroundedState == E_GroundedState.Grounded) || (this.moveState == E_GroundedState.FirstGroundedAndAlways && !this.firstGrounded))
             {
                 this.sequence.Pause();
             }
@@ -65,7 +66,8 @@ public class LiftMovement : MonoBehaviour
         else
         {
             if (StageTimeManager.Instance.IsStageMoving && ((this.moveState == E_GroundedState.Grounded && this.currentGroundedState == E_GroundedState.Grounded) ||
-            (this.moveState == E_GroundedState.NotGrounded && this.currentGroundedState == E_GroundedState.NotGrounded) || this.moveState == E_GroundedState.Always))
+            (this.moveState == E_GroundedState.NotGrounded && this.currentGroundedState == E_GroundedState.NotGrounded) || this.moveState == E_GroundedState.Always || 
+            (this.moveState == E_GroundedState.FirstGroundedAndAlways && this.firstGrounded)))
             {
                 this.sequence.Play();
             }
@@ -77,6 +79,7 @@ public class LiftMovement : MonoBehaviour
         if (other.CompareTag("PlayerMoveGroundCheck"))
         {
             this.currentGroundedState = E_GroundedState.Grounded;
+            this.firstGrounded = true;
         }
     }
 
@@ -122,5 +125,6 @@ public enum E_GroundedState
     Always,
     Grounded,
     NotGrounded,
+    FirstGroundedAndAlways,
     Other
 }

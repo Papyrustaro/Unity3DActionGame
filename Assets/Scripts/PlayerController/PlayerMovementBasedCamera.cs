@@ -91,6 +91,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     public PlayerAnimation _PlayerAnimation => this._playerAnimation;
 
     public bool AbleBreakByHipDrop { get; set; } = true;
+
     private void Awake()
     {
         this._monobitView = GetComponent<MonobitEngine.MonobitView>();
@@ -396,7 +397,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     public void Jump(float jumpVerticalSpeed)
     {
         this._velocity.y = 0f;
-        if (this._velocity.magnitude >= this.maxNormalAirHorizontalSpeed) this._velocity *= this.maxNormalAirHorizontalSpeed / this._velocity.magnitude;
+        //if (this._velocity.magnitude >= this.maxNormalAirHorizontalSpeed) this._velocity *= this.maxNormalAirHorizontalSpeed / this._velocity.magnitude;
         this._velocity.y = jumpVerticalSpeed;
         this._isGrounded = false;
 

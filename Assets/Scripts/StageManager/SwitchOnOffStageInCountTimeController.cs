@@ -17,6 +17,7 @@ public class SwitchOnOffStageInCountTimeController : MonoBehaviour
     [SerializeField] private Material initOffInOffSwitchStageMaterial;
     [SerializeField] private UnityEvent onSwitch;
     [SerializeField, ReadOnly] private List<SwitchOnOffStage> switchStages;
+    [SerializeField, ReadOnly] WallKickTrigger playerWallKickTrigger;
     private float countTime = 0f;
     private bool playSE = false;
 
@@ -35,6 +36,11 @@ public class SwitchOnOffStageInCountTimeController : MonoBehaviour
                 }
                 foreach (SwitchOnOffStage switchStage in this.switchStages) switchStage.SwitchOnOff();
                 this.countTime = 0f;
+                if (this.playerWallKickTrigger.IsStickingOnDisappearableWall)
+                {
+                    this.playerWallKickTrigger.AwayFromOneWall();
+                    this.playerWallKickTrigger.IsStickingOnDisappearableWall = false;
+                }
             }
         }
     }
@@ -70,5 +76,6 @@ public class SwitchOnOffStageInCountTimeController : MonoBehaviour
         {
             switchStage.InitSet(this.initOnInOnSwitchStageMaterial, this.initOnInOffSwitchStageMaterial, this.initOffInOnSwitchStageMaterial, this.initOffInOffSwitchStageMaterial);
         }
+        this.playerWallKickTrigger = GameObject.FindGameObjectsWithTag("Player")[0].transform.Find("WallCheck").GetComponent<WallKickTrigger>();
     }
 }
