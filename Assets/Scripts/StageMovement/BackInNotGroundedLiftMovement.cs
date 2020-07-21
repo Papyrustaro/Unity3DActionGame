@@ -41,7 +41,7 @@ public class BackInNotGroundedLiftMovement : MonoBehaviour
                 if (this.isRewarding) this.currentMoveTime -= Time.deltaTime * (this.backSpeed / this.moveSpeed);
                 else this.currentMoveTime += Time.deltaTime;
 
-                if (this.currentMoveTime > this.moveTime - 0.1f) { this.currentMoveTime = this.moveTime - 0.1f; this.sequence.Pause(); }
+                if (this.currentMoveTime > this.moveTime - 0.2f) { this.currentMoveTime = this.moveTime - 0.2f; this.sequence.Pause(); }
             });
 
         foreach (Vector3 p in this.path)
