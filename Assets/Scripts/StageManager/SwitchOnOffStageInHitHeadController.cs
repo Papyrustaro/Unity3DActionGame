@@ -19,7 +19,7 @@ public class SwitchOnOffStageInHitHeadController : MonoBehaviour
     [SerializeField, ReadOnly] private List<SwitchOnOffStage> switchStages;
 
 
-    private bool isOn = true;
+    public bool IsOn { get; private set; } = true;
     public static SwitchOnOffStageInHitHeadController Instance { get; private set; }
 
     private void Awake()
@@ -38,7 +38,7 @@ public class SwitchOnOffStageInHitHeadController : MonoBehaviour
     {
         SEManager.Instance.Play(SEPath.SWITCH_STAGE1, volumeRate: 0.5f);
         SEManager.Instance.Play(SEPath.SWITCH_STAGE2, volumeRate: 0.5f);
-        if (this.isOn)
+        if (this.IsOn)
         {
             foreach(SwitchOnOffStageInHitHead switchInHitHead in this.switches)
             {
@@ -52,7 +52,22 @@ public class SwitchOnOffStageInHitHeadController : MonoBehaviour
                 switchInHitHead.Switch(this.switchToOffMaterial);
             }
         }
-        this.isOn = !this.isOn;
+        this.IsOn = !this.IsOn;
+        this.onSwitch.Invoke();
+        foreach (SwitchOnOffStage switchStage in this.switchStages) switchStage.SwitchOnOff();
+    }
+
+    public void SwitchAllOnWarp()
+    {
+        if (this.IsOn) return;
+        else
+        {
+            foreach (SwitchOnOffStageInHitHead switchInHitHead in this.switches)
+            {
+                switchInHitHead.Switch(this.switchToOffMaterial);
+            }
+        }
+        this.IsOn = true;
         this.onSwitch.Invoke();
         foreach (SwitchOnOffStage switchStage in this.switchStages) switchStage.SwitchOnOff();
     }

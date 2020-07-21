@@ -18,6 +18,12 @@ public class WarpZone : MonoBehaviour
             this.onWarp.Invoke();
             toWarpPosition.GetComponent<BoxCollider>().enabled = false;
             other.GetComponent<PlayerMovementBasedCamera>().Warp(this.toWarpPosition.position);
+
+            if(SwitchOnOffStageInHitHeadController.Instance != null)
+            {
+                SwitchOnOffStageInHitHeadController.Instance.SwitchAllOnWarp();
+            }
         }
     }
+
 }

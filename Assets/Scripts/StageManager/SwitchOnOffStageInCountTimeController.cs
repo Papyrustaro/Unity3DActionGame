@@ -17,7 +17,7 @@ public class SwitchOnOffStageInCountTimeController : MonoBehaviour
     [SerializeField] private Material initOffInOffSwitchStageMaterial;
     [SerializeField] private UnityEvent onSwitch;
     [SerializeField, ReadOnly] private List<SwitchOnOffStage> switchStages;
-    [SerializeField, ReadOnly] WallKickTrigger playerWallKickTrigger;
+    [SerializeField] WallKickTrigger playerWallKickTrigger;
     private float countTime = 0f;
     private bool playSE = false;
 

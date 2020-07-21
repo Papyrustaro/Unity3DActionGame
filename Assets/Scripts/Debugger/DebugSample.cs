@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using NaughtyAttributes;
 
 public class DebugSample : MonoBehaviour
 {
-    public void PressButton()
+    [Button(enabledMode: EButtonEnableMode.Editor)]
+    public void SetAAA()
     {
-        Debug.Log("推されたよ");
+
     }
 
-    
+
 }

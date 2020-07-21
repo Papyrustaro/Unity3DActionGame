@@ -696,6 +696,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     /// <param name="toWarpPosition">ワープ先の座標</param>
     public void Warp(Vector3 toWarpPosition)
     {
+        this._velocity = Vector3.zero;
         this._characterController.enabled = false;
         this.transform.position = toWarpPosition;
         this._characterController.enabled = true;

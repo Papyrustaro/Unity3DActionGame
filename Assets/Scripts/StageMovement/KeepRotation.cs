@@ -9,6 +9,11 @@ public class KeepRotation : MonoBehaviour
     [SerializeField] private Vector3 rotateCenterPosition;
     [SerializeField] private float rotateSpeed = 100f;
 
+    private void Start()
+    {
+        this.SetRotateCenterByTransformCenter();
+    }
+
     private void Update()
     {
         if (StageTimeManager.Instance.IsStageMoving)
@@ -17,7 +22,6 @@ public class KeepRotation : MonoBehaviour
         }
     }
 
-    [Button(enabledMode: EButtonEnableMode.Editor)]
     public void SetRotateCenterByTransformCenter()
     {
         this.rotateCenterPosition = this.transform.position;
