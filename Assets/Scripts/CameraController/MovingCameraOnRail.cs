@@ -15,7 +15,7 @@ public class MovingCameraOnRail : MonoBehaviour
 
     private void Update()
     {
-        this._dolly.m_PathPosition += Time.deltaTime * 0.01f;
+        this._dolly.m_PathPosition += Time.deltaTime * 0.003f;
         if (this._dolly.m_PathPosition > 1f) this._dolly.m_PathPosition -= 1f;
     }
 }

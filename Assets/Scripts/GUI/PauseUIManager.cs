@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-
+using KanKikuchi.AudioManager;
 public class PauseUIManager : MonoBehaviour
 {
     [SerializeField] private GameObject initPauseView;
@@ -42,6 +42,7 @@ public class PauseUIManager : MonoBehaviour
 
     public void GoBackMenu()
     {
+        BGMManager.Instance.Play(BGMPath.MENU_BGM1, volumeRate: 0.3f);
         SceneManager.LoadScene("Menu");
     }
 }

@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System;
 using UnityEngine.SceneManagement;
+using KanKikuchi.AudioManager;
 
 public class MenuUIManager : MonoBehaviour
 {
@@ -132,8 +133,8 @@ public class MenuUIManager : MonoBehaviour
     /// <param name="selectStageIndex">選択したステージのindex</param>
     public void SelectStage(int selectStageIndex)
     {
-        
         SceneManager.LoadScene("Stage" + (selectStageIndex + 1).ToString());
+        BGMManager.Instance.Play(BGMPath.STAGE_BGM1, volumeRate: 0.5f);
     }
 
     /// <summary>

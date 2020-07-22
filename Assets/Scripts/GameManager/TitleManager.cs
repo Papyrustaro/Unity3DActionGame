@@ -14,6 +14,7 @@ public class TitleManager : MonoBehaviour
 
     private void Start()
     {
+        BGMManager.Instance.Play(BGMPath.MENU_BGM1, volumeRate: 0.3f);
         StartCoroutine(CoroutineManager.DelayMethod(1, () => this.inputPlayerNameField.Select()));
         this.inputPlayerNameField.onEndEdit.AddListener((text) => this.InputPlayerName(text));
     }
@@ -25,7 +26,6 @@ public class TitleManager : MonoBehaviour
         if(inputText != "")
         {
             StaticData.playerName = inputText;
-            //ここでSEをつける
             SceneManager.LoadScene("Menu");
         }
     }

@@ -36,8 +36,8 @@ public class SwitchOnOffStageInHitHeadController : MonoBehaviour
 
     public void SwitchAll()
     {
-        SEManager.Instance.Play(SEPath.SWITCH_STAGE1, volumeRate: 0.5f);
-        SEManager.Instance.Play(SEPath.SWITCH_STAGE2, volumeRate: 0.5f);
+        SEManager.Instance.Play(SEPath.SWITCH_STAGE1, volumeRate: 0.3f);
+        SEManager.Instance.Play(SEPath.SWITCH_STAGE2, volumeRate: 0.3f);
         if (this.IsOn)
         {
             foreach(SwitchOnOffStageInHitHead switchInHitHead in this.switches)

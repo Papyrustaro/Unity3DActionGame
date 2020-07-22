@@ -35,7 +35,8 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     [SerializeField] private float jumpThirdVerticalSpeed = 5f;
     [SerializeField] private GameObject stickingWallSmoke;
     [SerializeField] private GameObject hipDropOnGroundShock;
-    [SerializeField] private GameObject runningSmoke;
+    //[SerializeField] private GameObject runningSmoke;
+    //[SerializeField] private GameObject onGroundedShock;
 
     private Rigidbody _rigidbody;
     private bool _isGrounded = false;
@@ -279,20 +280,34 @@ public class PlayerMovementBasedCamera : MonoBehaviour
             {
                 this.StopAllCoroutineOfRotation();
             }
+
             if (this.currentState == E_State.HipDropping)
             {
                 this.AbleBreakByHipDrop = true;
                 SEManager.Instance.Play(SEPath.HIP_DROP_GROUNDED, volumeRate: 0.5f);
                 SEManager.Instance.Play(SEPath.HIP_DROP_GROUNDED1, volumeRate: 0.5f);
                 Instantiate(this.hipDropOnGroundShock, this.transform.position, Quaternion.identity);
+            }else if(this.currentState != E_State.Standing && this.currentState != E_State.Running)
+            {
+                SEManager.Instance.Play(SEPath.ON_GROUNDED_SOUND, volumeRate: 0.5f);
             }
+
             if(this.currentState == E_State.StickingWall) SEManager.Instance.Stop(SEPath.STICKING_WALL);
 
-            if (this.inputVelocity == Vector2.zero) this.currentState = E_State.Standing;
-            else this.currentState = E_State.Running;
+            if (this.inputVelocity == Vector2.zero)
+            {
+                SEManager.Instance.Stop(SEPath.RUNNING_SOUND);
+                this.currentState = E_State.Standing;
+            }
+            else
+            {
+                if(!SEManager.Instance.GetCurrentAudioNames().Any(s => s == "RunningSound")) SEManager.Instance.Play(SEPath.RUNNING_SOUND, volumeRate: 0.5f);
+                this.currentState = E_State.Running;
+            }
         }
         else
         {
+            SEManager.Instance.Stop(SEPath.RUNNING_SOUND);
             if (this.currentState == E_State.HipDropping) return; //ヒップドロップ中は着地するまで遷移しない
             if (this.currentState == E_State.JumpToTop && this._velocity.y > 0f) this.currentState = E_State.TopOfJump;
             else if (this._velocity.y <= -0f && (this.currentState != E_State.SpinJumping && this.currentState != E_State.StickingWall && this.currentState != E_State.BackFliping)) this.currentState = E_State.Falling;
@@ -365,6 +380,8 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         {
             this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(moveForward), 0.2f);
         }
+
+        if (this.currentState == E_State.Running && !SEManager.Instance.GetCurrentAudioNames().Any(s => s == "RunningSound")) SEManager.Instance.Play(SEPath.RUNNING_SOUND, volumeRate: 0.5f);
     }
 
     /// <summary>

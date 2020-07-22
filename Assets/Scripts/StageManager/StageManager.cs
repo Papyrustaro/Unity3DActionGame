@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using NCMB;
 using UnityEngine.SceneManagement;
+using KanKikuchi.AudioManager;
 
 public class StageManager : MonoBehaviour
 {
@@ -56,6 +57,7 @@ public class StageManager : MonoBehaviour
 
     public void GoMenu()
     {
+        BGMManager.Instance.Play(BGMPath.MENU_BGM1, volumeRate: 0.3f);
         SceneManager.LoadScene("Menu");
     }
 }

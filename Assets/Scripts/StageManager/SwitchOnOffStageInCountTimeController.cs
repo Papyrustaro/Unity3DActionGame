@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using NaughtyAttributes;
 using KanKikuchi.AudioManager;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// 時間経過でonOffStageのフラグが変わる。
@@ -20,6 +21,12 @@ public class SwitchOnOffStageInCountTimeController : MonoBehaviour
     [SerializeField] WallKickTrigger playerWallKickTrigger;
     private float countTime = 0f;
     private bool playSE = false;
+    private bool isStageScene = true;
+
+    private void Awake()
+    {
+        if (SceneManager.GetActiveScene().name == "Title" || SceneManager.GetActiveScene().name == "Menu") this.isStageScene = false;
+    }
 
     private void Update()
     {
@@ -31,12 +38,12 @@ public class SwitchOnOffStageInCountTimeController : MonoBehaviour
                 this.onSwitch.Invoke();
                 if (this.playSE)
                 {
-                    SEManager.Instance.Play(SEPath.SWITCH_STAGE1, volumeRate: 0.5f);
-                    SEManager.Instance.Play(SEPath.SWITCH_STAGE2, volumeRate: 0.5f);
+                    SEManager.Instance.Play(SEPath.SWITCH_STAGE1, volumeRate: 0.25f);
+                    SEManager.Instance.Play(SEPath.SWITCH_STAGE2, volumeRate: 0.25f);
                 }
                 foreach (SwitchOnOffStage switchStage in this.switchStages) switchStage.SwitchOnOff();
                 this.countTime = 0f;
-                if (this.playerWallKickTrigger.IsStickingOnDisappearableWall)
+                if (this.isStageScene && this.playerWallKickTrigger.IsStickingOnDisappearableWall)
                 {
                     this.playerWallKickTrigger.AwayFromOneWall();
                     this.playerWallKickTrigger.IsStickingOnDisappearableWall = false;
