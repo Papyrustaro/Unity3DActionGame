@@ -72,7 +72,7 @@ public class ShowRankingManager : MonoBehaviour
         List<ResultDataNameAndTime> results = new List<ResultDataNameAndTime>();
         for (int i = 0; i < highRanks.Count; i++)
         {
-            playerName += (i + 1).ToString() + ". " + highRanks[i]["PlayerName"].ToString() + "\n";
+            playerName += (i + 1).ToString() + "." + highRanks[i]["PlayerName"].ToString() + "\n";
             resultTime += highRanks[i]["ClearTime"].ToString() + "\n";
         }
         this.playerNamesTexts[stageIndex].text = playerName;
@@ -86,7 +86,7 @@ public class ShowRankingManager : MonoBehaviour
         this.showingStageIndex++;
         if (this.showingStageIndex > this.stageCount - 1) this.showingStageIndex = 0;
         this.scrollViews[this.showingStageIndex].SetActive(true);
-        this.stageTitleText.text = "Stage" + (this.showingStageIndex + 1).ToString();
+        this.stageTitleText.text = "ステージ" + (this.showingStageIndex + 1).ToString();
     }
 
     public void PressBackStageRankingButton()
@@ -95,7 +95,7 @@ public class ShowRankingManager : MonoBehaviour
         this.showingStageIndex--;
         if (this.showingStageIndex < 0) this.showingStageIndex = this.stageCount - 1;
         this.scrollViews[this.showingStageIndex].SetActive(true);
-        this.stageTitleText.text = "Stage" + (this.showingStageIndex + 1).ToString();
+        this.stageTitleText.text = "ステージ" + (this.showingStageIndex + 1).ToString();
     }
 
     [Button(enabledMode: EButtonEnableMode.Editor)]

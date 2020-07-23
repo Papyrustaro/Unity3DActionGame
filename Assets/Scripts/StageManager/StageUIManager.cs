@@ -124,12 +124,12 @@ public class StageUIManager : MonoBehaviour
 
     public void SetRecentClearTextFromClearResult(List<NCMBObject> recentResults)
     {
-        string playerName = "1. " + StaticData.playerName + "\n";
+        string playerName = "1." + StaticData.playerName + "\n";
         string clearDate = DateTime.Now.ToString("yyyy/MM/dd") + "\n";
 
         for (int i = 0; i < recentResults.Count; i++)
         {
-            playerName += (i + 2).ToString() + ". " + recentResults[i]["PlayerName"].ToString() + "\n";
+            playerName += (i + 2).ToString() + "." + recentResults[i]["PlayerName"].ToString() + "\n";
             DateTime cDate = DateTime.Parse(recentResults[i].CreateDate.ToString());
             clearDate += cDate.ToString("yyyy/MM/dd") + "\n";
         }
@@ -205,7 +205,7 @@ public class StageUIManager : MonoBehaviour
 
         for (int i = 0; i < recentResults.Count; i++)
         {
-            playerName += (i + 1).ToString() + ". " + recentResults[i]["PlayerName"].ToString() + "\n";
+            playerName += (i + 1).ToString() + "." + recentResults[i]["PlayerName"].ToString() + "\n";
             DateTime cDate = DateTime.Parse(recentResults[i].CreateDate.ToString());
             clearDate += cDate.ToString("yyyy/MM/dd") + "\n";
         }
@@ -223,7 +223,7 @@ public class StageUIManager : MonoBehaviour
         List<ResultDataNameAndTime> results = new List<ResultDataNameAndTime>();
         for (int i = 0; i < highRanks.Count; i++)
         {
-            playerName += (i + 1).ToString() + ". " + highRanks[i]["PlayerName"].ToString() + "\n";
+            playerName += (i + 1).ToString() + "." + highRanks[i]["PlayerName"].ToString() + "\n";
             resultTime += highRanks[i]["ClearTime"].ToString() + "\n";
         }
         this.rankingPlayerNameTextInFailed.text = playerName;
@@ -255,19 +255,19 @@ public class StageUIManager : MonoBehaviour
         {
             if (i == thisTimeIndex) //playerの順位
             {
-                playerName += (i + 1).ToString() + ". " + StaticData.playerName + "\n";
+                playerName += (i + 1).ToString() + "." + StaticData.playerName + "\n";
                 resultTime += StageTimeManager.Instance.CountTime + "\n";
                 this.thisTimePlayerRank = i + 1;
                 rankined = true;
             }
             else if (rankined) //playerがランクインしたあとの
             {
-                playerName += (i + 1).ToString() + ". " + highRanks[i - 1]["PlayerName"].ToString() + "\n";
+                playerName += (i + 1).ToString() + "." + highRanks[i - 1]["PlayerName"].ToString() + "\n";
                 resultTime += float.Parse((highRanks[i - 1]["ClearTime"]).ToString()) + "\n";
             }
             else //playerがランクインする前
             {
-                playerName += (i + 1).ToString() + ". " + highRanks[i]["PlayerName"].ToString() + "\n";
+                playerName += (i + 1).ToString() + "." + highRanks[i]["PlayerName"].ToString() + "\n";
                 resultTime += float.Parse((highRanks[i]["ClearTime"]).ToString()) + "\n";
             }
         }

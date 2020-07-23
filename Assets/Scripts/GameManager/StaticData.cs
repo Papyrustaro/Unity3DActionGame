@@ -8,6 +8,8 @@ public class StaticData : MonoBehaviour
 
     public static bool showCountTime = true;
 
+    public static bool isOpenStage10 = false;
+
     /// <summary>
     /// missionFailedのときは、こちらにランキングデータを格納し、次回以降のmissionFailed時はこちらを参照。keyはステージ名(Stage0など)。valueは上位10名のデータ
     /// </summary>

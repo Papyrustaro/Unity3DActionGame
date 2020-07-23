@@ -21,6 +21,9 @@ public class MenuUIManager : MonoBehaviour
 
     //[SerializeField] private Text selectStageTitleText;
     [SerializeField] private Text stageInformationText;
+    [SerializeField] private GameObject stage10LockIcon;
+    [SerializeField] private InputField stage10KeyInputField;
+    [SerializeField] private Button stage10Button;
 
 
     private E_MenuScene currentScene = E_MenuScene.InitMenu;
@@ -38,6 +41,12 @@ public class MenuUIManager : MonoBehaviour
         else
         {
             throw new Exception();
+        }
+
+        if (StaticData.isOpenStage10)
+        {
+            this.stage10KeyInputField.gameObject.SetActive(false);
+            this.stage10LockIcon.SetActive(false);
         }
     }
 
@@ -133,8 +142,28 @@ public class MenuUIManager : MonoBehaviour
     /// <param name="selectStageIndex">選択したステージのindex</param>
     public void SelectStage(int selectStageIndex)
     {
-        SceneManager.LoadScene("Stage" + (selectStageIndex + 1).ToString());
-        BGMManager.Instance.Play(BGMPath.STAGE_BGM1, volumeRate: 0.5f);
+        if(selectStageIndex == 9 && !StaticData.isOpenStage10)
+        {
+            this.stage10KeyInputField.Select();
+        }
+        else
+        {
+            SceneManager.LoadScene("Stage" + (selectStageIndex + 1).ToString());
+            BGMManager.Instance.Play(BGMPath.STAGE_BGM1, volumeRate: 0.5f);
+        }
+    }
+
+    public void InputStage10Key()
+    {
+        if (this.stage10KeyInputField.text == "5638")
+        {
+            StaticData.isOpenStage10 = true;
+            this.stage10LockIcon.SetActive(false);
+            this.stage10KeyInputField.gameObject.SetActive(false);
+
+        }
+        this.stage10KeyInputField.text = "";
+        this.stage10Button.Select();
     }
 
     /// <summary>
