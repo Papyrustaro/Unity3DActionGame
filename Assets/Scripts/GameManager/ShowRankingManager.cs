@@ -11,14 +11,21 @@ public class ShowRankingManager : MonoBehaviour
     [SerializeField] private List<GameObject> scrollViews = new List<GameObject>();
     [SerializeField] private List<Text> playerNamesTexts = new List<Text>();
     [SerializeField] private List<Text> clearTimesTexts = new List<Text>();
-    [SerializeField] private int stageCount = 11;
+    [SerializeField] private int stageCount = 10;
     [SerializeField] private Text stageTitleText;
     private int showingStageIndex = 0;
+    private bool isSet = false;
 
     public int ShowingStageIndex => this.showingStageIndex;
 
+    private void OnEnable()
+    {
+        if (!this.isSet) SetRanking();
+    }
+
     public void SetRanking()
     {
+        this.isSet = true;
         for (int i = 0; i < stageCount; i++)
         {
             if (StaticData.highRankResults.ContainsKey("Stage" + (i + 1).ToString()))
@@ -100,6 +107,16 @@ public class ShowRankingManager : MonoBehaviour
         {
             this.playerNamesTexts.Add(this.scrollViews[i].transform.Find("Viewport/Content/PlayerNameText").GetComponent<Text>());
             this.clearTimesTexts.Add(this.scrollViews[i].transform.Find("Viewport/Content/TimeOrDateText").GetComponent<Text>());
+        }
+    }
+
+    [Button(enabledMode: EButtonEnableMode.Editor)]
+    public void SetTextColor()
+    {
+        for(int i = 0; i < this.scrollViews.Count; i++)
+        {
+            this.playerNamesTexts[i].color = Color.white;
+            this.clearTimesTexts[i].color = Color.white;
         }
     }
 }

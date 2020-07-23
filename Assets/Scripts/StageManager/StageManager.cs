@@ -31,7 +31,7 @@ public class StageManager : MonoBehaviour
         }
     }
 
-    private void OnPressPause()
+    public void OnPressPause()
     {
         StageTimeManager.Instance.AllStop = !StageTimeManager.Instance.AllStop;
         StageCameraManager.Instance.SetAbleRotateByInput(this.pausePanel.activeSelf);
