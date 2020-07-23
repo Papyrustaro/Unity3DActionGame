@@ -291,7 +291,7 @@ public class StageUIManager : MonoBehaviour
         this.recentPlayerNameText.text = StaticData.recentResults[SceneManager.GetActiveScene().name].PlayerNameText;
         this.recentDateText.text = StaticData.recentResults[SceneManager.GetActiveScene().name].ClearDateText;*/
 
-        this.playerResultText.text = StaticData.playerName + ": " + StageTimeManager.Instance.CountTime;
+        this.playerResultText.text = StaticData.playerName + ": " + StageTimeManager.Instance.CountTime  + "秒";
         StageTimeManager.Instance.AllStop = true;
         this.gameOverText.SetActive(true);
         StartCoroutine(CoroutineManager.DelayMethodRealTime(0.3f, () =>
@@ -306,23 +306,20 @@ public class StageUIManager : MonoBehaviour
     /// <returns></returns>
     public IEnumerator SetAndShowRankingWhenClear()
     {
-        this.playerResultText.text = StaticData.playerName + ": " + StageTimeManager.Instance.CountTime;
+        this.playerResultText.text = StaticData.playerName + ": " + StageTimeManager.Instance.CountTime + "秒";
 
         this.gameClearText.SetActive(true);
         
         ///ランキング情報の代入処理
-        yield return StartCoroutine(SetHighRankingTextFromClearResult());
-        yield return StartCoroutine(SetRecentClearTextFromClearResult());
+        StartCoroutine(SetHighRankingTextFromClearResult());
+        StartCoroutine(SetRecentClearTextFromClearResult());
 
         SavePlayerResult();
 
-        StartCoroutine(CoroutineManager.DelayMethodRealTime(2f, () =>
-        {
-            this.gameClearText.SetActive(false);
-            this.gameClearPanel.SetActive(true);
-            StageTimeManager.Instance.PlayerStop = true;
-        }));
-        
+        yield return new WaitForSeconds(1f);
+        this.gameClearText.SetActive(false);
+        this.gameClearPanel.SetActive(true);
+        StageTimeManager.Instance.PlayerStop = true;
     }
 
     /// <summary>
@@ -341,7 +338,7 @@ public class StageUIManager : MonoBehaviour
         }
         else
         {
-            yield return StartCoroutine(SetHighRankingTextFromFailedResult());
+            StartCoroutine(SetHighRankingTextFromFailedResult());
         }
 
         //最近クリアした人を取得
@@ -352,15 +349,14 @@ public class StageUIManager : MonoBehaviour
         }
         else
         {
-            yield return StartCoroutine(SetRecentClearTextFromFailedResult());
+            StartCoroutine(SetRecentClearTextFromFailedResult());
         }
 
-        StartCoroutine(CoroutineManager.DelayMethodRealTime(2f, () =>
-        {
-            this.gameOverText.SetActive(false);
-            this.gameOverPanel.SetActive(true);
-            StageTimeManager.Instance.PlayerStop = true;
-        }));
+        yield return new WaitForSeconds(1f);
+
+        this.gameOverText.SetActive(false);
+        this.gameOverPanel.SetActive(true);
+        StageTimeManager.Instance.PlayerStop = true;
     }
 
     public void Tweeting()
