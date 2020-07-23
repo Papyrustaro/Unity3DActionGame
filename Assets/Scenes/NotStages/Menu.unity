@@ -6207,6 +6207,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 7413945629810317176, guid: 7ee0ed666ebce9741b981e8d5ed4a661,
+        type: 3}
+      propertyPath: explainStageSprites.Array.size
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7413945629810317176, guid: 7ee0ed666ebce9741b981e8d5ed4a661,
+        type: 3}
+      propertyPath: explainStageSprites.Array.data[6]
+      value: 
+      objectReference: {fileID: 21300000, guid: b8769d8915eb16e47b72fe64d2ea6b7b,
+        type: 3}
     - target: {fileID: 7413945631802640307, guid: 7ee0ed666ebce9741b981e8d5ed4a661,
         type: 3}
       propertyPath: m_LocalPosition.x

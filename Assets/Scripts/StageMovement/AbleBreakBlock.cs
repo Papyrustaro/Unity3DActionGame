@@ -33,7 +33,7 @@ public class AbleBreakBlock : MonoBehaviour
 
     public void BreakMe()
     {
-        SEManager.Instance.Play(SEPath.BREAK_CUBE, 0.8f);
+        SEManager.Instance.Play(SEPath.BREAK_CUBE, volumeRate: 0.3f);
         Instantiate(this.brokenEffect, this.transform.position, Quaternion.identity);
         Destroy(this.gameObject);
     }

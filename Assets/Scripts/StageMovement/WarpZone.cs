@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// 範囲にプレイヤーが入ると、ワープ先へとワープする
@@ -16,8 +17,15 @@ public class WarpZone : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             this.onWarp.Invoke();
-            toWarpPosition.GetComponent<BoxCollider>().enabled = false;
-            other.GetComponent<PlayerMovementBasedCamera>().Warp(this.toWarpPosition.position);
+            if(SceneManager.GetActiveScene().name == "Title")
+            {
+                other.GetComponent<PlayerMovementBasedCamera>().Warp(this.toWarpPosition.position);
+            }
+            else
+            {
+                toWarpPosition.GetComponent<BoxCollider>().enabled = false;
+                other.GetComponent<PlayerMovementBasedCamera>().Warp(this.toWarpPosition.position);
+            }
 
             if(SwitchOnOffStageInHitHeadController.Instance != null)
             {
