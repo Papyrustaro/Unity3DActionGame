@@ -10,6 +10,12 @@ public class PauseUIManager : MonoBehaviour
     [SerializeField] private GameObject showManualView;
     [SerializeField] private GameObject showOptionView;
 
+    private void OnEnable()
+    {
+        this.showManualView.SetActive(false);
+        this.showOptionView.SetActive(false);
+        this.initPauseView.SetActive(true);
+    }
     public void ContinueSameState()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
@@ -37,6 +43,7 @@ public class PauseUIManager : MonoBehaviour
     public void ResumePlayStage()
     {
         StageTimeManager.Instance.AllStop = false;
+        StageCameraManager.Instance.SetAbleRotateByInput(true);
         this.gameObject.SetActive(false);
     }
 
