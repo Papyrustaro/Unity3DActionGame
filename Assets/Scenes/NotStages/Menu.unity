@@ -6207,41 +6207,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 7413945630775328266, guid: 7ee0ed666ebce9741b981e8d5ed4a661,
-        type: 3}
-      propertyPath: m_FontData.m_FontSize
-      value: 35
-      objectReference: {fileID: 0}
-    - target: {fileID: 7413945630775328266, guid: 7ee0ed666ebce9741b981e8d5ed4a661,
-        type: 3}
-      propertyPath: m_FontData.m_FontStyle
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7413945631492290506, guid: 7ee0ed666ebce9741b981e8d5ed4a661,
-        type: 3}
-      propertyPath: m_FontData.m_FontStyle
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7413945631492290506, guid: 7ee0ed666ebce9741b981e8d5ed4a661,
-        type: 3}
-      propertyPath: m_FontData.m_FontSize
-      value: 35
-      objectReference: {fileID: 0}
-    - target: {fileID: 7413945631590632433, guid: 7ee0ed666ebce9741b981e8d5ed4a661,
-        type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 300
-      objectReference: {fileID: 0}
-    - target: {fileID: 7413945631751965820, guid: 7ee0ed666ebce9741b981e8d5ed4a661,
-        type: 3}
-      propertyPath: m_FontData.m_FontSize
-      value: 35
-      objectReference: {fileID: 0}
-    - target: {fileID: 7413945631751965820, guid: 7ee0ed666ebce9741b981e8d5ed4a661,
-        type: 3}
-      propertyPath: m_FontData.m_FontStyle
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7413945631802640307, guid: 7ee0ed666ebce9741b981e8d5ed4a661,
         type: 3}
       propertyPath: m_LocalPosition.x
