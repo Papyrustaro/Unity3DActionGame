@@ -10,7 +10,7 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class StageTimeManager : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI countTimeText;
+    [SerializeField] private Text countTimeText;
     [SerializeField] private GameObject timeIcon;
 
     private bool currentSceneIsStage = true;
