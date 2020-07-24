@@ -12,10 +12,14 @@ public class OptionUIManager : MonoBehaviour
     [SerializeField] private Slider seVolumeSlider;
     [SerializeField] private InputField seVolumeInputField;
     [SerializeField] private Toggle showTimeFlag;
+    [SerializeField] private Toggle invertCameraRotationAxisY;
+    [SerializeField] private Toggle invertCameraRotationHorizontal;
 
     private void OnEnable()
     {
         this.showTimeFlag.isOn = StaticData.showCountTime;
+        this.invertCameraRotationAxisY.isOn = StaticData.invertCameraRotationAxisY;
+        this.invertCameraRotationHorizontal.isOn = StaticData.invertCameraRotationHorizontal;
     }
 
     private void Start()
@@ -69,6 +73,15 @@ public class OptionUIManager : MonoBehaviour
         {
             StaticData.showCountTime = x;
             if (StageTimeManager.Instance != null) StageTimeManager.Instance.SetActiveCountTime(x);
+        });
+
+        this.invertCameraRotationAxisY.onValueChanged.AddListener((x) => {
+            StaticData.invertCameraRotationAxisY = x;
+        });
+
+        this.invertCameraRotationHorizontal.onValueChanged.AddListener((x) =>
+        {
+            StaticData.invertCameraRotationHorizontal = x;
         });
     }
 }

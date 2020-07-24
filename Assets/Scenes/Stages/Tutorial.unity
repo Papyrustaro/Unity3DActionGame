@@ -1298,7 +1298,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   changeText: {fileID: 1200967433}
-  afterText: "\u203B\u30C1\u30E5\u30FC\u30C8\u30EA\u30A2\u30EB\u306F\u4EE5\u4E0A\u3067\u3059"
+  afterText: "\u203B\u30C1\u30E5\u30FC\u30C8\u30EA\u30A2\u30EB\u306F\u4EE5\u4E0A\u3067\u3059\u3002\u30DD\u30FC\u30BA\u304B\u3089\u623B\u308C\u307E\u3059"
 --- !u!4 &290206386
 Transform:
   m_ObjectHideFlags: 0
@@ -3662,10 +3662,10 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: "\u79FB\u52D5: WASD(\u524D\u5F8C:WS/\u5DE6\u53F3:AD)\n\u901A\u5E38\u30B8\u30E3\u30F3\u30D7:
-    Space\n\u30B9\u30D4\u30F3\u30B8\u30E3\u30F3\u30D7: L\n\u30D0\u30C3\u30AF\u30D5\u30EA\u30C3\u30D7:
+    J/Space\n\u30B9\u30D4\u30F3\u30B8\u30E3\u30F3\u30D7: L\n\u30D0\u30C3\u30AF\u30D5\u30EA\u30C3\u30D7:
     I\n\u30D2\u30C3\u30D7\u30C9\u30ED\u30C3\u30D7: U\n\u30AB\u30E1\u30E9\u56DE\u8EE2:
-    \u65B9\u5411\u30AD\u30FC\n\u6B63\u9762\u304C\u898B\u3048\u308B\u3088\u3046\u306B\u30AB\u30E1\u30E9\u79FB\u52D5:
-    K\n\u6C7A\u5B9A: Enter"
+    \u65B9\u5411\u30AD\u30FC/78(\u5DE6\u53F3)90(\u4E0A\u4E0B)\n\u6B63\u9762\u304C\u898B\u3048\u308B\u3088\u3046\u306B\u30AB\u30E1\u30E9\u79FB\u52D5:
+    K\n\u6C7A\u5B9A: Enter/Space"
 --- !u!222 &740579434
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5611,7 +5611,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1134133558}
   m_LocalRotation: {x: 0.7071068, y: -0, z: 0.7071068, w: 0}
-  m_LocalPosition: {x: 0, y: 50, z: 50}
+  m_LocalPosition: {x: 0, y: 44, z: 50}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children: []
   m_Father: {fileID: 1374768145}

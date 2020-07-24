@@ -40,12 +40,14 @@ public class StageManager : MonoBehaviour
 
     public void StageClear()
     {
+        this.pausePanel.SetActive(false);
         this.AblePause = false;
         StageUIManager.Instance.GameClear();
     }
 
     public void StageFailed()
     {
+        this.pausePanel.SetActive(false);
         this.AblePause = false;
         StageUIManager.Instance.GameOver();
     }

@@ -57,6 +57,9 @@ public class ThirdPersonCameraController : MonoBehaviour
         float cameraAxisY = Input.GetAxis("RotateCameraAxisY");
         float cameraAxisHorizontal = Input.GetAxis("RotateCameraAxisHorizontal");
         float cameraRotationAxisHorizontal = this.transform.rotation.eulerAngles.x;
+
+        if (StaticData.invertCameraRotationAxisY) cameraAxisY *= -1f;
+        if (StaticData.invertCameraRotationHorizontal) cameraAxisHorizontal *= -1f;
         if(cameraAxisY != 0) this.transform.RotateAround(this.targetPositionBeforeFrame, Vector3.up, cameraAxisY * Time.deltaTime * this.rotationByMouseForce);
         if((((355f < cameraRotationAxisHorizontal && cameraRotationAxisHorizontal <= 360f) || (cameraRotationAxisHorizontal < 75f)) && cameraAxisHorizontal != 0) ||
             (340f < cameraRotationAxisHorizontal && cameraRotationAxisHorizontal <= 355f && cameraAxisHorizontal > 0) ||
