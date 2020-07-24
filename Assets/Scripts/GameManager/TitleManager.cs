@@ -9,23 +9,37 @@ using KanKikuchi.AudioManager;
 
 public class TitleManager : MonoBehaviour
 {
-    
-    [SerializeField] private TMP_InputField inputPlayerNameField;
+    [SerializeField] private InputField inputPlayerNameField;
+    [SerializeField] private GameObject announceText;
 
     private void Start()
     {
         StartCoroutine(CoroutineManager.DelayMethod(1, () => this.inputPlayerNameField.Select()));
-        this.inputPlayerNameField.onEndEdit.AddListener((text) => this.InputPlayerName(text));
     }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            InputPlayerName();
+        }
+    }
+
     /// <summary>
     /// プレイヤー名を入力したら、menu画面へ遷移する
     /// </summary>
-    public void InputPlayerName(string inputText)
+    public void InputPlayerName()
     {
-        if(inputText != "")
+        if(this.inputPlayerNameField.text != "")
         {
-            StaticData.playerName = inputText;
+            SEManager.Instance.Play(SEPath.DECISION1);
+            StaticData.playerName = this.inputPlayerNameField.text;
             SceneManager.LoadScene("Menu");
         }
+    }
+
+    public void InputTextChanged()
+    {
+        this.announceText.SetActive(this.inputPlayerNameField.text != "");
     }
 }

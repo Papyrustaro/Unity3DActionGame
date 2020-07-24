@@ -213,7 +213,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
 
         if(this.noInputCountTime > 10f)
         {
-            this.PlayIdleVoice();
+            if(SceneManager.GetActiveScene().name != "Title") this.PlayIdleVoice();
             this.noInputCountTime = 0f;
         }
     }
@@ -723,6 +723,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     /// <param name="toWarpPosition">ワープ先の座標</param>
     public void Warp(Vector3 toWarpPosition)
     {
+        SEManager.Instance.Play(SEPath.WARP, 0.3f);
         this._velocity = Vector3.zero;
         this._characterController.enabled = false;
         this.transform.position = toWarpPosition;

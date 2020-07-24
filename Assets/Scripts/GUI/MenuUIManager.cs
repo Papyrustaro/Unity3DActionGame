@@ -160,7 +160,11 @@ public class MenuUIManager : MonoBehaviour
             StaticData.isOpenStage10 = true;
             this.stage10LockIcon.SetActive(false);
             this.stage10KeyInputField.gameObject.SetActive(false);
-
+            SEManager.Instance.Play(SEPath.CORRECT);
+        }
+        else
+        {
+            SEManager.Instance.Play(SEPath.INCORRECT);
         }
         this.stage10KeyInputField.text = "";
         this.stage10Button.Select();
