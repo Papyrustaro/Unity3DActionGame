@@ -24,6 +24,7 @@ public class MenuUIManager : MonoBehaviour
     [SerializeField] private GameObject stage10LockIcon;
     [SerializeField] private InputField stage10KeyInputField;
     [SerializeField] private Button stage10Button;
+    [SerializeField] private List<Button> selectStageViewButtons = new List<Button>();
 
 
     private E_MenuScene currentScene = E_MenuScene.InitMenu;
@@ -148,6 +149,10 @@ public class MenuUIManager : MonoBehaviour
         }
         else
         {
+            foreach(Button b in this.selectStageViewButtons)
+            {
+                b.enabled = false;
+            }
             BGMManager.Instance.Play(BGMPath.STAGE_BGM1, volumeRate: 0.5f);
             StartCoroutine(CoroutineManager.DelayMethod(0.5f, () => SceneManager.LoadScene("Stage" + (selectStageIndex + 1).ToString())));
         }

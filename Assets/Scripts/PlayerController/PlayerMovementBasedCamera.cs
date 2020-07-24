@@ -108,7 +108,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
 
         this._characterController
             .ObserveEveryValueChanged(x => x.isGrounded)
-            .ThrottleFrame(5)
+            .ThrottleFrame(1)
             .Subscribe(x => this._isGrounded = x);
         this.isTitleScene = SceneManager.GetActiveScene().name == "Title";
     }
