@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System;
 using UnityEngine.Networking;
+using KanKikuchi.AudioManager;
 
 
 
@@ -40,7 +41,7 @@ public class StageUIManager : MonoBehaviour
 
     public void GameOver()
     {
-        Debug.Log("gameOver");
+        SEManager.Instance.Play(SEPath.FAILED);
         StageTimeManager.Instance.CountTimeStop = true;
         StageTimeManager.Instance.SetActiveCountTime(false);
         StageCameraManager.Instance.SetAbleFollow(false);
@@ -49,6 +50,7 @@ public class StageUIManager : MonoBehaviour
 
     public void GameClear()
     {
+        SEManager.Instance.Play(SEPath.SUCCESS);
         this.isClear = true;
         StageTimeManager.Instance.CountTimeStop = true;
         StageTimeManager.Instance.SetActiveCountTime(false);
@@ -282,6 +284,8 @@ public class StageUIManager : MonoBehaviour
         {
             StaticData.highRankResults.Add(SceneManager.GetActiveScene().name, new ResultDataNameAndTime(playerName, resultTime));
         }
+
+        if (rankined) SEManager.Instance.Play(SEPath.RANKIN_VOICE0);
     }
 
     public void SetResultAndShowUsedStaticData()

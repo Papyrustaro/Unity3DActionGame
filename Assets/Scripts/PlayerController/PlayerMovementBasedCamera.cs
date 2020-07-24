@@ -62,6 +62,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     private int pressJumpButtonFrame = 0;
     private bool checkPressJumpButton = false;
     private bool isTitleScene = false;
+    private float noInputCountTime = 0f;
 
     [field: SerializeField]
     [field: RenameField("centerPosition")]
@@ -205,6 +206,15 @@ public class PlayerMovementBasedCamera : MonoBehaviour
             case E_State.BackFliping:
                 if (Input.GetButtonDown("HipDrop")) this.waitingAction = E_ActionFlag.HipDrop;
                 break;
+        }
+
+        if (this.currentState == E_State.Standing) this.noInputCountTime += Time.deltaTime;
+        else this.noInputCountTime = 0f;
+
+        if(this.noInputCountTime > 10f)
+        {
+            this.PlayIdleVoice();
+            this.noInputCountTime = 0f;
         }
     }
 
@@ -730,6 +740,26 @@ public class PlayerMovementBasedCamera : MonoBehaviour
             this.currentState = E_State.Falling;
             StopAllCoroutineOfRotation();
         }*/
+    }
+
+    /// <summary>
+    /// 棒立ちのときにボイスをランダムで再生する
+    /// </summary>
+    private void PlayIdleVoice()
+    {
+        switch(UnityEngine.Random.Range(0, 3))
+        {
+            case 0:
+                SEManager.Instance.Play(SEPath.IDLE_VOICE0);
+                break;
+            case 1:
+                SEManager.Instance.Play(SEPath.IDLE_VOICE1);
+                break;
+            case 2:
+                SEManager.Instance.Play(SEPath.NYAN_VOICE0);
+                break;
+        }
+        this.noInputCountTime = 0f;
     }
 
     /// <summary>

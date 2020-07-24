@@ -5888,6 +5888,14 @@ PrefabInstance:
       propertyPath: m_Color.b
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4745600032763925047, guid: 111e9f0aceb8cb14597b3befef00c3fd,
+        type: 3}
+      propertyPath: m_Text
+      value: "\u30FB\u5236\u4F5C: \u3055\u3093\u305F\u308D\n\u30FB\u30AD\u30E3\u30E9\u30AF\u30BF\u30FC:
+        SD\u30E6\u30CB\u30C6\u30A3\u3061\u3083\u3093\n\u30FBSE: \u52B9\u679C\u97F3\u30E9\u30DC\u69D8\u3001\u9B54\u738B\u9B42\u69D8\n\u30FBBGM:
+        Ucchii0\u69D8\n\u30FB\u30D5\u30A9\u30F3\u30C8: Nasu\u30D5\u30A9\u30F3\u30C8\n\n\xA9
+        UTJ/UCL"
+      objectReference: {fileID: 0}
     - target: {fileID: 4745600032789030782, guid: 111e9f0aceb8cb14597b3befef00c3fd,
         type: 3}
       propertyPath: m_IsActive
