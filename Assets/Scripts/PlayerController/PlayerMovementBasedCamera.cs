@@ -724,7 +724,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     public void Warp(Vector3 toWarpPosition)
     {
         SEManager.Instance.Play(SEPath.WARP, 0.3f);
-        this._velocity = Vector3.zero;
+        if(this.currentState != E_State.HipDropping) this._velocity = Vector3.zero;
         this._characterController.enabled = false;
         this.transform.position = toWarpPosition;
         this._characterController.enabled = true;
