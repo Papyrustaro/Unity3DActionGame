@@ -38,8 +38,8 @@ public class SwitchOnOffStageInCountTimeController : MonoBehaviour
                 this.onSwitch.Invoke();
                 if (this.playSE)
                 {
-                    SEManager.Instance.Play(SEPath.SWITCH_STAGE1, volumeRate: 0.25f);
-                    SEManager.Instance.Play(SEPath.SWITCH_STAGE2, volumeRate: 0.25f);
+                    SEManager.Instance.Play(SEPath.SWITCH_STAGE1, volumeRate: 0.2f);
+                    SEManager.Instance.Play(SEPath.SWITCH_STAGE2, volumeRate: 0.2f);
                 }
                 foreach (SwitchOnOffStage switchStage in this.switchStages) switchStage.SwitchOnOff();
                 this.countTime = 0f;

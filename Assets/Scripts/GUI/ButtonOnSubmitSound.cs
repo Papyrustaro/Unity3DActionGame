@@ -23,7 +23,7 @@ public class ButtonOnSubmitSound : MonoBehaviour
                 entry.callback.AddListener((eventData) => SEManager.Instance.Play(SEPath.BACK, volumeRate: 0.3f));
                 break;
             case E_SubmitSE.Page:
-                entry.callback.AddListener((eventData) => SEManager.Instance.Play(SEPath.PAGE, volumeRate: 0.3f));
+                entry.callback.AddListener((eventData) => SEManager.Instance.Play(SEPath.PAGE, volumeRate: 0.1f));
                 break;
             case E_SubmitSE.Go:
                 entry.callback.AddListener((eventData) => SEManager.Instance.Play(SEPath.DECISION1, volumeRate: 0.3f));
@@ -44,7 +44,7 @@ public class ButtonOnSubmitSound : MonoBehaviour
                 entry.callback.AddListener((eventData) => SEManager.Instance.Play(SEPath.BACK, volumeRate: 0.3f));
                 break;
             case E_SubmitSE.Page:
-                entry.callback.AddListener((eventData) => SEManager.Instance.Play(SEPath.PAGE, volumeRate: 0.3f));
+                entry.callback.AddListener((eventData) => SEManager.Instance.Play(SEPath.PAGE, volumeRate: 0.1f));
                 break;
             case E_SubmitSE.Go:
                 entry.callback.AddListener((eventData) => SEManager.Instance.Play(SEPath.DECISION1, volumeRate: 0.3f));

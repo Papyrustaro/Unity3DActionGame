@@ -32,7 +32,7 @@ public class TitleManager : MonoBehaviour
     {
         if(this.inputPlayerNameField.text != "")
         {
-            SEManager.Instance.Play(SEPath.DECISION1);
+            SEManager.Instance.Play(SEPath.DECISION1, volumeRate: 0.3f);
             StaticData.playerName = this.inputPlayerNameField.text;
             SceneManager.LoadScene("Menu");
         }

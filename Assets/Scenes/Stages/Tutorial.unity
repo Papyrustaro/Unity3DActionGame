@@ -8213,7 +8213,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u203BP:\u30DD\u30FC\u30BA"
+  m_Text: "\u203BP(+):\u30DD\u30FC\u30BA"
 --- !u!222 &1926824984
 CanvasRenderer:
   m_ObjectHideFlags: 0

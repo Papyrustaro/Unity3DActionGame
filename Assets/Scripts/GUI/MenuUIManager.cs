@@ -148,8 +148,8 @@ public class MenuUIManager : MonoBehaviour
         }
         else
         {
-            SceneManager.LoadScene("Stage" + (selectStageIndex + 1).ToString());
             BGMManager.Instance.Play(BGMPath.STAGE_BGM1, volumeRate: 0.5f);
+            StartCoroutine(CoroutineManager.DelayMethod(0.5f, () => SceneManager.LoadScene("Stage" + (selectStageIndex + 1).ToString())));
         }
     }
 
@@ -164,7 +164,7 @@ public class MenuUIManager : MonoBehaviour
         }
         else
         {
-            SEManager.Instance.Play(SEPath.INCORRECT);
+            SEManager.Instance.Play(SEPath.INCORRECT, 0.2f);
         }
         this.stage10KeyInputField.text = "";
         this.stage10Button.Select();
@@ -175,7 +175,7 @@ public class MenuUIManager : MonoBehaviour
     /// </summary>
     public void GoTutorial()
     {
-        SceneManager.LoadScene("Tutorial");
+        StartCoroutine(CoroutineManager.DelayMethod(0.1f, () => SceneManager.LoadScene("Tutorial")));
     }
 
     /// <summary>
@@ -183,7 +183,7 @@ public class MenuUIManager : MonoBehaviour
     /// </summary>
     public void GoTitle()
     {
-        SceneManager.LoadScene("Title");
+        StartCoroutine(CoroutineManager.DelayMethod(0.1f, () => SceneManager.LoadScene("Title")));
     }
 
 

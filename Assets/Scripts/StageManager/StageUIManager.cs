@@ -41,7 +41,7 @@ public class StageUIManager : MonoBehaviour
 
     public void GameOver()
     {
-        SEManager.Instance.Play(SEPath.FAILED);
+        SEManager.Instance.Play(SEPath.FAILED, 0.5f);
         StageTimeManager.Instance.CountTimeStop = true;
         StageTimeManager.Instance.SetActiveCountTime(false);
         StageCameraManager.Instance.SetAbleFollow(false);
@@ -50,7 +50,7 @@ public class StageUIManager : MonoBehaviour
 
     public void GameClear()
     {
-        SEManager.Instance.Play(SEPath.SUCCESS);
+        SEManager.Instance.Play(SEPath.SUCCESS, 0.5f);
         this.isClear = true;
         StageTimeManager.Instance.CountTimeStop = true;
         StageTimeManager.Instance.SetActiveCountTime(false);
@@ -285,7 +285,7 @@ public class StageUIManager : MonoBehaviour
             StaticData.highRankResults.Add(SceneManager.GetActiveScene().name, new ResultDataNameAndTime(playerName, resultTime));
         }
 
-        if (rankined) SEManager.Instance.Play(SEPath.RANKIN_VOICE0);
+        if (rankined) SEManager.Instance.Play(SEPath.RANKIN_VOICE0, volumeRate: 0.9f);
     }
 
     public void SetResultAndShowUsedStaticData()

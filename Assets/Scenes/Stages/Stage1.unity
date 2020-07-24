@@ -624,6 +624,12 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2197645392119970363, guid: ef3e0a55d62e9ce4484d129ce981bd3a,
+        type: 3}
+      propertyPath: startRunningSmoke
+      value: 
+      objectReference: {fileID: 5143775410230790571, guid: 00b71abb3ffec72488eefce0c8c7960a,
+        type: 3}
     - target: {fileID: 2197645392934514447, guid: ef3e0a55d62e9ce4484d129ce981bd3a,
         type: 3}
       propertyPath: m_LocalPosition.x

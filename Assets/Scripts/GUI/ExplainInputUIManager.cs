@@ -23,8 +23,8 @@ public class ExplainInputUIManager : MonoBehaviour
         else
         {
             this.titleText.text = "操作方法(キーボード)";
-            this.explainInputText.text = "移動: WASD(前後:WS/左右:AD)\n通常ジャンプ: Space\nスピンジャンプ: L\nバックフリップ: I\nヒップドロップ: U\n" +
-                "カメラ回転: 方向キー\n正面が見えるようにカメラ移動: K\n決定: Enter\n";
+            this.explainInputText.text = "移動: WA(前後),SD(左右)\n通常ジャンプ: J/Space\nスピンジャンプ: L\nバックフリップ: I\nヒップドロップ: U\n" +
+                "カメラ回転: 方向キー/78(上下),90(左右)\n正面が見えるようにカメラ移動: K\n決定: Enter/Space\n";
             this.changeTextButtonText.text = "Joy-Conの操作を確認";
         }
         this.isShowingKeybordInput = !this.isShowingKeybordInput;

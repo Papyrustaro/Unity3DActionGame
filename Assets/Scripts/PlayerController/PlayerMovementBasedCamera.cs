@@ -294,12 +294,12 @@ public class PlayerMovementBasedCamera : MonoBehaviour
             if (this.currentState == E_State.HipDropping)
             {
                 this.AbleBreakByHipDrop = true;
-                SEManager.Instance.Play(SEPath.HIP_DROP_GROUNDED, volumeRate: 0.5f);
-                SEManager.Instance.Play(SEPath.HIP_DROP_GROUNDED1, volumeRate: 0.5f);
+                SEManager.Instance.Play(SEPath.HIP_DROP_GROUNDED, volumeRate: 0.25f);
+                SEManager.Instance.Play(SEPath.HIP_DROP_GROUNDED1, volumeRate: 0.25f);
                 Instantiate(this.hipDropOnGroundShock, this.transform.position, Quaternion.identity);
             }else if(this.currentState != E_State.Standing && this.currentState != E_State.Running)
             {
-                SEManager.Instance.Play(SEPath.ON_GROUNDED_SOUND, volumeRate: 0.5f);
+                SEManager.Instance.Play(SEPath.ON_GROUNDED_SOUND, volumeRate: 0.4f);
             }
 
             if(this.currentState == E_State.StickingWall) SEManager.Instance.Stop(SEPath.STICKING_WALL);
@@ -311,7 +311,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
             }
             else
             {
-                if(!SEManager.Instance.GetCurrentAudioNames().Any(s => s == "RunningSound")) SEManager.Instance.Play(SEPath.RUNNING_SOUND, volumeRate: 0.5f);
+                if(!SEManager.Instance.GetCurrentAudioNames().Any(s => s == "RunningSound")) SEManager.Instance.Play(SEPath.RUNNING_SOUND, volumeRate: 0.2f);
                 this.currentState = E_State.Running;
             }
         }
@@ -391,7 +391,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
             this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(moveForward), 0.2f);
         }
 
-        if (this.currentState == E_State.Running && !SEManager.Instance.GetCurrentAudioNames().Any(s => s == "RunningSound")) SEManager.Instance.Play(SEPath.RUNNING_SOUND, volumeRate: 0.5f);
+        if (this.currentState == E_State.Running && !SEManager.Instance.GetCurrentAudioNames().Any(s => s == "RunningSound")) SEManager.Instance.Play(SEPath.RUNNING_SOUND, volumeRate: 0.2f);
     }
 
     /// <summary>
@@ -407,8 +407,8 @@ public class PlayerMovementBasedCamera : MonoBehaviour
 
         this.currentState = E_State.JumpToTop;
         this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.JumpToTop);
-        SEManager.Instance.Play(SEPath.JUMP_VOICE0);
-        SEManager.Instance.Play(SEPath.JUMP_WIND0, volumeRate: 0.5f);
+        SEManager.Instance.Play(SEPath.JUMP_VOICE0, volumeRate: 0.5f);
+        SEManager.Instance.Play(SEPath.JUMP_WIND0, volumeRate: 0.4f);
         this.checkPressJumpButton = true;
         StartCoroutine(CoroutineManager.DelayMethod(8, () =>
         {
@@ -433,8 +433,8 @@ public class PlayerMovementBasedCamera : MonoBehaviour
             this.currentState = E_State.JumpToTop;
             this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.JumpToTop);
         }
-        SEManager.Instance.Play(SEPath.JUMP_VOICE0);
-        SEManager.Instance.Play(SEPath.JUMP_WIND0, volumeRate: 0.5f);
+        SEManager.Instance.Play(SEPath.JUMP_VOICE0, volumeRate: 0.5f);
+        SEManager.Instance.Play(SEPath.JUMP_WIND0, volumeRate: 0.4f);
         SEManager.Instance.Play(SEPath.TRAMPOLINE_JUMP, volumeRate: 0.5f);
 
         this.checkPressJumpButton = true;
@@ -536,7 +536,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         //回転運動
         this.transform.Rotate(new Vector3(0f, 2000f, 0f) * Time.deltaTime, Space.World);
 
-        if (!SEManager.Instance.GetCurrentAudioNames().Any(s => s == "JumpWind1")) SEManager.Instance.Play(SEPath.JUMP_WIND1, volumeRate: 0.5f);
+        if (!SEManager.Instance.GetCurrentAudioNames().Any(s => s == "JumpWind1")) SEManager.Instance.Play(SEPath.JUMP_WIND1, volumeRate: 0.4f);
     }
 
     /// <summary>
@@ -572,8 +572,8 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.BackFlip);
         SEManager.Instance.Play(SEPath.JUMP_VOICE1);
         SEManager.Instance.Play(SEPath.JUMP_WIND0);
-        StartCoroutine(CoroutineManager.DelayMethod(0.4f, () => SEManager.Instance.Play(SEPath.JUMP_WIND0)));
-        StartCoroutine(CoroutineManager.DelayMethod(0.8f, () => SEManager.Instance.Play(SEPath.JUMP_WIND0)));
+        StartCoroutine(CoroutineManager.DelayMethod(0.4f, () => SEManager.Instance.Play(SEPath.JUMP_WIND0, volumeRate: 0.8f)));
+        StartCoroutine(CoroutineManager.DelayMethod(0.8f, () => SEManager.Instance.Play(SEPath.JUMP_WIND0, volumeRate: 0.8f)));
     }
 
     /// <summary>
@@ -586,7 +586,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
 
         this.currentState = E_State.SpinJumping;
         this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.SpinJump);
-        SEManager.Instance.Play(SEPath.JUMP_VOICE7);
+        SEManager.Instance.Play(SEPath.JUMP_VOICE7, volumeRate: 0.5f);
         SEManager.Instance.Play(SEPath.JUMP_WIND1);
     }
 
@@ -601,7 +601,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         this.currentState = E_State.HipDropping;
         this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.HipDrop);
         SEManager.Instance.Stop(SEPath.STICKING_WALL);
-        SEManager.Instance.Play(SEPath.JUMP_VOICE8);
+        SEManager.Instance.Play(SEPath.JUMP_VOICE8, volumeRate: 0.5f);
         SEManager.Instance.Play(SEPath.HIP_DROP_ROTATE);
         CapsuleCollider _collider = GetComponent<CapsuleCollider>();
         this._hitHeadCheck.localPosition = Vector3.zero;
@@ -645,8 +645,8 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.JumpToTop);
 
         SEManager.Instance.Stop(SEPath.STICKING_WALL);
-        SEManager.Instance.Play(SEPath.JUMP_VOICE3);
-        SEManager.Instance.Play(SEPath.JUMP_WIND0, volumeRate: 0.5f);
+        SEManager.Instance.Play(SEPath.JUMP_VOICE3, volumeRate: 0.7f);
+        SEManager.Instance.Play(SEPath.JUMP_WIND0, volumeRate: 0.4f);
 
     }
 
