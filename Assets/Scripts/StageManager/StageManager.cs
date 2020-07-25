@@ -11,6 +11,8 @@ public class StageManager : MonoBehaviour
     public bool AblePause { get; set; } = true;
     public static StageManager Instance { get; private set; }
 
+    private bool isFinished = false;
+
     private void Awake()
     {
         if(Instance == null)
@@ -40,6 +42,8 @@ public class StageManager : MonoBehaviour
 
     public void StageClear()
     {
+        if (this.isFinished) return;
+        this.isFinished = true;
         this.pausePanel.SetActive(false);
         this.AblePause = false;
         StageUIManager.Instance.GameClear();
@@ -47,6 +51,8 @@ public class StageManager : MonoBehaviour
 
     public void StageFailed()
     {
+        if (this.isFinished) return;
+        this.isFinished = true;
         this.pausePanel.SetActive(false);
         this.AblePause = false;
         StageUIManager.Instance.GameOver();
