@@ -13,7 +13,7 @@ animationのtriggerをboolに変更
 joycon操作 //done
 結果ツイートのurl //done
 ステージ五修正 //done
-joycon操作のテキスト修正
+joycon操作のテキスト修正 //done
 
 # joycon操作
 L十字

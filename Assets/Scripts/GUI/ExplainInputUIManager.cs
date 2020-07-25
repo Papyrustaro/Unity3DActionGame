@@ -16,8 +16,8 @@ public class ExplainInputUIManager : MonoBehaviour
         if (this.isShowingKeybordInput)
         {
             this.titleText.text = "操作方法(Joy-Con)";
-            this.explainInputText.text = "移動: L十字\n通常ジャンプ: A\nスピンジャンプ: X\nバックフリップ: Y\nヒップドロップ: B" +
-                "\nカメラ回転: LRステ押し込み(上下),L1R1(左右)\n正面が見えるようにカメラ移動: -\n決定: A\nポーズ: +";
+            this.explainInputText.text = "移動: L十字,Lスティック\n通常ジャンプ: A\nスピンジャンプ: X\nバックフリップ: Y\nヒップドロップ: B" +
+                "\nカメラ回転: Rスティック,ZLZR(左右)\n正面が見えるようにカメラ移動: L1\n決定: A\nポーズ: +";
             this.changeTextButtonText.text = "キーボードの操作を確認";
         }
         else
