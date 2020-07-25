@@ -371,8 +371,8 @@ public class StageUIManager : MonoBehaviour
 
         string url = "https://twitter.com/intent/tweet?"
             + "text=" + tweetText
-            + "&url=" + "https://unityroom.com/games/underrocket"
-            + "&hashtags=" + "UnderRocket,unityroom";
+            + "&url=" + "https://unityroom.com/games/spacejumpgame"
+            + "&hashtags=" + "SpaceJumpGame,unityroom";
 
 #if UNITY_EDITOR
         Application.OpenURL(url);

@@ -1472,6 +1472,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: 09ed524cde9c7f342ad8dc102f2204b4,
         type: 3}
+    - target: {fileID: 2185022737483585598, guid: 01da62e8974c9d54a9ef21ac577a1f5b,
+        type: 3}
+      propertyPath: m_Positions.Array.data[0].x
+      value: -500
+      objectReference: {fileID: 0}
+    - target: {fileID: 2185022737483585598, guid: 01da62e8974c9d54a9ef21ac577a1f5b,
+        type: 3}
+      propertyPath: m_Positions.Array.data[1].x
+      value: -500
+      objectReference: {fileID: 0}
     - target: {fileID: 2185022737671340118, guid: 01da62e8974c9d54a9ef21ac577a1f5b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -6506,6 +6516,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 7413945630208072792, guid: 7ee0ed666ebce9741b981e8d5ed4a661,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 650
+      objectReference: {fileID: 0}
+    - target: {fileID: 7413945630208072792, guid: 7ee0ed666ebce9741b981e8d5ed4a661,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 300
+      objectReference: {fileID: 0}
     - target: {fileID: 7413945630208072795, guid: 7ee0ed666ebce9741b981e8d5ed4a661,
         type: 3}
       propertyPath: m_Text
@@ -6513,12 +6533,22 @@ PrefabInstance:
         J/Space\n\u30B9\u30D4\u30F3\u30B8\u30E3\u30F3\u30D7: L\n\u30D0\u30C3\u30AF\u30D5\u30EA\u30C3\u30D7:
         I\n\u30D2\u30C3\u30D7\u30C9\u30ED\u30C3\u30D7: U\n\u30AB\u30E1\u30E9\u56DE\u8EE2:
         \u65B9\u5411\u30AD\u30FC/78(\u4E0A\u4E0B),90(\u5DE6\u53F3)\n\u6B63\u9762\u304C\u898B\u3048\u308B\u3088\u3046\u306B\u30AB\u30E1\u30E9\u79FB\u52D5:
-        K\n\u6C7A\u5B9A: Enter/Space"
+        K\n\u6C7A\u5B9A: Enter/Space\n\u30DD\u30FC\u30BA: P"
+      objectReference: {fileID: 0}
+    - target: {fileID: 7413945630208072795, guid: 7ee0ed666ebce9741b981e8d5ed4a661,
+        type: 3}
+      propertyPath: m_FontData.m_FontSize
+      value: 26
       objectReference: {fileID: 0}
     - target: {fileID: 7413945631318151706, guid: 7ee0ed666ebce9741b981e8d5ed4a661,
         type: 3}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7413945631318151711, guid: 7ee0ed666ebce9741b981e8d5ed4a661,
+        type: 3}
+      propertyPath: stageInformationText
+      value: "\u30B9\u30C6\u30FC\u30B82\u3000\u96E3\u6613\u5EA6: 3"
       objectReference: {fileID: 0}
     - target: {fileID: 7413945631802640306, guid: 7ee0ed666ebce9741b981e8d5ed4a661,
         type: 3}

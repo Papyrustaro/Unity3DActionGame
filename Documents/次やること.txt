@@ -8,9 +8,29 @@ animationのtriggerをboolに変更
 5638
 
 # テストプレイして
-ステージ七の最初のやつがだるい。
-ステージ2が難しい。中継ポイントよろ。バックフリップ使わないでやる人多い。やはり後半に持ってくるべき存在
-カメラ操作反転の設定ほしい
-ステージクリア時に次のステージに行きたい
-joycon操作
-ステージ選択画面の難易度がわかりづらい？？？
+ステージ七の最初のやつがだるい。//done
+ステージクリア時に次のステージに行きたい //done
+joycon操作 //done
+結果ツイートのurl //done
+ステージ五修正 //done
+joycon操作のテキスト修正
+
+# joycon操作
+L十字
+左stick1button14
+右stick1button15
+上stick1button12
+下stick1button13
+
+A: stick1button1
+B: stick1button0
+Y: stick1button2
+X: stick1button3
+
++: stick1button7
+-: stick1button6: カメラ回り込み
+L1: button4: カメラ左回転
+r1: button5: カメラ右回転
+
+Lスティック押し込み: 8: カメラ上回転
+R押し込み: 9: カメラ下回転

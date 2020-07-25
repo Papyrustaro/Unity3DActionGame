@@ -1006,6 +1006,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2185022737483585598, guid: 01da62e8974c9d54a9ef21ac577a1f5b,
+        type: 3}
+      propertyPath: m_Positions.Array.data[0].x
+      value: -500
+      objectReference: {fileID: 0}
+    - target: {fileID: 2185022737483585598, guid: 01da62e8974c9d54a9ef21ac577a1f5b,
+        type: 3}
+      propertyPath: m_Positions.Array.data[1].x
+      value: -500
+      objectReference: {fileID: 0}
     - target: {fileID: 2185022737671340118, guid: 01da62e8974c9d54a9ef21ac577a1f5b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1066,6 +1076,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: AllStage
       objectReference: {fileID: 0}
+    - target: {fileID: 6033491212207710259, guid: 01da62e8974c9d54a9ef21ac577a1f5b,
+        type: 3}
+      propertyPath: moveSpeed
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 6880211821662438321, guid: 01da62e8974c9d54a9ef21ac577a1f5b,
         type: 3}
       propertyPath: playerWallKickTrigger
@@ -1076,6 +1091,11 @@ PrefabInstance:
       propertyPath: playerWallKickTrigger
       value: 
       objectReference: {fileID: 749377935}
+    - target: {fileID: 8973098788767309212, guid: 01da62e8974c9d54a9ef21ac577a1f5b,
+        type: 3}
+      propertyPath: rotateSpeed
+      value: 50
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 01da62e8974c9d54a9ef21ac577a1f5b, type: 3}
 --- !u!1001 &2187759225862792199
