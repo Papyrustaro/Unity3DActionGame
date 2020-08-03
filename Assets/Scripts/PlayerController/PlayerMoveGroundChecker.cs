@@ -44,7 +44,7 @@ public class PlayerMoveGroundChecker : MonoBehaviour
     {
         if (other.CompareTag("MoveStage"))
         {
-            this.groundedMoveStageTransform = null;
+            if(other.transform == this.groundedMoveStageTransform) this.groundedMoveStageTransform = null;
         }
     }
 }

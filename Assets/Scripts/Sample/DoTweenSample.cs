@@ -87,7 +87,14 @@ public class DoTweenSample : MonoBehaviour
             .SetRelative()
             .SetEase(Ease.InBounce)
             .SetLoops(2);
+        Sequence sequence = DOTween.Sequence();
+        sequence
+            .Append(this.transform.DOMoveX(6f, 3f))
+            .Play();
+        this.onDestroy.AddListener(() => sequence.Kill());
+
     }
+
 
     private void MoveSquareSample(float horizontalLength, float verticalLength, float oneRoutineTime)
     {
