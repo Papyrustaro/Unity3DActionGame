@@ -402,8 +402,8 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         this._velocity.y = this.jumpVerticalSpeed;
         this._isGrounded = false;
 
-        //進行方向を向く→入力方向と速度が一致しないこともあるため撤廃
-        //if(!(this._velocity.x == 0f && this._velocity.z == 0f)) this.transform.forward = new Vector3(this._velocity.x, 0f, this._velocity.z);
+        //進行方向を向く
+        if(!(this._velocity.x == 0f && this._velocity.z == 0f)) this.transform.forward = new Vector3(this._velocity.x, 0f, this._velocity.z);
 
         this.currentState = E_State.JumpToTop;
         this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.JumpToTop);
