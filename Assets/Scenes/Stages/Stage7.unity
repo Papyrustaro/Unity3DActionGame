@@ -624,31 +624,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2197645391594177358, guid: ef3e0a55d62e9ce4484d129ce981bd3a,
-        type: 3}
-      propertyPath: m_Size.z
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2197645391594177358, guid: ef3e0a55d62e9ce4484d129ce981bd3a,
-        type: 3}
-      propertyPath: m_Size.x
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2197645392119970363, guid: ef3e0a55d62e9ce4484d129ce981bd3a,
-        type: 3}
-      propertyPath: rateOfRunHorizontalSpeedOnAccelerationGround
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 2197645392119970363, guid: ef3e0a55d62e9ce4484d129ce981bd3a,
-        type: 3}
-      propertyPath: backFlipVerticalSpeed
-      value: 27
-      objectReference: {fileID: 0}
-    - target: {fileID: 2197645392119970363, guid: ef3e0a55d62e9ce4484d129ce981bd3a,
-        type: 3}
-      propertyPath: wallKickVerticalSpeed
-      value: 17
-      objectReference: {fileID: 0}
     - target: {fileID: 2197645392934514447, guid: ef3e0a55d62e9ce4484d129ce981bd3a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -708,11 +683,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PlayerOffline
-      objectReference: {fileID: 0}
-    - target: {fileID: 3249513760022718254, guid: ef3e0a55d62e9ce4484d129ce981bd3a,
-        type: 3}
-      propertyPath: m_Size.z
-      value: 0.25
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ef3e0a55d62e9ce4484d129ce981bd3a, type: 3}
