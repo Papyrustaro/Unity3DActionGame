@@ -424,7 +424,11 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     public void Jump(float jumpVerticalSpeed)
     {
         this._velocity.y = 0f;
+
+        //進行方向を向く
+        if (!(this._velocity.x == 0f && this._velocity.z == 0f)) this.transform.forward = new Vector3(this._velocity.x, 0f, this._velocity.z);
         //if (this._velocity.magnitude >= this.maxNormalAirHorizontalSpeed) this._velocity *= this.maxNormalAirHorizontalSpeed / this._velocity.magnitude;
+
         this._velocity.y = jumpVerticalSpeed;
         this._isGrounded = false;
 

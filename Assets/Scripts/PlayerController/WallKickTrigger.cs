@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.SceneManagement;
 
 public class WallKickTrigger : MonoBehaviour
 {
@@ -34,10 +35,11 @@ public class WallKickTrigger : MonoBehaviour
             float angle = Vector3.Angle(new Vector3(normalVector.x, 0f, normalVector.z), new Vector3(this.transform.forward.x, 0f, this.transform.forward.z));
             /*if (normalVector.y < 0.02f && 100f <= angle) //入射角が80°以内ではりつく
             {*/
-                //Debug.Log(Vector3.Angle(new Vector3(normalVector.x, 0f, normalVector.z), new Vector3(this.transform.forward.x, 0f, this.transform.forward.z)));
-                if(this.stickWallCount == 0) this.playerMoveController.StickWall(normalVector);
+            if(!(SceneManager.GetActiveScene().name != "Stage2" && normalVector.y > 0.02))
+            {
+                if (this.stickWallCount == 0) this.playerMoveController.StickWall(normalVector);
                 this.stickWallCount++;
-            //}
+            }
             if (collision.transform.CompareTag("SwitchOnOffStage"))
             {
                 this.IsStickingOnDisappearableWall = true;
