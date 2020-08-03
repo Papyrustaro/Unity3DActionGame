@@ -16,6 +16,7 @@ public class ThirdPersonCameraController : MonoBehaviour
     private float rotationByMouseForce = 200f;
     private Vector3 targetPositionBeforeFrame;
     private float defaultCameraRotationX;
+    private Quaternion initRotation;
 
     public static ThirdPersonCameraController Instance { get; private set; }
 
@@ -37,6 +38,7 @@ public class ThirdPersonCameraController : MonoBehaviour
         {
             throw new System.Exception();
         }
+        this.initRotation = this.transform.rotation;
         this.defaultCameraRotationX = this.transform.rotation.eulerAngles.x;
     }
 
@@ -74,10 +76,22 @@ public class ThirdPersonCameraController : MonoBehaviour
             //if(this.CameraViewType != E_CameraViewType.Overhead) this.transform.RotateAround(this.targetPositionBeforeFrame, this.transform.right, mouseInputY * Time.deltaTime * this.rotationByMouseForce);
         }*/
 
-        if (Input.GetButtonDown("CameraMoveToPlayerBehind"))
+        if (Input.GetButtonDown("RotateCamera90LeftAxisY"))
+        {
+            this.Rotate90LeftAxisY();
+        }
+        if (Input.GetButtonDown("RotateCamera90RightAxisY"))
+        {
+            this.Rotate90RightAxisY();
+        }
+        if (Input.GetButtonDown("InitCameraRotation"))
+        {
+            this.InitCameraRotation();
+        }
+        /*if (Input.GetButtonDown("CameraMoveToPlayerBehind"))
         {
             WatchFromPlayerBack();
-        }
+        }*/
         /*if (Input.GetButtonDown("DefaultCamera"))
         {
             WatchDefault();
@@ -112,6 +126,33 @@ public class ThirdPersonCameraController : MonoBehaviour
         {
             this.transform.RotateAround(this.TargetPlayerCenterTransform.position, this.transform.right, this.defaultCameraRotationX - this.transform.rotation.eulerAngles.x);
         }
+    }
+
+    /// <summary>
+    /// -90,0,90,180の°に沿う用に右回転
+    /// </summary>
+    private void Rotate90RightAxisY()
+    {
+        int angleLevel = (int)(this.transform.rotation.eulerAngles.y / 90) + 1;
+        this.transform.rotation = Quaternion.Euler(this.transform.rotation.eulerAngles.x, angleLevel * 90f, this.transform.rotation.eulerAngles.z);
+    }
+
+    /// <summary>
+    /// -90,0,90,180の°に沿う用に左回転
+    /// </summary>
+    private void Rotate90LeftAxisY()
+    {
+        int angleLevel = (int)(this.transform.rotation.eulerAngles.y / 90);
+        if (this.transform.rotation.eulerAngles.y % 90 < 1) angleLevel--;
+        this.transform.rotation = Quaternion.Euler(this.transform.rotation.eulerAngles.x, angleLevel * 90f, this.transform.rotation.eulerAngles.z);
+    }
+
+    /// <summary>
+    /// ステージ開始時のカメラ角度に初期化
+    /// </summary>
+    private void InitCameraRotation()
+    {
+        this.transform.rotation = this.initRotation;
     }
 
     /// <summary>
