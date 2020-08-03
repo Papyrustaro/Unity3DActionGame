@@ -78,11 +78,13 @@ public class ThirdPersonCameraController : MonoBehaviour
 
         if (Input.GetButtonDown("RotateCamera90LeftAxisY"))
         {
-            this.Rotate90LeftAxisY();
+            if (StaticData.invertCameraRotationAxisY) this.Rotate90LeftAxisY();
+            else this.Rotate90RightAxisY();
         }
         if (Input.GetButtonDown("RotateCamera90RightAxisY"))
         {
-            this.Rotate90RightAxisY();
+            if (StaticData.invertCameraRotationAxisY) this.Rotate90RightAxisY();
+            else this.Rotate90LeftAxisY();
         }
         if (Input.GetButtonDown("InitCameraRotation"))
         {
