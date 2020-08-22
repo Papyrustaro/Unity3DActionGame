@@ -59,11 +59,12 @@ public class PlayerMovementBasedCamera : MonoBehaviour
 
     private MonobitEngine.MonobitView _monobitView;
 
-    private int pressJumpButtonFrame = 0;
     private bool checkPressJumpButton = false;
     private bool isTitleScene = false;
     private float noInputCountTime = 0f;
     private bool setStickWallTrigger = false;
+    private float countJumpTime = 0f;
+    private float countJumpLevel = 0;
 
 
     [field: SerializeField]
@@ -171,20 +172,35 @@ public class PlayerMovementBasedCamera : MonoBehaviour
                 {
                     this.waitingAction = E_ActionFlag.HipDrop;
                     this.checkPressJumpButton = false;
-                    this.pressJumpButtonFrame = 0;
+                    //this.pressJumpButtonFrame = 0;
+                    this.countJumpTime = 0f;
+                    this.countJumpLevel = 0;
                 }
                 else if (this.checkPressJumpButton)
                 {
                     if (Input.GetButton("Jump"))
                     {
-                        this.pressJumpButtonFrame++;
+                        this.countJumpTime += Time.deltaTime;
+                        if(this.countJumpTime > 0.03f && this.countJumpLevel == 0)
+                        {
+                            this._velocity.y += this.jumpSecondVerticalSpeed;
+                            this.countJumpLevel++;
+                        }
+                        if(this.countJumpTime > 0.06f && this.countJumpLevel == 1)
+                        {
+                            this._velocity.y += this.jumpThirdVerticalSpeed;
+                            this.countJumpLevel++;
+                        }
+                        /*this.pressJumpButtonFrame++;
                         if (this.pressJumpButtonFrame == 4) this._velocity.y += this.jumpSecondVerticalSpeed;
-                        if (this.pressJumpButtonFrame == 7) this._velocity.y += this.jumpThirdVerticalSpeed;
+                        if (this.pressJumpButtonFrame == 7) this._velocity.y += this.jumpThirdVerticalSpeed;*/
                     }
                     else
                     {
                         this.checkPressJumpButton = false;
-                        this.pressJumpButtonFrame = 0;
+                        this.countJumpTime = 0f;
+                        this.countJumpLevel = 0;
+                        //this.pressJumpButtonFrame = 0;
                     }
                 }
                 break;
@@ -194,14 +210,27 @@ public class PlayerMovementBasedCamera : MonoBehaviour
                 {
                     if (Input.GetButton("SpinJump"))
                     {
-                        this.pressJumpButtonFrame++;
+                        this.countJumpTime += Time.deltaTime;
+                        if (this.countJumpTime > 0.03f && this.countJumpLevel == 0)
+                        {
+                            this._velocity.y += this.jumpSecondVerticalSpeed;
+                            this.countJumpLevel++;
+                        }
+                        if (this.countJumpTime > 0.06f && this.countJumpLevel == 1)
+                        {
+                            this._velocity.y += this.jumpThirdVerticalSpeed;
+                            this.countJumpLevel++;
+                        }
+                        /*this.pressJumpButtonFrame++;
                         if (this.pressJumpButtonFrame == 4) this._velocity.y += this.jumpSecondVerticalSpeed;
-                        if (this.pressJumpButtonFrame == 7) this._velocity.y += this.jumpThirdVerticalSpeed;
+                        if (this.pressJumpButtonFrame == 7) this._velocity.y += this.jumpThirdVerticalSpeed;*/
                     }
                     else
                     {
                         this.checkPressJumpButton = false;
-                        this.pressJumpButtonFrame = 0;
+                        this.countJumpTime = 0f;
+                        this.countJumpLevel = 0;
+                        //this.pressJumpButtonFrame = 0;
                     }
                 }
                 break;
@@ -427,10 +456,12 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         SEManager.Instance.Play(SEPath.JUMP_VOICE0, volumeRate: 0.5f);
         SEManager.Instance.Play(SEPath.JUMP_WIND0, volumeRate: 0.4f);
         this.checkPressJumpButton = true;
-        StartCoroutine(CoroutineManager.DelayMethod(8, () =>
+        StartCoroutine(CoroutineManager.DelayMethod(0.08f, () =>
         {
+            this.countJumpTime = 0f;
+            this.countJumpLevel = 0;
             this.checkPressJumpButton = false;
-            this.pressJumpButtonFrame = 0;
+            //this.pressJumpButtonFrame = 0;
         }));
     }
 
@@ -459,10 +490,12 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         SEManager.Instance.Play(SEPath.TRAMPOLINE_JUMP, volumeRate: 0.5f);
 
         this.checkPressJumpButton = true;
-        StartCoroutine(CoroutineManager.DelayMethod(8, () =>
+        StartCoroutine(CoroutineManager.DelayMethod(0.08f, () =>
         {
+            this.countJumpTime = 0f;
+            this.countJumpLevel = 0;
             this.checkPressJumpButton = false;
-            this.pressJumpButtonFrame = 0;
+            //this.pressJumpButtonFrame = 0;
         }));
         this._wallKickTrigger.ResetTrigger();
     }
