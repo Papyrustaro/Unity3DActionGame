@@ -27,7 +27,7 @@ public class StageUIManager : MonoBehaviour
     [SerializeField] private Text rankingPlayerNameTextInFailed;
     [SerializeField] private Text rankingTimeTextInFailed;
 
-    private int thisTimePlayerRank;
+    private int thisTimePlayerRank = -1;
 
     private bool isClear = false;
 
