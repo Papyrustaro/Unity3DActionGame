@@ -63,6 +63,8 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     private bool checkPressJumpButton = false;
     private bool isTitleScene = false;
     private float noInputCountTime = 0f;
+    private bool setStickWallTrigger = false;
+
 
     [field: SerializeField]
     [field: RenameField("centerPosition")]
@@ -78,6 +80,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     /// 壁に空中で張り付いているか(stateのひとつとして持ってもいい)
     /// </summary>
     public bool IsStickingWall { get; set; } = false;
+
 
     public bool IsGrounded => this._isGrounded;
 
@@ -321,6 +324,20 @@ public class PlayerMovementBasedCamera : MonoBehaviour
             if (this.currentState == E_State.HipDropping) return; //ヒップドロップ中は着地するまで遷移しない
             if (this.currentState == E_State.JumpToTop && this._velocity.y > 0f) this.currentState = E_State.TopOfJump;
             else if (this._velocity.y <= -0f && (this.currentState != E_State.SpinJumping && this.currentState != E_State.StickingWall && this.currentState != E_State.BackFliping)) this.currentState = E_State.Falling;
+        }
+
+        if(!this.setStickWallTrigger && this.IsStickingWall && this.currentState != E_State.StickingWall)
+        {
+            if (this.IsGrounded)
+            {
+                this.IsStickingWall = false;
+            }
+            else
+            {
+                this.setStickWallTrigger = true;
+                if(Time.deltaTime < 0.05f) StartCoroutine(CoroutineManager.DelayMethod(0.05f, () => { this.IsStickingWall = false; this.setStickWallTrigger = false; }));
+                else StartCoroutine(CoroutineManager.DelayMethod(0.08f, () => { this.IsStickingWall = false; this.setStickWallTrigger = false; }));
+            }
         }
     }
 
@@ -600,6 +617,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     private void HipDrop()
     {
         this.StopAllCoroutineOfRotation(); //現在はbackFlipのコルーチンのみ
+        //this.IsStickingWall = false;
         this._velocity = Vector3.zero;
         this.transform.rotation = new Quaternion(0f, this.transform.rotation.y, 0f, this.transform.rotation.w);
         this.currentState = E_State.HipDropping;
@@ -652,6 +670,8 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         SEManager.Instance.Play(SEPath.JUMP_VOICE3, volumeRate: 0.7f);
         SEManager.Instance.Play(SEPath.JUMP_WIND0, volumeRate: 0.4f);
 
+        //StartCoroutine(CoroutineManager.DelayMethod(0.3f, () => this.IsStickingWall = false));
+
     }
 
     /// <summary>
@@ -667,6 +687,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         this.NormalOfStickingWall = normalOfStickingWall;
         this.currentState = E_State.StickingWall;
         this._playerAnimation.Play(PlayerAnimation.E_PlayerAnimationType.StickingWall);
+        this.IsStickingWall = true;
         //this.stickingWallSmoke.Play(true);
     }
 
@@ -773,6 +794,8 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     public void StopAllCoroutineOfRotation()
     {
         StopAllCoroutines();
+        this.IsStickingWall = false;
+        this.setStickWallTrigger = false;
         this.transform.localRotation = Quaternion.Euler(new Vector3(0f, this.transform.rotation.eulerAngles.y, 0f));
         this._hitHeadCheck.transform.localPosition = Vector3.zero;
         this._hitHeadCheck.transform.localRotation = Quaternion.Euler(Vector3.zero);
