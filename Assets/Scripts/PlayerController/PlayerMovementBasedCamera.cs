@@ -87,6 +87,8 @@ public class PlayerMovementBasedCamera : MonoBehaviour
 
     public bool IsOnAccelerationGround { get; set; } = false;
 
+    public int CountGroundNearFoots { get; set; } = 0;
+
     public E_State CurrentState => this.currentState;
 
     /// <summary>
@@ -112,7 +114,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
 
         this._characterController
             .ObserveEveryValueChanged(x => x.isGrounded)
-            .ThrottleFrame(1)
+            //.ThrottleFrame(1)
             .Subscribe(x => this._isGrounded = x);
         this.isTitleScene = SceneManager.GetActiveScene().name == "Title";
     }
@@ -168,7 +170,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
                 break;
             case E_State.JumpToTop:
             case E_State.TopOfJump:
-                if (Input.GetButtonDown("HipDrop"))
+                if (!this._isGrounded && Input.GetButtonDown("HipDrop"))
                 {
                     this.waitingAction = E_ActionFlag.HipDrop;
                     this.checkPressJumpButton = false;
@@ -318,6 +320,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         //ここで接地判定をおこなうため、jumpなどの処理時に念のため_isGrounded = falseにするべき
         if (this._isGrounded)
         {
+            this.CountGroundNearFoots = 0;
             if (this.currentState == E_State.BackFliping)
             {
                 this.StopAllCoroutineOfRotation();
@@ -456,7 +459,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         SEManager.Instance.Play(SEPath.JUMP_VOICE0, volumeRate: 0.5f);
         SEManager.Instance.Play(SEPath.JUMP_WIND0, volumeRate: 0.4f);
         this.checkPressJumpButton = true;
-        StartCoroutine(CoroutineManager.DelayMethod(0.08f, () =>
+        StartCoroutine(CoroutineManager.DelayMethod(0.1f, () =>
         {
             this.countJumpTime = 0f;
             this.countJumpLevel = 0;
@@ -490,7 +493,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         SEManager.Instance.Play(SEPath.TRAMPOLINE_JUMP, volumeRate: 0.5f);
 
         this.checkPressJumpButton = true;
-        StartCoroutine(CoroutineManager.DelayMethod(0.08f, () =>
+        StartCoroutine(CoroutineManager.DelayMethod(0.1f, () =>
         {
             this.countJumpTime = 0f;
             this.countJumpLevel = 0;
@@ -658,21 +661,24 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         SEManager.Instance.Stop(SEPath.STICKING_WALL);
         SEManager.Instance.Play(SEPath.JUMP_VOICE8, volumeRate: 0.5f);
         SEManager.Instance.Play(SEPath.HIP_DROP_ROTATE);
-        CapsuleCollider _collider = GetComponent<CapsuleCollider>();
+        //CapsuleCollider _collider = GetComponent<CapsuleCollider>();
         this._hitHeadCheck.localPosition = Vector3.zero;
         this._hitHeadCheck.localRotation = Quaternion.Euler(Vector3.zero);
         this._groundCheck.localPosition = Vector3.zero;
         this._groundCheck.localRotation = Quaternion.Euler(Vector3.zero);
-        StartCoroutine(TransformManager.RotateInCertainTimeByAxisFromAway(this.transform, this.CenterPosition, E_TransformAxis.Right, 360f, 0.14f));
-        StartCoroutine(TransformManager.RotateInCertainTimeByAxisFromAway(this._hitHeadCheck, this.CenterPosition, E_TransformAxis.Right, -360f, 0.14f));
-        StartCoroutine(TransformManager.RotateInCertainTimeByAxisFromAway(this._groundCheck, this.CenterPosition, E_TransformAxis.Right, -360f, 0.14f));
-        StartCoroutine(CoroutineManager.DelayMethod(0.15f, () =>
+        if(this.CountGroundNearFoots == 0) //地面スレスレでないとき
         {
-            this._hitHeadCheck.localPosition = Vector3.zero;
-            this._hitHeadCheck.localRotation = Quaternion.Euler(Vector3.zero);
-            this._groundCheck.localPosition = Vector3.zero;
-            this._groundCheck.localRotation = Quaternion.Euler(Vector3.zero);
-        }));
+            StartCoroutine(TransformManager.RotateInCertainTimeByAxisFromAway(this.transform, this.CenterPosition, E_TransformAxis.Right, 360f, 0.14f));
+            StartCoroutine(TransformManager.RotateInCertainTimeByAxisFromAway(this._hitHeadCheck, this.CenterPosition, E_TransformAxis.Right, -360f, 0.14f));
+            StartCoroutine(TransformManager.RotateInCertainTimeByAxisFromAway(this._groundCheck, this.CenterPosition, E_TransformAxis.Right, -360f, 0.14f));
+            StartCoroutine(CoroutineManager.DelayMethod(0.15f, () =>
+            {
+                this._hitHeadCheck.localPosition = Vector3.zero;
+                this._hitHeadCheck.localRotation = Quaternion.Euler(Vector3.zero);
+                this._groundCheck.localPosition = Vector3.zero;
+                this._groundCheck.localRotation = Quaternion.Euler(Vector3.zero);
+            }));
+        }
         StartCoroutine(CoroutineManager.DelayMethod(0.3f, () =>
         {
             this._velocity.y = -1 * this.hipDropVerticalSpeed;

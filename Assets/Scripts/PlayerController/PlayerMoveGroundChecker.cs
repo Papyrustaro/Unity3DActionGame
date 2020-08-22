@@ -38,6 +38,10 @@ public class PlayerMoveGroundChecker : MonoBehaviour
             this.groundedMoveStageTransform = other.transform;
             this.moveStagePositionBeforeFrame = this.groundedMoveStageTransform.position;
         }
+        if(other.CompareTag("Stage") || other.CompareTag("MoveStage") || other.CompareTag("AccelerationGround") || other.CompareTag("SwitchOnOff") || other.CompareTag("SwitchOnOffStage"))
+        {
+            this.playerMoveController.CountGroundNearFoots++;
+        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -45,6 +49,10 @@ public class PlayerMoveGroundChecker : MonoBehaviour
         if (other.CompareTag("MoveStage"))
         {
             if(other.transform == this.groundedMoveStageTransform) this.groundedMoveStageTransform = null;
+        }
+        if (other.CompareTag("Stage") || other.CompareTag("MoveStage") || other.CompareTag("AccelerationGround") || other.CompareTag("SwitchOnOff") || other.CompareTag("SwitchOnOffStage"))
+        {
+            if (this.playerMoveController.CountGroundNearFoots > 0) this.playerMoveController.CountGroundNearFoots--;
         }
     }
 }
