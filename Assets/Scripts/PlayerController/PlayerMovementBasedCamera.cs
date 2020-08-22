@@ -66,6 +66,11 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     private float countJumpTime = 0f;
     private float countJumpLevel = 0;
 
+    private int countFrameOfGroundFromHipDrop = 0;
+    /// <summary>
+    /// 着地して数フレーム猶予記憶用
+    /// </summary>
+    public bool IsHipDropping { get; private set; } = false;
 
     [field: SerializeField]
     [field: RenameField("centerPosition")]
@@ -175,6 +180,8 @@ public class PlayerMovementBasedCamera : MonoBehaviour
                     this.waitingAction = E_ActionFlag.HipDrop;
                     this.checkPressJumpButton = false;
                     //this.pressJumpButtonFrame = 0;
+                    this.countFrameOfGroundFromHipDrop = 0;
+                    this.IsHipDropping = true;
                     this.countJumpTime = 0f;
                     this.countJumpLevel = 0;
                 }
@@ -328,6 +335,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
 
             if (this.currentState == E_State.HipDropping)
             {
+                this.countFrameOfGroundFromHipDrop = 1;
                 this.AbleBreakByHipDrop = true;
                 SEManager.Instance.Play(SEPath.HIP_DROP_GROUNDED, volumeRate: 0.25f);
                 SEManager.Instance.Play(SEPath.HIP_DROP_GROUNDED1, volumeRate: 0.25f);
@@ -370,6 +378,13 @@ public class PlayerMovementBasedCamera : MonoBehaviour
                 if(Time.deltaTime < 0.05f) StartCoroutine(CoroutineManager.DelayMethod(0.05f, () => { this.IsStickingWall = false; this.setStickWallTrigger = false; }));
                 else StartCoroutine(CoroutineManager.DelayMethod(0.08f, () => { this.IsStickingWall = false; this.setStickWallTrigger = false; }));
             }
+        }
+
+        if (0 < this.countFrameOfGroundFromHipDrop && this.countFrameOfGroundFromHipDrop < 4) this.countFrameOfGroundFromHipDrop++;
+        if(this.countFrameOfGroundFromHipDrop == 4)
+        {
+            this.countFrameOfGroundFromHipDrop = 0;
+            this.IsHipDropping = false;
         }
     }
 
@@ -654,6 +669,7 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     {
         this.StopAllCoroutineOfRotation(); //現在はbackFlipのコルーチンのみ
         //this.IsStickingWall = false;
+        this.IsHipDropping = true;
         this._velocity = Vector3.zero;
         this.transform.rotation = new Quaternion(0f, this.transform.rotation.y, 0f, this.transform.rotation.w);
         this.currentState = E_State.HipDropping;

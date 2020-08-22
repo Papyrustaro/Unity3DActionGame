@@ -18,7 +18,7 @@ public class SwitchOnOffStageInHitHead : MonoBehaviour
         }
         if (other.CompareTag("PlayerGroundCheck"))
         {
-            if(other.transform.parent.GetComponent<PlayerMovementBasedCamera>().CurrentState == PlayerMovementBasedCamera.E_State.HipDropping)
+            if(other.transform.parent.GetComponent<PlayerMovementBasedCamera>().IsHipDropping)
             {
                 SwitchOnOffStageInHitHeadController.Instance.SwitchAll();
             }
