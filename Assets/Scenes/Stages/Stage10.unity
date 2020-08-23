@@ -1296,6 +1296,26 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 3488583881450725191, guid: 01da62e8974c9d54a9ef21ac577a1f5b,
+        type: 3}
+      propertyPath: horizontalDirection.x
+      value: -3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3488583882125200943, guid: 01da62e8974c9d54a9ef21ac577a1f5b,
+        type: 3}
+      propertyPath: horizontalDirection.x
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3488583882712130566, guid: 01da62e8974c9d54a9ef21ac577a1f5b,
+        type: 3}
+      propertyPath: horizontalDirection.x
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3488583882712130567, guid: 01da62e8974c9d54a9ef21ac577a1f5b,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -3
+      objectReference: {fileID: 0}
     - target: {fileID: 6033491212207710259, guid: 01da62e8974c9d54a9ef21ac577a1f5b,
         type: 3}
       propertyPath: moveSpeed

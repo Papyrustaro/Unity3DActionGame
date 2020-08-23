@@ -1543,6 +1543,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3331311413285757128, guid: a87e088b3a13ef04489619d96bdc182d,
+        type: 3}
+      propertyPath: horizontalDirection.x
+      value: -3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3331311413689184672, guid: a87e088b3a13ef04489619d96bdc182d,
+        type: 3}
+      propertyPath: horizontalDirection.x
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3331311414142409608, guid: a87e088b3a13ef04489619d96bdc182d,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3331311414142409609, guid: a87e088b3a13ef04489619d96bdc182d,
+        type: 3}
+      propertyPath: horizontalDirection.x
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 4695476127244631102, guid: a87e088b3a13ef04489619d96bdc182d,
         type: 3}
       propertyPath: playerWallKickTrigger
