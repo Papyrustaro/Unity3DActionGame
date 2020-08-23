@@ -27,6 +27,8 @@ public class StageUIManager : MonoBehaviour
     [SerializeField] private Text rankingPlayerNameTextInFailed;
     [SerializeField] private Text rankingTimeTextInFailed;
 
+    private bool sendResultThisTime = false;
+
     private int thisTimePlayerRank = -1;
 
     private bool isClear = false;
@@ -56,14 +58,25 @@ public class StageUIManager : MonoBehaviour
         StageTimeManager.Instance.SetActiveCountTime(false);
         StageCameraManager.Instance.SetAbleFollow(false);
         StartCoroutine(this.SetAndShowRankingWhenClear());
+        StartCoroutine(CoroutineManager.DelayMethod(5f, () => SavePlayerResult()));
     }
 
     public void SavePlayerResult()
     {
+        if (this.sendResultThisTime) return;
+        this.sendResultThisTime = true;
         NCMBObject obj = new NCMBObject(SceneManager.GetActiveScene().name);
         obj["PlayerName"] = StaticData.playerName;
         obj["ClearTime"] = StageTimeManager.Instance.CountTime;
         obj.SaveAsync();
+    }
+
+    public void SavePlayerResultBeforeMoveScene()
+    {
+        if(this.isClear)
+        {
+            this.SavePlayerResult();
+        }
     }
 
     public IEnumerator SetHighRankingTextFromClearResult()
@@ -318,7 +331,7 @@ public class StageUIManager : MonoBehaviour
         StartCoroutine(SetHighRankingTextFromClearResult());
         StartCoroutine(SetRecentClearTextFromClearResult());
 
-        SavePlayerResult();
+        //SavePlayerResult();
 
         yield return new WaitForSeconds(1f);
         this.gameClearText.SetActive(false);
@@ -362,6 +375,8 @@ public class StageUIManager : MonoBehaviour
         this.gameOverPanel.SetActive(true);
         StageTimeManager.Instance.PlayerStop = true;
     }
+
+
 
     public void Tweeting()
     {

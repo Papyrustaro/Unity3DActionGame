@@ -33,11 +33,13 @@ public class RankingPanelInStageManager : MonoBehaviour
 
     public void PressContinueButton()
     {
+        StageUIManager.Instance.SavePlayerResultBeforeMoveScene();
         StageManager.Instance.ContinueStage();
     }
 
     public void PressGoMenuButton()
     {
+        StageUIManager.Instance.SavePlayerResultBeforeMoveScene();
         StageManager.Instance.GoMenu();
     }
 }
