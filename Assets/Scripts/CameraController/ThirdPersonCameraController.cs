@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 /// <summary>
 /// プレイヤーの背後を基本とし、カメラを移動させる
@@ -16,15 +17,21 @@ public class ThirdPersonCameraController : MonoBehaviour
     private float rotationByMouseForce = 200f;
     private Vector3 targetPositionBeforeFrame;
     private float defaultCameraRotationX;
-    private Quaternion initRotation;
+
+    //private Tweener _toDefaultRotationTween;
+    public Quaternion DefaultCameraRotation { get; set; }
 
     public static ThirdPersonCameraController Instance { get; private set; }
 
     public bool IsMoving { get; set; } = true;
 
-    public E_CameraViewType CameraViewType { private get; set; } = E_CameraViewType.Default;
+    //public E_CameraViewType CameraViewType { private get; set; } = E_CameraViewType.Default;
 
     public Transform TargetPlayerCenterTransform { get; set; } = null;
+
+    private bool inputRotateCamera = false;
+
+
 
 
 
@@ -38,7 +45,6 @@ public class ThirdPersonCameraController : MonoBehaviour
         {
             throw new System.Exception();
         }
-        this.initRotation = this.transform.rotation;
         this.defaultCameraRotationX = this.transform.rotation.eulerAngles.x;
     }
 
@@ -53,20 +59,32 @@ public class ThirdPersonCameraController : MonoBehaviour
         }
         if (!this.IsMoving) return;
 
+        if(this.transform.rotation != this.DefaultCameraRotation && (this.targetPositionBeforeFrame.x != this.TargetPlayerCenterTransform.position.x || this.targetPositionBeforeFrame.z != this.TargetPlayerCenterTransform.position.z))
+        {
+            StageCameraManager.Instance.CurrentCamera.transform.rotation = this.DefaultCameraRotation;
+        }
         this.transform.position += this.TargetPlayerCenterTransform.position - this.targetPositionBeforeFrame;
         this.targetPositionBeforeFrame = this.TargetPlayerCenterTransform.position;
 
         float cameraAxisY = Input.GetAxis("RotateCameraAxisY");
         float cameraAxisHorizontal = Input.GetAxis("RotateCameraAxisHorizontal");
+
+        /*if(this.inputRotateCamera && cameraAxisY == 0 && cameraAxisHorizontal == 0)
+        {
+            this.inputRotateCamera = false;
+            StageCameraManager.Instance.CurrentCamera.transform.rotation = this.DefaultCameraRotation;
+        }
+        if (cameraAxisY != 0 || cameraAxisHorizontal != 0) this.inputRotateCamera = true;*/
         float cameraRotationAxisHorizontal = this.transform.rotation.eulerAngles.x;
 
         if (StaticData.invertCameraRotationAxisY) cameraAxisY *= -1f;
         if (StaticData.invertCameraRotationHorizontal) cameraAxisHorizontal *= -1f;
-        if(cameraAxisY != 0) this.transform.RotateAround(this.targetPositionBeforeFrame, Vector3.up, cameraAxisY * Time.deltaTime * this.rotationByMouseForce);
+        if(cameraAxisY != 0) StageCameraManager.Instance.CurrentCamera.transform.RotateAround(this.targetPositionBeforeFrame, Vector3.up, cameraAxisY * Time.deltaTime * this.rotationByMouseForce);
         if((((355f < cameraRotationAxisHorizontal && cameraRotationAxisHorizontal <= 360f) || (cameraRotationAxisHorizontal < 75f)) && cameraAxisHorizontal != 0) ||
             (340f < cameraRotationAxisHorizontal && cameraRotationAxisHorizontal <= 355f && cameraAxisHorizontal > 0) ||
             (75f < cameraRotationAxisHorizontal && cameraRotationAxisHorizontal < 90f && cameraAxisHorizontal < 0))
-            this.transform.RotateAround(this.targetPositionBeforeFrame, this.transform.right, cameraAxisHorizontal * Time.deltaTime * this.rotationByMouseForce);
+            StageCameraManager.Instance.CurrentCamera.transform.RotateAround(this.targetPositionBeforeFrame, this.transform.right, cameraAxisHorizontal * Time.deltaTime * this.rotationByMouseForce);
+
         /*if (Input.GetMouseButton(1))
         {
             //float mouseInputX = Input.GetAxis("Mouse X");
@@ -76,7 +94,7 @@ public class ThirdPersonCameraController : MonoBehaviour
             //if(this.CameraViewType != E_CameraViewType.Overhead) this.transform.RotateAround(this.targetPositionBeforeFrame, this.transform.right, mouseInputY * Time.deltaTime * this.rotationByMouseForce);
         }*/
 
-        if (Input.GetButtonDown("RotateCamera90LeftAxisY"))
+        /*if (Input.GetButtonDown("RotateCamera90LeftAxisY"))
         {
             if (StaticData.invertCameraRotationAxisY) this.Rotate90LeftAxisY();
             else this.Rotate90RightAxisY();
@@ -89,7 +107,9 @@ public class ThirdPersonCameraController : MonoBehaviour
         if (Input.GetButtonDown("InitCameraRotation"))
         {
             this.InitCameraRotation();
-        }
+        }*/
+
+
         /*if (Input.GetButtonDown("CameraMoveToPlayerBehind"))
         {
             WatchFromPlayerBack();
@@ -112,7 +132,7 @@ public class ThirdPersonCameraController : MonoBehaviour
     /// プレイヤーの正面を向く(カメラをプレイヤーの背中側に移動)。ゆっくり回転させたい気もする
     /// 一人称視点では、マウスでのみ向いている方向が変わるべきではある。
     /// </summary>
-    private void WatchFromPlayerBack()
+    /*private void WatchFromPlayerBack()
     {
         if(this.CameraViewType == E_CameraViewType.OnePerson)
         {
@@ -128,12 +148,12 @@ public class ThirdPersonCameraController : MonoBehaviour
         {
             this.transform.RotateAround(this.TargetPlayerCenterTransform.position, this.transform.right, this.defaultCameraRotationX - this.transform.rotation.eulerAngles.x);
         }
-    }
+    }*/
 
     /// <summary>
     /// -90,0,90,180の°に沿う用に右回転
     /// </summary>
-    private void Rotate90RightAxisY()
+    /*private void Rotate90RightAxisY()
     {
         int angleLevel = (int)(this.transform.rotation.eulerAngles.y / 90) + 1;
         this.transform.rotation = Quaternion.Euler(this.transform.rotation.eulerAngles.x, angleLevel * 90f, this.transform.rotation.eulerAngles.z);
@@ -152,10 +172,10 @@ public class ThirdPersonCameraController : MonoBehaviour
     /// <summary>
     /// ステージ開始時のカメラ角度に初期化
     /// </summary>
-    private void InitCameraRotation()
+    public void SetInitCameraRotation(Quaternion initCameraRotation)
     {
-        this.transform.rotation = this.initRotation;
-    }
+        this.initRotation = initCameraRotation;
+    }*/
 
     /// <summary>
     /// プレイヤーを真上から見る(カメラをプレイヤーの真上に移動)
@@ -187,10 +207,10 @@ public class ThirdPersonCameraController : MonoBehaviour
         this.transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, 0f));
     }*/
 
-    public enum E_CameraViewType
+    /*public enum E_CameraViewType
     {
         Default,
         Overhead,
         OnePerson,
-    }
+    }*/
 }
