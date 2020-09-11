@@ -16,10 +16,9 @@ public class ThirdPersonCameraController : MonoBehaviour
 
     private float rotationByMouseForce = 200f;
     private Vector3 targetPositionBeforeFrame;
-    private float defaultCameraRotationX;
 
     private Tweener _toDefaultRotationTween = null;
-    public Quaternion DefaultCameraRotation { get; set; }
+    public Quaternion DefaultCameraRotation { get; private set; }
 
     public static ThirdPersonCameraController Instance { get; private set; }
 
@@ -29,7 +28,9 @@ public class ThirdPersonCameraController : MonoBehaviour
 
     public Transform TargetPlayerCenterTransform { get; set; } = null;
 
-    private bool inputRotateCamera = false;
+    private bool playerHorizontalMoveThisFrame = false;
+
+    
     
 
 
@@ -44,7 +45,6 @@ public class ThirdPersonCameraController : MonoBehaviour
         {
             throw new System.Exception();
         }
-        this.defaultCameraRotationX = this.transform.rotation.eulerAngles.x;
     }
 
     private void LateUpdate()
@@ -62,39 +62,41 @@ public class ThirdPersonCameraController : MonoBehaviour
             if (this._toDefaultRotationTween != null && this._toDefaultRotationTween.IsPlaying()) this._toDefaultRotationTween.Pause();
             return;
         }
-        else
-        {
-            if (this._toDefaultRotationTween != null && !this._toDefaultRotationTween.IsPlaying()) this._toDefaultRotationTween.Play();
-        }
 
-        if(this.transform.rotation != this.DefaultCameraRotation && (this.targetPositionBeforeFrame.x != this.TargetPlayerCenterTransform.position.x || this.targetPositionBeforeFrame.z != this.TargetPlayerCenterTransform.position.z))
+        this.playerHorizontalMoveThisFrame = this.targetPositionBeforeFrame.x != this.TargetPlayerCenterTransform.position.x || this.targetPositionBeforeFrame.z != this.TargetPlayerCenterTransform.position.z;
+
+        if (this.transform.rotation != this.DefaultCameraRotation && this.playerHorizontalMoveThisFrame)
         {
-            //StageCameraManager.Instance.CurrentCamera.transform.rotation = this.DefaultCameraRotation;
-            this._toDefaultRotationTween = StageCameraManager.Instance.CurrentCamera.transform.DORotateQuaternion(this.DefaultCameraRotation, 0.5f)
+            if(this._toDefaultRotationTween == null)
+            {
+                this._toDefaultRotationTween = StageCameraManager.Instance.CurrentCamera.transform.DORotateQuaternion(this.DefaultCameraRotation, 0.5f)
                 .SetEase(Ease.OutQuad)
                 .OnKill(() => this._toDefaultRotationTween = null);
+            }else if (!this._toDefaultRotationTween.IsPlaying())
+            {
+                this._toDefaultRotationTween.Play();
+            }
         }
+
         this.transform.position += this.TargetPlayerCenterTransform.position - this.targetPositionBeforeFrame;
         this.targetPositionBeforeFrame = this.TargetPlayerCenterTransform.position;
 
-        float cameraAxisY = Input.GetAxis("RotateCameraAxisY");
-        float cameraAxisHorizontal = Input.GetAxis("RotateCameraAxisHorizontal");
-
-        /*if(this.inputRotateCamera && cameraAxisY == 0 && cameraAxisHorizontal == 0)
+        if (!this.playerHorizontalMoveThisFrame)
         {
-            this.inputRotateCamera = false;
-            StageCameraManager.Instance.CurrentCamera.transform.rotation = this.DefaultCameraRotation;
-        }
-        if (cameraAxisY != 0 || cameraAxisHorizontal != 0) this.inputRotateCamera = true;*/
-        float cameraRotationAxisHorizontal = this.transform.rotation.eulerAngles.x;
+            float cameraAxisY = Input.GetAxis("RotateCameraAxisY");
+            float cameraAxisHorizontal = Input.GetAxis("RotateCameraAxisHorizontal");
+            float cameraRotationAxisHorizontal = this.transform.rotation.eulerAngles.x;
 
-        if (StaticData.invertCameraRotationAxisY) cameraAxisY *= -1f;
-        if (StaticData.invertCameraRotationHorizontal) cameraAxisHorizontal *= -1f;
-        if(cameraAxisY != 0) StageCameraManager.Instance.CurrentCamera.transform.RotateAround(this.targetPositionBeforeFrame, Vector3.up, cameraAxisY * Time.deltaTime * this.rotationByMouseForce);
-        if((((355f < cameraRotationAxisHorizontal && cameraRotationAxisHorizontal <= 360f) || (cameraRotationAxisHorizontal < 75f)) && cameraAxisHorizontal != 0) ||
-            (340f < cameraRotationAxisHorizontal && cameraRotationAxisHorizontal <= 355f && cameraAxisHorizontal > 0) ||
-            (75f < cameraRotationAxisHorizontal && cameraRotationAxisHorizontal < 90f && cameraAxisHorizontal < 0))
-            StageCameraManager.Instance.CurrentCamera.transform.RotateAround(this.targetPositionBeforeFrame, this.transform.right, cameraAxisHorizontal * Time.deltaTime * this.rotationByMouseForce);
+            if (StaticData.invertCameraRotationAxisY) cameraAxisY *= -1f;
+            if (StaticData.invertCameraRotationHorizontal) cameraAxisHorizontal *= -1f;
+            if (cameraAxisY != 0) StageCameraManager.Instance.CurrentCamera.transform.RotateAround(this.targetPositionBeforeFrame, Vector3.up, cameraAxisY * Time.deltaTime * this.rotationByMouseForce);
+            if ((((355f < cameraRotationAxisHorizontal && cameraRotationAxisHorizontal <= 360f) || (cameraRotationAxisHorizontal < 75f)) && cameraAxisHorizontal != 0) ||
+                (340f < cameraRotationAxisHorizontal && cameraRotationAxisHorizontal <= 355f && cameraAxisHorizontal > 0) ||
+                (75f < cameraRotationAxisHorizontal && cameraRotationAxisHorizontal < 90f && cameraAxisHorizontal < 0))
+                StageCameraManager.Instance.CurrentCamera.transform.RotateAround(this.targetPositionBeforeFrame, this.transform.right, cameraAxisHorizontal * Time.deltaTime * this.rotationByMouseForce);
+        }
+
+        
 
         /*if (Input.GetMouseButton(1))
         {
@@ -137,6 +139,12 @@ public class ThirdPersonCameraController : MonoBehaviour
         {
             WatchFromOverHead();
         }*/
+    }
+
+    public void SetDefaultCameraRotation(Quaternion defaultRotation)
+    {
+        this.DefaultCameraRotation = defaultRotation;
+        if (this._toDefaultRotationTween != null) this._toDefaultRotationTween.Kill();
     }
 
     /// <summary>

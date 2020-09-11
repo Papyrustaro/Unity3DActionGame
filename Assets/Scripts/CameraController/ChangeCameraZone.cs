@@ -14,7 +14,7 @@ public class ChangeCameraZone : MonoBehaviour
         if (StageCameraManager.Instance.CurrentCamera != this.toChangeCamera.Camera && other.CompareTag("Player"))
         {
             StageCameraManager.Instance.SetCurrentCamera(this.toChangeCamera.Camera);
-            ThirdPersonCameraController.Instance.DefaultCameraRotation = this.toChangeCamera.DefaultRotation;
+            ThirdPersonCameraController.Instance.SetDefaultCameraRotation(this.toChangeCamera.DefaultRotation);
         }
     }
 }

@@ -21,7 +21,7 @@ public class StageCameraManager : MonoBehaviour
         else throw new System.Exception();
         this.cinemachineBrain = GetComponent<CinemachineBrain>();
         this.CurrentCamera = this.firstCamera;
-        ThirdPersonCameraController.Instance.DefaultCameraRotation = this.firstCamera.transform.rotation;
+        ThirdPersonCameraController.Instance.SetDefaultCameraRotation(this.firstCamera.transform.rotation);
     }
 
     public void SetAbleFollow(bool canFollow)
