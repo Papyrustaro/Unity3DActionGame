@@ -18,7 +18,7 @@ public class ThirdPersonCameraController : MonoBehaviour
     private Vector3 targetPositionBeforeFrame;
     private float defaultCameraRotationX;
 
-    //private Tweener _toDefaultRotationTween;
+    private Tweener _toDefaultRotationTween = null;
     public Quaternion DefaultCameraRotation { get; set; }
 
     public static ThirdPersonCameraController Instance { get; private set; }
@@ -30,8 +30,7 @@ public class ThirdPersonCameraController : MonoBehaviour
     public Transform TargetPlayerCenterTransform { get; set; } = null;
 
     private bool inputRotateCamera = false;
-
-
+    
 
 
 
@@ -57,11 +56,23 @@ public class ThirdPersonCameraController : MonoBehaviour
             this.targetPositionBeforeFrame = this.TargetPlayerCenterTransform.position;
             this.IsMoving = true;
         }
-        if (!this.IsMoving) return;
+
+        if (!this.IsMoving)
+        {
+            if (this._toDefaultRotationTween != null && this._toDefaultRotationTween.IsPlaying()) this._toDefaultRotationTween.Pause();
+            return;
+        }
+        else
+        {
+            if (this._toDefaultRotationTween != null && !this._toDefaultRotationTween.IsPlaying()) this._toDefaultRotationTween.Play();
+        }
 
         if(this.transform.rotation != this.DefaultCameraRotation && (this.targetPositionBeforeFrame.x != this.TargetPlayerCenterTransform.position.x || this.targetPositionBeforeFrame.z != this.TargetPlayerCenterTransform.position.z))
         {
-            StageCameraManager.Instance.CurrentCamera.transform.rotation = this.DefaultCameraRotation;
+            //StageCameraManager.Instance.CurrentCamera.transform.rotation = this.DefaultCameraRotation;
+            this._toDefaultRotationTween = StageCameraManager.Instance.CurrentCamera.transform.DORotateQuaternion(this.DefaultCameraRotation, 0.5f)
+                .SetEase(Ease.OutQuad)
+                .OnKill(() => this._toDefaultRotationTween = null);
         }
         this.transform.position += this.TargetPlayerCenterTransform.position - this.targetPositionBeforeFrame;
         this.targetPositionBeforeFrame = this.TargetPlayerCenterTransform.position;

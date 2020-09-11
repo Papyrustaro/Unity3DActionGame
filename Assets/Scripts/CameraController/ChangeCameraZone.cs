@@ -10,7 +10,7 @@ public class ChangeCameraZone : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (StageCameraManager.Instance.CurrentCamera == this.toChangeCamera.Camera) Debug.Log("同じカメラ");
+        //if (StageCameraManager.Instance.CurrentCamera == this.toChangeCamera.Camera) Debug.Log("同じカメラ");
         if (StageCameraManager.Instance.CurrentCamera != this.toChangeCamera.Camera && other.CompareTag("Player"))
         {
             StageCameraManager.Instance.SetCurrentCamera(this.toChangeCamera.Camera);
