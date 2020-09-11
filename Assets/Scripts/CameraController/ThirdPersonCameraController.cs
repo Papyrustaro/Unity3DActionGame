@@ -30,10 +30,6 @@ public class ThirdPersonCameraController : MonoBehaviour
 
     private bool playerHorizontalMoveThisFrame = false;
 
-    
-    
-
-
 
     private void Awake()
     {
