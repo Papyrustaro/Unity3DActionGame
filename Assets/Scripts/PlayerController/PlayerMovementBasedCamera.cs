@@ -463,6 +463,10 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     /// </summary>
     private void NormalJump()
     {
+        this.countJumpTime = 0f;
+        this.countJumpLevel = 0;
+        this.checkPressJumpButton = false;
+
         this._velocity.y = this.jumpVerticalSpeed;
         this._isGrounded = false;
 
@@ -474,13 +478,6 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         SEManager.Instance.Play(SEPath.JUMP_VOICE0, volumeRate: 0.5f);
         SEManager.Instance.Play(SEPath.JUMP_WIND0, volumeRate: 0.4f);
         this.checkPressJumpButton = true;
-        StartCoroutine(CoroutineManager.DelayMethod(0.1f, () =>
-        {
-            this.countJumpTime = 0f;
-            this.countJumpLevel = 0;
-            this.checkPressJumpButton = false;
-            //this.pressJumpButtonFrame = 0;
-        }));
     }
 
     /// <summary>
@@ -489,6 +486,9 @@ public class PlayerMovementBasedCamera : MonoBehaviour
     /// <param name="jumpVerticalSpeed">上方向への初速度</param>
     public void Jump(float jumpVerticalSpeed)
     {
+        this.countJumpTime = 0f;
+        this.countJumpLevel = 0;
+        this.checkPressJumpButton = false;
         this._velocity.y = 0f;
 
         //進行方向を向く
@@ -508,13 +508,6 @@ public class PlayerMovementBasedCamera : MonoBehaviour
         SEManager.Instance.Play(SEPath.TRAMPOLINE_JUMP, volumeRate: 0.5f);
 
         this.checkPressJumpButton = true;
-        StartCoroutine(CoroutineManager.DelayMethod(0.1f, () =>
-        {
-            this.countJumpTime = 0f;
-            this.countJumpLevel = 0;
-            this.checkPressJumpButton = false;
-            //this.pressJumpButtonFrame = 0;
-        }));
         this._wallKickTrigger.ResetTrigger();
     }
 
