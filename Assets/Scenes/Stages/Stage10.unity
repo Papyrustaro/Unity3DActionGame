@@ -471,7 +471,7 @@ MonoBehaviour:
   - m_Script
   m_LockStageInInspector: 
   m_StreamingVersion: 20170927
-  m_Priority: 10
+  m_Priority: 1
   m_StandbyUpdate: 2
   m_LookAt: {fileID: 2035512500}
   m_Follow: {fileID: 858761539}
@@ -1248,6 +1248,11 @@ PrefabInstance:
       propertyPath: m_Follow
       value: 
       objectReference: {fileID: 858761539}
+    - target: {fileID: 798587997902303927, guid: 01da62e8974c9d54a9ef21ac577a1f5b,
+        type: 3}
+      propertyPath: m_Priority
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1000738016405664619, guid: 01da62e8974c9d54a9ef21ac577a1f5b,
         type: 3}
       propertyPath: toChangeCamera
@@ -1303,6 +1308,11 @@ PrefabInstance:
       propertyPath: m_Follow
       value: 
       objectReference: {fileID: 858761539}
+    - target: {fileID: 1444522248622478748, guid: 01da62e8974c9d54a9ef21ac577a1f5b,
+        type: 3}
+      propertyPath: m_Priority
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1444522248622478749, guid: 01da62e8974c9d54a9ef21ac577a1f5b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1438,6 +1448,11 @@ PrefabInstance:
       propertyPath: m_Follow
       value: 
       objectReference: {fileID: 858761539}
+    - target: {fileID: 3089719010057620052, guid: 01da62e8974c9d54a9ef21ac577a1f5b,
+        type: 3}
+      propertyPath: m_Priority
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3089719010057620053, guid: 01da62e8974c9d54a9ef21ac577a1f5b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1563,6 +1578,11 @@ PrefabInstance:
       propertyPath: m_Follow
       value: 
       objectReference: {fileID: 858761539}
+    - target: {fileID: 3506753113819531175, guid: 01da62e8974c9d54a9ef21ac577a1f5b,
+        type: 3}
+      propertyPath: m_Priority
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3655177677328474448, guid: 01da62e8974c9d54a9ef21ac577a1f5b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1693,6 +1713,11 @@ PrefabInstance:
       propertyPath: m_Follow
       value: 
       objectReference: {fileID: 858761539}
+    - target: {fileID: 4107717883590257248, guid: 01da62e8974c9d54a9ef21ac577a1f5b,
+        type: 3}
+      propertyPath: m_Priority
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4107717883590257249, guid: 01da62e8974c9d54a9ef21ac577a1f5b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1778,6 +1803,11 @@ PrefabInstance:
       propertyPath: m_Follow
       value: 
       objectReference: {fileID: 858761539}
+    - target: {fileID: 5169234264206992553, guid: 01da62e8974c9d54a9ef21ac577a1f5b,
+        type: 3}
+      propertyPath: m_Priority
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5392285682650846873, guid: 01da62e8974c9d54a9ef21ac577a1f5b,
         type: 3}
       propertyPath: toChangeCamera
@@ -1858,6 +1888,11 @@ PrefabInstance:
       propertyPath: m_Follow
       value: 
       objectReference: {fileID: 858761539}
+    - target: {fileID: 5530164271839924191, guid: 01da62e8974c9d54a9ef21ac577a1f5b,
+        type: 3}
+      propertyPath: m_Priority
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5854041693757982090, guid: 01da62e8974c9d54a9ef21ac577a1f5b,
         type: 3}
       propertyPath: toChangeCamera
@@ -1933,6 +1968,11 @@ PrefabInstance:
       propertyPath: m_Follow
       value: 
       objectReference: {fileID: 858761539}
+    - target: {fileID: 7566135343677426973, guid: 01da62e8974c9d54a9ef21ac577a1f5b,
+        type: 3}
+      propertyPath: m_Priority
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7770954854719373952, guid: 01da62e8974c9d54a9ef21ac577a1f5b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1958,6 +1998,11 @@ PrefabInstance:
       propertyPath: m_Follow
       value: 
       objectReference: {fileID: 858761539}
+    - target: {fileID: 7770954854719373953, guid: 01da62e8974c9d54a9ef21ac577a1f5b,
+        type: 3}
+      propertyPath: m_Priority
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8477589379940854705, guid: 01da62e8974c9d54a9ef21ac577a1f5b,
         type: 3}
       propertyPath: m_LookAt

@@ -444,6 +444,8 @@ GameObject:
   - component: {fileID: 102637831}
   - component: {fileID: 102637830}
   - component: {fileID: 102637834}
+  - component: {fileID: 102637835}
+  - component: {fileID: 102637833}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -516,6 +518,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &102637833
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 102637829}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7203db026816abb4e9fec5580f3cce36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  firstCamera: {fileID: 642339790}
 --- !u!114 &102637834
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -550,6 +565,18 @@ MonoBehaviour:
   m_CameraActivatedEvent:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &102637835
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 102637829}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52da282f4c0d45742a191dd5c3145f7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &132621514
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2998,7 +3025,6 @@ GameObject:
   - component: {fileID: 642339791}
   - component: {fileID: 642339790}
   - component: {fileID: 642339792}
-  - component: {fileID: 642339793}
   m_Layer: 0
   m_Name: CM vcam1
   m_TagString: Untagged
@@ -3065,23 +3091,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 642339789}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 52da282f4c0d45742a191dd5c3145f7c, type: 3}
+  m_Script: {fileID: 11500000, guid: fa39555a9ee26b942978a199558c2ab9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &642339793
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 642339789}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7203db026816abb4e9fec5580f3cce36, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  virtualCamera: {fileID: 642339790}
-  cameraController: {fileID: 642339792}
 --- !u!1001 &658176849
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3664,8 +3676,8 @@ MonoBehaviour:
   m_Text: "\u79FB\u52D5: WASD(\u524D\u5F8C:WS/\u5DE6\u53F3:AD)\n\u901A\u5E38\u30B8\u30E3\u30F3\u30D7:
     J/Space\n\u30B9\u30D4\u30F3\u30B8\u30E3\u30F3\u30D7: L\n\u30D0\u30C3\u30AF\u30D5\u30EA\u30C3\u30D7:
     I\n\u30D2\u30C3\u30D7\u30C9\u30ED\u30C3\u30D7: U\n\u30AB\u30E1\u30E9\u56DE\u8EE2:
-    \u65B9\u5411\u30AD\u30FC/78(\u5DE6\u53F3)90(\u4E0A\u4E0B),23(\u5DE6\u53F3\u76F4\u89D2)\n\u30AB\u30E1\u30E9\u4F4D\u7F6E\u521D\u671F\u5316:
-    1\n\u6C7A\u5B9A: Enter/Space\n\u30DD\u30FC\u30BA: P"
+    \u65B9\u5411\u30AD\u30FC/78(\u5DE6\u53F3)90(\u4E0A\u4E0B)\n\u6C7A\u5B9A: Enter/Space\n\u30DD\u30FC\u30BA:
+    P"
 --- !u!222 &740579434
 CanvasRenderer:
   m_ObjectHideFlags: 0

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
-
+using UnityEngine.SceneManagement;
 /// <summary>
 /// プレイヤーの背後を基本とし、カメラを移動させる
 /// </summary>
@@ -30,6 +30,8 @@ public class ThirdPersonCameraController : MonoBehaviour
 
     private bool playerHorizontalMoveThisFrame = false;
 
+    private bool isTitle = false;
+
 
     private void Awake()
     {
@@ -41,6 +43,7 @@ public class ThirdPersonCameraController : MonoBehaviour
         {
             throw new System.Exception();
         }
+        if (SceneManager.GetActiveScene().name == "Title") this.isTitle = true;
     }
 
     private void LateUpdate()
@@ -52,6 +55,9 @@ public class ThirdPersonCameraController : MonoBehaviour
             this.targetPositionBeforeFrame = this.TargetPlayerCenterTransform.position;
             this.IsMoving = true;
         }
+
+
+        if (this.isTitle) return;
 
         if (!this.IsMoving)
         {

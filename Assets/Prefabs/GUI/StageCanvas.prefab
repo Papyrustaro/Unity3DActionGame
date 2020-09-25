@@ -6056,8 +6056,8 @@ PrefabInstance:
       value: "\u79FB\u52D5: WS(\u524D\u5F8C),AD(\u5DE6\u53F3)\n\u901A\u5E38\u30B8\u30E3\u30F3\u30D7:
         J/Space\n\u30B9\u30D4\u30F3\u30B8\u30E3\u30F3\u30D7: L\n\u30D0\u30C3\u30AF\u30D5\u30EA\u30C3\u30D7:
         I\n\u30D2\u30C3\u30D7\u30C9\u30ED\u30C3\u30D7: U\n\u30AB\u30E1\u30E9\u56DE\u8EE2:
-        \u65B9\u5411\u30AD\u30FC/78(\u4E0A\u4E0B)90(\u5DE6\u53F3),23(\u5DE6\u53F3\u76F4\u89D2)\n\u30AB\u30E1\u30E9\u4F4D\u7F6E\u521D\u671F\u5316:
-        1\n\u6C7A\u5B9A: Enter/Space\n\u30DD\u30FC\u30BA: P"
+        \u65B9\u5411\u30AD\u30FC/78(\u4E0A\u4E0B)90(\u5DE6\u53F3)\n\u6C7A\u5B9A:
+        Enter/Space\n\u30DD\u30FC\u30BA: P"
       objectReference: {fileID: 0}
     - target: {fileID: 4745600033147247838, guid: 111e9f0aceb8cb14597b3befef00c3fd,
         type: 3}
